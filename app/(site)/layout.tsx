@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
+
+import { LayoutTransition } from "@/components/global/layout-transition";
+import { DisableDraft } from "@/components/global/disable-draft";
+import { SanityLive } from "@/sanity/lib/live";
+import { VisualEditing } from "next-sanity";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +33,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <header className="flex gap-4 items-center justify-center">
+          <Link href="/">Home</Link>
+          <Link href="/about">About</Link>
+        </header>
+        <SanityLive />
+        <LayoutTransition>
+          {children}
+        </LayoutTransition>
+        <VisualEditing />
       </body>
     </html>
   );
