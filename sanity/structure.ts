@@ -6,21 +6,58 @@ import { singletonTypes, hiddenTypes, orderableTypes } from './schemaTypes'
 export const structure: StructureResolver = (S) => {
   
   const singletons = singletonTypes.map((typeDef) => {
-    return S.listItem()
-      .title(typeDef.title as string)
-      .icon(typeDef.icon)
-      .child(
-        S.editor()
-          .id(typeDef.name)
-          .schemaType(typeDef.name)
-          .documentId(typeDef.name)
-          .views([S.view.form()])
-      )
+    if ('types' in typeDef) {
+      // Handle group of types
+      return S.listItem()
+        .title(typeDef.title)
+        .icon(typeDef.icon)
+        .child(
+          S.list()
+            .title(typeDef.title)
+            .items(
+              typeDef.types.map(type => 
+                S.listItem()
+                  .title(type.title || '')
+                  .icon(type.icon)
+                  .child(
+                    typeDef.singleton ? (
+                      S.editor()
+                        .id(type.name)
+                        .schemaType(type.name)
+                        .documentId(type.name)
+                        .views([S.view.form()])
+                    ) : (
+                      S.documentTypeList(type.name)
+                        .title(type.title || '')
+                        .filter('_type == $type')
+                        .params({ type: type.name })
+                    )
+                  )
+              )
+            )
+        )
+    } else {
+      // Handle single type
+      return S.listItem()
+        .title(typeDef.title || '')
+        .icon(typeDef.icon)
+        .child(
+          S.editor()
+            .id(typeDef.name)
+            .schemaType(typeDef.name)
+            .documentId(typeDef.name)
+            .views([S.view.form()])
+        )
+    }
   })
 
   const defaultListItems = S.documentTypeListItems().filter(
     (listItem) =>
-      !singletonTypes.find((typeDef) => listItem.getId() === typeDef.name) &&
+      !singletonTypes.find((typeDef) => 
+        'types' in typeDef
+          ? typeDef.types.some(type => listItem.getId() === type.name)
+          : listItem.getId() === typeDef.name
+      ) &&
       !hiddenTypes.find(
         (hiddenTypeDef) => listItem.getId() === hiddenTypeDef.name
       ) &&

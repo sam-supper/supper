@@ -1,0 +1,11 @@
+/* SETTINGS FOOTER */
+
+div[id^='settingsFooter'] [data-testid='pt-editor'][data-fullscreen='false'] {
+  height: 8em!important;
+}
+
+[data-testid='pt-editor'] em {
+  font-style: normal!important;
+  font-family: var(--font-times-now)!important;
+  font-size: 1.1em!important;
+}

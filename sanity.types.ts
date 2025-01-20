@@ -39,22 +39,6 @@ export type SanityImageDimensions = {
   aspectRatio?: number;
 };
 
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
 export type SanityFileAsset = {
   _id: string;
   _type: "sanity.fileAsset";
@@ -75,6 +59,96 @@ export type SanityFileAsset = {
   path?: string;
   url?: string;
   source?: SanityAssetSourceData;
+};
+
+export type Geopoint = {
+  _type: "geopoint";
+  lat?: number;
+  lng?: number;
+  alt?: number;
+};
+
+export type RichText = Array<{
+  children?: Array<{
+    marks?: Array<string>;
+    text?: string;
+    _type: "span";
+    _key: string;
+  }>;
+  style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+  listItem?: "bullet" | "number";
+  markDefs?: Array<{
+    href?: string;
+    _type: "link";
+    _key: string;
+  }>;
+  level?: number;
+  _type: "block";
+  _key: string;
+}>;
+
+export type ArticleAuthor = {
+  _id: string;
+  _type: "articleAuthor";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+};
+
+export type ArticlePage = {
+  _id: string;
+  _type: "articlePage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  published?: string;
+  originalPublished?: string;
+  category?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "articleCategory";
+  };
+  authors?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "articleAuthor";
+  }>;
+  featuredImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  content?: RichText;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
 };
 
 export type SanityImageAsset = {
@@ -100,6 +174,13 @@ export type SanityImageAsset = {
   source?: SanityAssetSourceData;
 };
 
+export type SanityAssetSourceData = {
+  _type: "sanity.assetSourceData";
+  name?: string;
+  id?: string;
+  url?: string;
+};
+
 export type SanityImageMetadata = {
   _type: "sanity.imageMetadata";
   location?: Geopoint;
@@ -111,11 +192,24 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type Geopoint = {
-  _type: "geopoint";
-  lat?: number;
-  lng?: number;
-  alt?: number;
+export type ArticleCategory = {
+  _id: string;
+  _type: "articleCategory";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+};
+
+export type LegalPage = {
+  _id: string;
+  _type: "legalPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
 };
 
 export type Slug = {
@@ -124,11 +218,13 @@ export type Slug = {
   source?: string;
 };
 
-export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData";
-  name?: string;
-  id?: string;
-  url?: string;
+export type AboutPage = {
+  _id: string;
+  _type: "aboutPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
 };
 
 export type HomePage = {
@@ -140,9 +236,118 @@ export type HomePage = {
   title?: string;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData | HomePage;
+export type SettingsDonate = {
+  _id: string;
+  _type: "settingsDonate";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  text?: string;
+  linkText?: string;
+};
+
+export type SettingsFooter = {
+  _id: string;
+  _type: "settingsFooter";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  links?: Array<{
+    label?: string;
+    _type: "search";
+    _key: string;
+  } | {
+    label?: string;
+    _type: "mainMenu";
+    _key: string;
+  } | {
+    label?: string;
+    _type: "bag";
+    _key: string;
+  }>;
+};
+
+export type SettingsHeader = {
+  _id: string;
+  _type: "settingsHeader";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  links?: Array<{
+    label?: string;
+    _type: "search";
+    _key: string;
+  } | {
+    label?: string;
+    _type: "mainMenu";
+    _key: string;
+  } | {
+    label?: string;
+    _type: "bag";
+    _key: string;
+  }>;
+};
+
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | RichText | ArticleAuthor | ArticlePage | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | ArticleCategory | LegalPage | Slug | AboutPage | HomePage | SettingsDonate | SettingsFooter | SettingsHeader;
 export declare const internalGroqTypeReferenceTo: unique symbol;
-// Source: ./sanity/lib/queries.ts
+// Source: ./sanity/queries/article.ts
+// Variable: articlePageQuery
+// Query: *[_type == "articlePage" && slug.current == $slug][0]{    _id,    _type,    title,    slug,    authors[] -> {      _key,      _type,      name,      slug    },    "category": category->title,    published,    originalPublished,    featuredImage {        _id,  _type,  asset,  alt,  "aspectRatio": asset->metadata.dimensions.aspectRatio    },    content[] {      _key,      _type,      style,      markDefs,      children    },    "wordCount": round(length(pt::text(content)) / 5),    "readingTime": round(length(pt::text(content)) / 5 / 180 )  }
+export type ArticlePageQueryResult = {
+  _id: string;
+  _type: "articlePage";
+  title: string | null;
+  slug: Slug | null;
+  authors: Array<{
+    _key: null;
+    _type: "articleAuthor";
+    name: string | null;
+    slug: Slug | null;
+  }> | null;
+  category: string | null;
+  published: string | null;
+  originalPublished: string | null;
+  featuredImage: {
+    _id: null;
+    _type: "image";
+    asset: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    } | null;
+    alt: string | null;
+    aspectRatio: number | null;
+  } | null;
+  content: Array<{
+    _key: string;
+    _type: "block";
+    style: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal" | null;
+    markDefs: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }> | null;
+    children: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }> | null;
+  }> | null;
+  wordCount: number;
+  readingTime: number;
+} | null;
+// Variable: articlePageSlugsQuery
+// Query: *[_type == "articlePage"]{    "slug": slug.current  }
+export type ArticlePageSlugsQueryResult = Array<{
+  slug: string | null;
+}>;
+
+// Source: ./sanity/queries/home.ts
 // Variable: homePageQuery
 // Query: *[_type == "homePage"][0]
 export type HomePageQueryResult = {
@@ -158,6 +363,8 @@ export type HomePageQueryResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
+    "*[_type == \"articlePage\" && slug.current == $slug][0]{\n    _id,\n    _type,\n    title,\n    slug,\n    authors[] -> {\n      _key,\n      _type,\n      name,\n      slug\n    },\n    \"category\": category->title,\n    published,\n    originalPublished,\n    featuredImage {\n      \n  _id,\n  _type,\n  asset,\n  alt,\n  \"aspectRatio\": asset->metadata.dimensions.aspectRatio\n\n    },\n    content[] {\n      _key,\n      _type,\n      style,\n      markDefs,\n      children\n    },\n    \"wordCount\": round(length(pt::text(content)) / 5),\n    \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n  }": ArticlePageQueryResult;
+    "*[_type == \"articlePage\"]{\n    \"slug\": slug.current\n  }": ArticlePageSlugsQueryResult;
     "*[_type == \"homePage\"][0]": HomePageQueryResult;
   }
 }
