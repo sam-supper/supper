@@ -10,6 +10,7 @@
     "schema:update": "sanity schema extract && sanity typegen generate"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
     "@sanity/image-url": "^1.1.0",
     "@sanity/vision": "^3.69.0",
     "@vercel/postgres": "^0.10.0",

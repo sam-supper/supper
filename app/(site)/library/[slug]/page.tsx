@@ -4,7 +4,7 @@ import { client } from "@/sanity/lib/client";
 import { ArticlePage } from "@/components/library/article-page";
 import { notFound } from "next/navigation";
 
-export default async function About({ params }: { params: { slug: string } }) {
+export default async function About({ params }: any) {
   const { data: article } = await sanityFetch({
     query: articlePageQuery,
     params: await params
