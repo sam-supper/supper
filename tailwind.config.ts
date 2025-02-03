@@ -8,6 +8,18 @@ export default {
   ],
   darkMode: 'class',
   theme: {
+    colors: {
+      'current': 'currentColor',
+      'off-white': '#FCFCFA',
+      'grey-light': '#F6F6F2',
+      'grey': '#979797',
+      'grey-dark': '#7F7F7F',
+      'black': '#272727',
+      'black-true': '#000000',
+      'article-black': '#191919',
+      'royal-blue': '#0036D5',
+      'royal-blue-dark': '#0057FF',
+    },
     screens: {
       'md': '900px'
     },
@@ -20,7 +32,7 @@ export default {
         lineHeight: '140%'
       }],
       'sans-medium': ['24px', {
-        lineHeight: '116%'
+        lineHeight: '117%'
       }],
       'sans-large': ['48px', {
         lineHeight: '116%'
@@ -56,17 +68,6 @@ export default {
       'semibold': '600'
     },
     extend: {
-      colors: {
-        'current': 'currentColor',
-        'off-white': '#FCFCFA',
-        'grey-light': '#F6F6F2',
-        'grey': '#979797',
-        'grey-dark': '#7F7F7F',
-        'black': '#272727',
-        'article-black': '#191919',
-        'royal-blue': '#0036D5',
-        'royal-blue-dark': '#0057FF',
-      },
       spacing: {
         ...Object.fromEntries(
           Array.from({ length: 999 }, (_, i) => [i, `${i/16}rem`])

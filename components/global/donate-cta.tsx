@@ -9,7 +9,7 @@ export const DonateCta = async () => {
   const { data: settings } = await sanityFetch({ query: settingsQuery });
 
   return (
-    <div className="py-140 flex flex-col items-center justify-center gap-20">
+    <div className="flex flex-col items-center justify-center gap-20">
       <Label element="h2" uppercase className="text-center text-sans-small">{settings?.donate?.title}</Label>
       <div className="flex flex-col text-[64px] leading-100 font-serif">
         <p>{settings?.donate?.text}</p>

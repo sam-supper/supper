@@ -34,3 +34,9 @@
 i, em {
   font-style: normal;
 }
+
+@layer base {
+  .site-container {
+    @apply px-site-x pb-150;
+  }
+}

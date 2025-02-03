@@ -19,6 +19,11 @@ import settingsHeader from './settings/settings-header'
 import settingsFooter from './settings/settings-footer'
 import settingsDonate from './settings/settings-donate'
 
+/** Modules */
+import featuredEntries from './modules/featured-entries'
+import textCallout from './modules/text-callout'
+import donateCta from './modules/donate-cta'
+
 /** Documents */
 import homePage from './documents/home-page'
 import aboutPage from './documents/about-page'
@@ -38,6 +43,7 @@ export const allTypes: SchemaTypeDefinition[] = [
   settingsHeader,
   settingsFooter,
   settingsDonate,
+
   // Documents
   homePage,
   aboutPage,
@@ -45,6 +51,12 @@ export const allTypes: SchemaTypeDefinition[] = [
   articlePage,
   articleCategory,
   articleAuthor,
+
+  // Modules
+  featuredEntries,
+  textCallout,
+  donateCta,
+  
   // Blocks
   richText,
   richTextSimple,

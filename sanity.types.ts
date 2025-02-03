@@ -68,6 +68,70 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type CreditRow = {
+  _type: "creditRow";
+  title?: string;
+  credits?: Array<{
+    _key: string;
+  } & ExternalLink>;
+};
+
+export type ExternalLink = {
+  _type: "externalLink";
+  label?: string;
+  url?: string;
+};
+
+export type RichTextSimple = Array<{
+  children?: Array<{
+    marks?: Array<string>;
+    text?: string;
+    _type: "span";
+    _key: string;
+  }>;
+  style?: "normal";
+  listItem?: never;
+  markDefs?: Array<{
+    to?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "aboutPage";
+    } | {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "homePage";
+    } | {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "articlePage";
+    } | {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "legalPage";
+    } | {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "articleCategory";
+    };
+    arrow?: boolean;
+    _type: "internalLink";
+    _key: string;
+  } | {
+    url?: string;
+    arrow?: boolean;
+    _type: "externalLink";
+    _key: string;
+  }>;
+  level?: number;
+  _type: "block";
+  _key: string;
+}>;
+
 export type RichText = Array<{
   children?: Array<{
     marks?: Array<string>;
@@ -87,6 +151,17 @@ export type RichText = Array<{
   _key: string;
 }>;
 
+export type FeaturedEntries = {
+  _type: "featuredEntries";
+  entries?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "articlePage";
+  }>;
+};
+
 export type ArticleAuthor = {
   _id: string;
   _type: "articleAuthor";
@@ -94,6 +169,56 @@ export type ArticleAuthor = {
   _updatedAt: string;
   _rev: string;
   name?: string;
+  slug?: Slug;
+};
+
+export type SettingsDonate = {
+  _id: string;
+  _type: "settingsDonate";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  text?: string;
+  linkText?: string;
+};
+
+export type SettingsFooter = {
+  _id: string;
+  _type: "settingsFooter";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  siteInfo?: Array<{
+    text?: RichTextSimple;
+    _type: "textBlock";
+    _key: string;
+  } | {
+    _key: string;
+  } & CreditRow>;
+  links?: Array<{
+    label?: string;
+    _type: "search";
+    _key: string;
+  } | {
+    label?: string;
+    _type: "mainMenu";
+    _key: string;
+  } | {
+    label?: string;
+    _type: "bag";
+    _key: string;
+  }>;
+};
+
+export type LegalPage = {
+  _id: string;
+  _type: "legalPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
   slug?: Slug;
 };
 
@@ -202,29 +327,10 @@ export type ArticleCategory = {
   slug?: Slug;
 };
 
-export type LegalPage = {
-  _id: string;
-  _type: "legalPage";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  slug?: Slug;
-};
-
 export type Slug = {
   _type: "slug";
   current?: string;
   source?: string;
-};
-
-export type AboutPage = {
-  _id: string;
-  _type: "aboutPage";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
 };
 
 export type HomePage = {
@@ -234,39 +340,19 @@ export type HomePage = {
   _updatedAt: string;
   _rev: string;
   title?: string;
+  greeting?: string;
+  content?: Array<{
+    _key: string;
+  } & FeaturedEntries>;
 };
 
-export type SettingsDonate = {
+export type AboutPage = {
   _id: string;
-  _type: "settingsDonate";
+  _type: "aboutPage";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   title?: string;
-  text?: string;
-  linkText?: string;
-};
-
-export type SettingsFooter = {
-  _id: string;
-  _type: "settingsFooter";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  links?: Array<{
-    label?: string;
-    _type: "search";
-    _key: string;
-  } | {
-    label?: string;
-    _type: "mainMenu";
-    _key: string;
-  } | {
-    label?: string;
-    _type: "bag";
-    _key: string;
-  }>;
 };
 
 export type SettingsHeader = {
@@ -291,7 +377,7 @@ export type SettingsHeader = {
   }>;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | RichText | ArticleAuthor | ArticlePage | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | ArticleCategory | LegalPage | Slug | AboutPage | HomePage | SettingsDonate | SettingsFooter | SettingsHeader;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | CreditRow | ExternalLink | RichTextSimple | RichText | FeaturedEntries | ArticleAuthor | SettingsDonate | SettingsFooter | LegalPage | ArticlePage | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | ArticleCategory | Slug | HomePage | AboutPage | SettingsHeader;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/queries/article.ts
 // Variable: articlePageQuery
@@ -349,15 +435,181 @@ export type ArticlePageSlugsQueryResult = Array<{
 
 // Source: ./sanity/queries/home.ts
 // Variable: homePageQuery
-// Query: *[_type == "homePage"][0]
+// Query: *[_type == "homePage"][0] {    title,    greeting,    content[]{        _key,  _type,  _type == "featuredEntries" => {    "entries": entries[] -> {      _key,      title,      featuredImage,      "slug": slug.current,      "category": category->title,    }  }    }  }
 export type HomePageQueryResult = {
+  title: string | null;
+  greeting: string | null;
+  content: Array<{
+    _key: string;
+    _type: "featuredEntries";
+    entries: Array<{
+      _key: null;
+      title: string | null;
+      featuredImage: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      } | null;
+      slug: string | null;
+      category: string | null;
+    }> | null;
+  }> | null;
+} | null;
+
+// Source: ./sanity/queries/settings.ts
+// Variable: settingsHeaderQuery
+// Query: *[_type == "settingsHeader"][0]
+export type SettingsHeaderQueryResult = {
   _id: string;
-  _type: "homePage";
+  _type: "settingsHeader";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   title?: string;
+  links?: Array<{
+    label?: string;
+    _type: "bag";
+    _key: string;
+  } | {
+    label?: string;
+    _type: "mainMenu";
+    _key: string;
+  } | {
+    label?: string;
+    _type: "search";
+    _key: string;
+  }>;
 } | null;
+// Variable: settingsFooterQuery
+// Query: *[_type == "settingsFooter"][0] {    siteInfo[] {      _key,      _type,      _type == "textBlock" => {        text[] {          ...,          markDefs[] {            ...,            _type == "internalLink" => {              to->{                "slug": slug.current              },              arrow            },            _type == "externalLink" => {              url,              arrow            }          }        }      },      _type == "credit" => {        title,        credits[] {          _key,          label,          url        }      }    }  }
+export type SettingsFooterQueryResult = {
+  siteInfo: Array<{
+    _key: string;
+    _type: "creditRow";
+  } | {
+    _key: string;
+    _type: "textBlock";
+    text: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs: Array<{
+        url: string | null;
+        arrow: boolean | null;
+        _type: "externalLink";
+        _key: string;
+      } | {
+        to: {
+          slug: null;
+        } | {
+          slug: string | null;
+        } | null;
+        arrow: boolean | null;
+        _type: "internalLink";
+        _key: string;
+      }> | null;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }> | null;
+  }> | null;
+} | null;
+// Variable: settingsDonateQuery
+// Query: *[_type == "settingsDonate"][0]
+export type SettingsDonateQueryResult = {
+  _id: string;
+  _type: "settingsDonate";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  text?: string;
+  linkText?: string;
+} | null;
+// Variable: settingsQuery
+// Query: {    "header": *[_type == "settingsHeader"][0],    "footer": *[_type == "settingsFooter"][0] {    siteInfo[] {      _key,      _type,      _type == "textBlock" => {        text[] {          ...,          markDefs[] {            ...,            _type == "internalLink" => {              to->{                "slug": slug.current              },              arrow            },            _type == "externalLink" => {              url,              arrow            }          }        }      },      _type == "credit" => {        title,        credits[] {          _key,          label,          url        }      }    }  },    "donate": *[_type == "settingsDonate"][0]  }
+export type SettingsQueryResult = {
+  header: {
+    _id: string;
+    _type: "settingsHeader";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title?: string;
+    links?: Array<{
+      label?: string;
+      _type: "bag";
+      _key: string;
+    } | {
+      label?: string;
+      _type: "mainMenu";
+      _key: string;
+    } | {
+      label?: string;
+      _type: "search";
+      _key: string;
+    }>;
+  } | null;
+  footer: {
+    siteInfo: Array<{
+      _key: string;
+      _type: "creditRow";
+    } | {
+      _key: string;
+      _type: "textBlock";
+      text: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "normal";
+        listItem?: never;
+        markDefs: Array<{
+          url: string | null;
+          arrow: boolean | null;
+          _type: "externalLink";
+          _key: string;
+        } | {
+          to: {
+            slug: null;
+          } | {
+            slug: string | null;
+          } | null;
+          arrow: boolean | null;
+          _type: "internalLink";
+          _key: string;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }> | null;
+    }> | null;
+  } | null;
+  donate: {
+    _id: string;
+    _type: "settingsDonate";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title?: string;
+    text?: string;
+    linkText?: string;
+  } | null;
+};
 
 // Query TypeMap
 import "@sanity/client";
@@ -365,6 +617,10 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"articlePage\" && slug.current == $slug][0]{\n    _id,\n    _type,\n    title,\n    slug,\n    authors[] -> {\n      _key,\n      _type,\n      name,\n      slug\n    },\n    \"category\": category->title,\n    published,\n    originalPublished,\n    featuredImage {\n      \n  _id,\n  _type,\n  asset,\n  alt,\n  \"aspectRatio\": asset->metadata.dimensions.aspectRatio\n\n    },\n    content[] {\n      _key,\n      _type,\n      style,\n      markDefs,\n      children\n    },\n    \"wordCount\": round(length(pt::text(content)) / 5),\n    \"readingTime\": round(length(pt::text(content)) / 5 / 180 )\n  }": ArticlePageQueryResult;
     "*[_type == \"articlePage\"]{\n    \"slug\": slug.current\n  }": ArticlePageSlugsQueryResult;
-    "*[_type == \"homePage\"][0]": HomePageQueryResult;
+    "*[_type == \"homePage\"][0] {\n    title,\n    greeting,\n    content[]{\n      \n  _key,\n  _type,\n  _type == \"featuredEntries\" => {\n    \"entries\": entries[] -> {\n      _key,\n      title,\n      featuredImage,\n      \"slug\": slug.current,\n      \"category\": category->title,\n    }\n  }\n\n    }\n  }": HomePageQueryResult;
+    "*[_type == \"settingsHeader\"][0]": SettingsHeaderQueryResult;
+    "*[_type == \"settingsFooter\"][0] {\n    siteInfo[] {\n      _key,\n      _type,\n      _type == \"textBlock\" => {\n        text[] {\n          ...,\n          markDefs[] {\n            ...,\n            _type == \"internalLink\" => {\n              to->{\n                \"slug\": slug.current\n              },\n              arrow\n            },\n            _type == \"externalLink\" => {\n              url,\n              arrow\n            }\n          }\n        }\n      },\n      _type == \"credit\" => {\n        title,\n        credits[] {\n          _key,\n          label,\n          url\n        }\n      }\n    }\n  }": SettingsFooterQueryResult;
+    "*[_type == \"settingsDonate\"][0]": SettingsDonateQueryResult;
+    "{\n    \"header\": *[_type == \"settingsHeader\"][0],\n    \"footer\": *[_type == \"settingsFooter\"][0] {\n    siteInfo[] {\n      _key,\n      _type,\n      _type == \"textBlock\" => {\n        text[] {\n          ...,\n          markDefs[] {\n            ...,\n            _type == \"internalLink\" => {\n              to->{\n                \"slug\": slug.current\n              },\n              arrow\n            },\n            _type == \"externalLink\" => {\n              url,\n              arrow\n            }\n          }\n        }\n      },\n      _type == \"credit\" => {\n        title,\n        credits[] {\n          _key,\n          label,\n          url\n        }\n      }\n    }\n  },\n    \"donate\": *[_type == \"settingsDonate\"][0]\n  }": SettingsQueryResult;
   }
 }
