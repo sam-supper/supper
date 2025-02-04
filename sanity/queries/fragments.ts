@@ -1,11 +1,22 @@
 import { groq } from "next-sanity";
 
+
 export const imageFields = groq`
   _id,
   _type,
   asset,
   alt,
   "aspectRatio": asset->metadata.dimensions.aspectRatio
+`
+
+export const linkFields = groq`
+  _key,
+  _type,
+  label,
+  to -> {
+    _type,
+    "slug": slug.current
+  }
 `
 
 export const modulesFields = groq`
@@ -29,5 +40,13 @@ export const modulesFields = groq`
   },
   _type == "donateCta" => {
     text
+  },
+  _type == "popularEntriesList" => {
+    title,
+    weeklyTitle,
+    allTimeTitle,
+    link {
+      ${linkFields}
+    }
   }
 `

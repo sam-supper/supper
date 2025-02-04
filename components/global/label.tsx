@@ -28,6 +28,6 @@ export const Label: FC<LabelProps> = (props) => {
   const Component = element;
 
   return (
-    <Component className={twMerge(labelStyles({ uppercase, tone }), className)} {...rest}>{children}</Component>
+    <Component className={`${labelStyles({ uppercase, tone })} ${className}`} {...rest}>{children}</Component>
   )
 }

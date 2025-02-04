@@ -19,7 +19,8 @@ export default defineType({
       of: [
         { type: 'featuredEntries' },
         { type: 'textCallout' },
-        { type: 'donateCta' }
+        { type: 'donateCta' },
+        { type: 'popularEntriesList' }
       ]
     })
   ],

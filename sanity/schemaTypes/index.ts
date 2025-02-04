@@ -14,15 +14,23 @@ type SchemaTypeGroup = {
 
 type SingletonType = SchemaTypeDefinition | SchemaTypeGroup
 
-/** Settings */
-import settingsHeader from './settings/settings-header'
-import settingsFooter from './settings/settings-footer'
-import settingsDonate from './settings/settings-donate'
+// Blocks
+import richText from './blocks/rich-text'
+import richTextSimple from './blocks/rich-text-simple'
+import externalLink from './blocks/external-link'
+import creditRow from './blocks/credit-row'
+import link from './blocks/link'
 
 /** Modules */
 import featuredEntries from './modules/featured-entries'
 import textCallout from './modules/text-callout'
 import donateCta from './modules/donate-cta'
+import popularEntriesList from './modules/popular-entries-list'
+
+/** Settings */
+import settingsHeader from './settings/settings-header'
+import settingsFooter from './settings/settings-footer'
+import settingsDonate from './settings/settings-donate'
 
 /** Documents */
 import homePage from './documents/home-page'
@@ -31,12 +39,7 @@ import legalPage from './documents/legal-page'
 import articlePage from './documents/article-page'
 import articleCategory from './documents/article-category'
 import articleAuthor from './documents/article-author'
-
-// Blocks
-import richText from './blocks/rich-text'
-import richTextSimple from './blocks/rich-text-simple'
-import externalLink from './blocks/external-link'
-import creditRow from './blocks/credit-row'
+import libraryPage from './documents/library-page'
 
 export const allTypes: SchemaTypeDefinition[] = [
   // Settings
@@ -51,17 +54,19 @@ export const allTypes: SchemaTypeDefinition[] = [
   articlePage,
   articleCategory,
   articleAuthor,
-
+  libraryPage,
   // Modules
   featuredEntries,
   textCallout,
   donateCta,
+  popularEntriesList,
   
   // Blocks
   richText,
   richTextSimple,
   externalLink,
-  creditRow
+  creditRow,
+  link
 ]
 
 export const singletonTypes: SingletonType[] = [
@@ -81,6 +86,8 @@ export const singletonTypes: SingletonType[] = [
   }
 ]
 
-export const hiddenTypes: SchemaTypeDefinition[] = []
+export const hiddenTypes: SchemaTypeDefinition[] = [
+  libraryPage
+]
 
 export const orderableTypes: SchemaTypeDefinition[] = []
