@@ -9,7 +9,6 @@ import { VisualEditing } from "next-sanity";
 import { Header } from "@/components/global/header";
 import { Footer } from "@/components/global/footer";
 import { ReactLenis } from "lenis/react";
-import { ThemeSwitcher } from "@/components/global/theme-switcher";
 
 const timesNow = localFont({
   src: [
@@ -50,7 +49,6 @@ export default async function RootLayout({
       <body
         className={`${timesNow.variable} ${grotesqueMT.variable} antialiased font-sans font-normal bg-off-white dark:bg-article-black text-black dark:text-off-white transition-colors duration-300 ease`}
       >
-        <ThemeSwitcher />
         <Header />
         <SanityLive />
         <LayoutTransition>

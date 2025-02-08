@@ -51,11 +51,6 @@ export default defineType({
               }
             }
           }
-        }),
-        defineArrayMember({
-          name: 'credit',
-          title: 'Site Credit',
-          type: 'creditRow'
         })
       ]
     }),

@@ -1,6 +1,6 @@
-import type { HomePageQueryResult } from "@/sanity.types";
+import type { ProjectPageQueryResult } from "@/sanity.types";
 
-export const HomePage = (props: HomePageQueryResult) => {
+export const ProjectPage = (props: ProjectPageQueryResult) => {
   if (!props) return null
 
   const { title, content } = props

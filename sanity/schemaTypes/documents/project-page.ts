@@ -1,11 +1,11 @@
 import { defineType, defineField } from "sanity";
-import {CaseIcon} from '@sanity/icons'
+import {HomeIcon} from '@sanity/icons'
 
 export default defineType({
-  name: "legalPage",
-  title: "Legal Pages",
+  name: "projectPage",
+  title: "Projects",
   type: "document",
-  icon: CaseIcon,
+  icon: HomeIcon,
   fields: [
     defineField({
       name: "title",
@@ -18,8 +18,8 @@ export default defineType({
       type: "slug",
       options: {
         source: "title",
-        maxLength: 96,
+        slugify: (input) => input.toLowerCase().replace(/\s+/g, '-'),
       },
-    }),
+    })
   ],
 });

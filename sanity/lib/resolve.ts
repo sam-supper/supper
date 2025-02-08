@@ -5,7 +5,7 @@ import {
 
 export const resolve: PresentationPluginOptions["resolve"] = {
   locations: {
-    articlePage: defineLocations({
+    projectPage: defineLocations({
       select: {
         title: 'title',
         slug: 'slug.current'
@@ -14,11 +14,11 @@ export const resolve: PresentationPluginOptions["resolve"] = {
         locations: [
           {
             title: doc?.title,
-            href: `/library/${doc?.slug}`
+            href: `/project/${doc?.slug}`
           },
           {
-            title: 'Library',
-            href: `/library`
+            title: 'Works',
+            href: `/works`
           }
         ]
       })

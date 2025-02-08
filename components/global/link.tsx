@@ -1,7 +1,6 @@
 import type { ComponentProps, FC } from "react";
 import type { LinkProps as NextLinkProps } from "next/link";
 
-import { twMerge } from "tailwind-merge";
 import { cva } from "class-variance-authority";
 
 import NextLink from "next/link";
@@ -24,6 +23,6 @@ export const Link: FC<LinkProps> = (props) => {
   const { children, className, underline = false, ...rest } = props;
 
   return (
-    <NextLink className={twMerge(linkStyles({ underline }), className)} {...rest}>{children}</NextLink>
+    <NextLink className={`${className} ${linkStyles({ underline })}`} {...rest}>{children}</NextLink>
   )
 }

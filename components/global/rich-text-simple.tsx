@@ -2,8 +2,6 @@ import type { FC } from "react";
 import type { PortableTextBlock } from "sanity";
 import type { PortableTextReactComponents } from "@portabletext/react";
 
-import { IconArrowDiagonal } from "../icons/icon-arrow-diagonal";
-
 import { PortableText } from "@portabletext/react";
 import { useMemo } from "react";
 import Link from "next/link";
@@ -26,7 +24,6 @@ const defaultComponents: Partial<PortableTextReactComponents> = {
       return (
         <Link href={`/${to.slug}`} className="relative group text-royal-blue dark:text-royal-blue-dark">
           {children}
-          {arrow ? <IconArrowDiagonal size="sm" className="inline-block h-[.8em] w-auto ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-400 will-change-transform ease" /> : null}
         </Link>
       )
     }

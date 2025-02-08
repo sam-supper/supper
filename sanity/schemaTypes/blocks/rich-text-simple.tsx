@@ -29,9 +29,7 @@ export default defineType({
                 to: [
                   { type: 'aboutPage' },
                   { type: 'homePage' },
-                  { type: 'articlePage' },
-                  { type: 'legalPage' },
-                  { type: 'articleCategory' },
+                  { type: 'projectPage' }
                 ]
               }),
               defineField({

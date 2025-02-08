@@ -39,14 +39,9 @@ export const settingsFooterQuery = defineQuery(
   }`
 )
 
-export const settingsDonateQuery = defineQuery(
-  groq`*[_type == "settingsDonate"][0]`
-)
-
 export const settingsQuery = defineQuery(
   groq`{
     "header": ${settingsHeaderQuery},
     "footer": ${settingsFooterQuery},
-    "donate": ${settingsDonateQuery}
   }`
 )

@@ -12,16 +12,5 @@ export default defineType({
       title: "Title",
       type: "string",
     }),
-    defineField({
-      name: 'content',
-      title: 'Content',
-      type: 'array',
-      of: [
-        { type: 'featuredEntries' },
-        { type: 'textCallout' },
-        { type: 'donateCta' },
-        { type: 'popularEntriesList' }
-      ]
-    })
   ],
 });
