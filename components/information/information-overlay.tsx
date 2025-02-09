@@ -1,10 +1,13 @@
 'use client'
 
 import { type FC, useEffect } from "react";
-import { PortableTextReactComponents } from "@portabletext/react";
+import type { SEO } from "@/sanity/types";
+
+import { useDynamicMetaTitle } from "@/hooks/use-dynamic-meta-title";
 import { useSiteStore } from "@/stores/use-site-store";
 import { easeInOutQuart } from "@/lib/easings";
 
+import { PortableTextReactComponents } from "@portabletext/react";
 import { AnimatePresence, motion } from "motion/react";
 import { Footer } from "../global/footer";
 import { RichTextSimple } from "../global/rich-text-simple";
@@ -13,6 +16,7 @@ import Link from "next/link";
 interface InformationOverlayProps {
   content: any
   footer: any
+  seo: SEO
 }
 
 const informationComponents: Partial<PortableTextReactComponents> = {
@@ -41,9 +45,14 @@ const informationComponents: Partial<PortableTextReactComponents> = {
   }
 }
 
-export const InformationOverlay: FC<InformationOverlayProps> = ({ footer, content }) => {
+export const InformationOverlay: FC<InformationOverlayProps> = ({ footer, seo, content }) => {
   const isOpen = useSiteStore((state) => state.informationOpen)
   const setIsOpen = useSiteStore((state) => state.setInformationOpen)
+
+  useDynamicMetaTitle({
+    title: seo?.title,
+    enabled: isOpen
+  })
 
   useEffect(() => {
     const handleKeyUp = (event: KeyboardEvent) => {

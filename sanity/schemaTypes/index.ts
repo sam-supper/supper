@@ -15,18 +15,19 @@ type SchemaTypeGroup = {
 type SingletonType = SchemaTypeDefinition | SchemaTypeGroup
 
 // Blocks
+import seo from './blocks/seo'
 import richText from './blocks/rich-text'
 import richTextSimple from './blocks/rich-text-simple'
 import externalLink from './blocks/external-link'
 import internalLink from './blocks/internal-link'
 
 /** Settings */
+import settingsSeo from './settings/settings-seo'
 import settingsHeader from './settings/settings-header'
 import settingsFooter from './settings/settings-footer'
 
 /** Documents */
 import homePage from './documents/home-page'
-import aboutPage from './documents/about-page'
 import projectPage from './documents/project-page'
 import worksPage from './documents/works-page'
 import client from './documents/client'
@@ -35,12 +36,12 @@ import infoPage from './documents/info-page'
 
 export const allTypes: SchemaTypeDefinition[] = [
   // Settings
+  settingsSeo,
   settingsHeader,
   settingsFooter,
 
   // Documents
   homePage,
-  aboutPage,
   projectPage,
   worksPage,
   client,
@@ -48,6 +49,7 @@ export const allTypes: SchemaTypeDefinition[] = [
   infoPage,
 
   // Blocks
+  seo,
   richText,
   richTextSimple,
   externalLink,
@@ -56,15 +58,14 @@ export const allTypes: SchemaTypeDefinition[] = [
 
 export const singletonTypes: SingletonType[] = [
   {
-    title: 'Settings & Navigation',
+    title: 'Global Settings & Navigation',
     icon: EarthGlobeIcon,
-    types: [settingsHeader, settingsFooter],
+    types: [settingsHeader, settingsFooter, settingsSeo],
     singleton: true,
     divider: true,
   },
   worksPage,
   homePage,
-  aboutPage,
   infoPage,
 ]
 

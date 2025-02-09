@@ -1,5 +1,5 @@
 import { defineQuery, groq } from "next-sanity";
-import { linkFields } from "./fragments";
+import { linkFields, imageFields } from "./fragments";
 
 export const settingsHeaderQuery = defineQuery(
   groq`*[_type == "settingsHeader"][0] {
@@ -33,6 +33,19 @@ export const settingsFooterQuery = defineQuery(
       _key,
       label,
       url
+    }
+  }`
+)
+
+export const settingsSeoQuery = defineQuery(
+  groq`*[_type == "settingsSeo"][0] {
+    title,
+    description,
+    favicon {
+      ${imageFields}
+    },
+    ogImage {
+      ${imageFields}
     }
   }`
 )

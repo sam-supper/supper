@@ -8,6 +8,11 @@ export default defineType({
   icon: HomeIcon,
   fields: [
     defineField({
+      name: 'seo',
+      title: 'SEO Meta',
+      type: 'seo'
+    }),
+    defineField({
       name: "title",
       title: "Title",
       type: "string",

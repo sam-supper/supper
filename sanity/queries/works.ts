@@ -1,5 +1,5 @@
 import { defineQuery, groq } from "next-sanity";
-import { mediaFields } from "./fragments";
+import { mediaFields, seoQuery } from "./fragments";
 
 const worksProjectFields = groq`
 _id,
@@ -23,6 +23,7 @@ featuredMedia {
 
 export const worksPageQuery = defineQuery(
   groq`*[_type == "worksPage"][0] {
+    ${seoQuery},
     "projects": *[_type == "projectPage"] {
       ${worksProjectFields},
     },

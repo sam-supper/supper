@@ -1,8 +1,16 @@
+import { useMetadata } from "@/hooks/use-metadata";
 import { sanityFetch } from "@/sanity/lib/live";
+import { worksPageQuery } from "@/sanity/queries/works";
 import { settingsFooterQuery } from "@/sanity/queries/settings";
 
 import { Footer } from "@/components/global/footer";
 import { ViewToggle } from "@/components/works/view-toggle";
+
+export async function generateMetadata() {
+  const { data: worksPage } = await sanityFetch({ query: worksPageQuery })
+
+  return useMetadata({ data: worksPage?.seo })
+}
 
 export default async function WorksLayout({ children }: { children: React.ReactNode }) {
   const { data: footer } = await sanityFetch({ query: settingsFooterQuery });

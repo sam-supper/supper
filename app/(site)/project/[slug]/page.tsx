@@ -1,7 +1,20 @@
 import { ProjectPage } from "@/components/project/project-page"
-import { client } from "@/sanity/lib/client"
-import { sanityFetch } from "@/sanity/lib/live"
+import { useMetadata } from "@/hooks/use-metadata"
 import { projectQuery, projectPathsQuery } from "@/sanity/queries/project"
+import { sanityFetch } from "@/sanity/lib/live"
+import { client } from "@/sanity/lib/client"
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const slug = (await params).slug
+  const { data: project } = await sanityFetch({ query: projectQuery, params: { slug } })
+
+  const seoData = {
+    title: project?.seo?.title || project?.title,
+    ...project?.seo
+  }
+
+  return useMetadata({ data: seoData })
+}
 
 export default async function ProjectRoute({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug

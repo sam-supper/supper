@@ -16,7 +16,6 @@ export default defineType({
       type: 'reference',
       to: [
         { type: 'homePage' },
-        { type: 'aboutPage' },
         { type: 'projectPage' },
         { type: 'worksPage' },
       ]

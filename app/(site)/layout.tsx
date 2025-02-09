@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next'
+import { settingsQuery, settingsSeoQuery } from "@/sanity/queries/settings";
+import { useMetadata } from "@/hooks/use-metadata";
 import { draftMode } from "next/headers";
 import localFont from "next/font/local";
-import { settingsQuery } from "@/sanity/queries/settings";
 
 import { LayoutTransition } from "@/components/global/layout-transition";
 import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 import { VisualEditing } from "next-sanity";
 import { Header } from "@/components/global/header";
-import { Footer } from "@/components/global/footer";
 import { ThemeSwitcher } from "@/components/global/theme-switcher";
 import { ReactLenis } from "lenis/react";
 
@@ -31,10 +31,11 @@ const ArizonaText = localFont({
   variable: '--font-arizona-text'
 })
 
-export const metadata: Metadata = {
-  title: "Supper",
-  description: "Supper is ...",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { data } = await sanityFetch({ query: settingsSeoQuery })
+
+  return useMetadata({ data, useTitleTemplate: false })
+}
 
 export default async function RootLayout({
   children,

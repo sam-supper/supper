@@ -1,7 +1,8 @@
 import { defineQuery, groq } from "next-sanity";
-import { mediaFields } from "./fragments";
+import { mediaFields, seoQuery } from "./fragments";
 export const homePageQuery = defineQuery(
   groq`*[_type == "homePage"][0] {
+    ${seoQuery},
     title,
     featuredProjects[] {
       _key,

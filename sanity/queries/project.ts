@@ -1,5 +1,5 @@
 import { defineQuery, groq } from "next-sanity";
-import { mediaFields, videoFields, imageFields } from "./fragments";
+import { mediaFields, videoFields, imageFields, seoQuery } from "./fragments";
 
 export const projectPathsQuery = defineQuery(
   groq`*[_type == "projectPage"] {
@@ -9,6 +9,7 @@ export const projectPathsQuery = defineQuery(
 
 export const projectQuery = defineQuery(
   groq`*[_type == "projectPage" && slug.current == $slug][0] {
+    ${seoQuery},
     title,
     "slug": slug.current,
     year,

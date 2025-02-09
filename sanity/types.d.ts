@@ -31,3 +31,10 @@ export interface Media {
   image?: Image
   video?: Video
 }
+
+export interface SEO {
+  title?: string
+  description?: string
+  favicon?: Image
+  ogImage?: Image
+}

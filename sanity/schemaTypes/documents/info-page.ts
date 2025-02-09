@@ -8,6 +8,11 @@ export default defineType({
   icon: InfoOutlineIcon,
   fields: [
     defineField({
+      name: 'seo',
+      title: 'SEO Meta',
+      type: 'seo'
+    }),
+    defineField({
       name: 'content',
       title: 'Content',
       type: 'array',

@@ -1,6 +1,5 @@
 import { groq } from "next-sanity";
 
-
 export const imageFields = groq`
   _id,
   _type,
@@ -35,4 +34,14 @@ export const mediaFields = groq`
   video {
     ${videoFields}
   }
+`
+
+export const seoQuery = groq`
+seo {
+  title,
+  description,
+  ogImage {
+    ${imageFields}
+  }
+}
 `
