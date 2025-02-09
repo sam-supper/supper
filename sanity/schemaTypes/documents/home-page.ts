@@ -1,4 +1,4 @@
-import { defineType, defineField } from "sanity";
+import { defineType, defineField, defineArrayMember } from "sanity";
 import {HomeIcon} from '@sanity/icons'
 
 export default defineType({
@@ -11,6 +11,52 @@ export default defineType({
       name: "title",
       title: "Title",
       type: "string",
+    }),
+    defineField({
+      name: 'featuredProjects',
+      title: 'Featured Projects',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          name: 'project',
+          title: 'Project',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'color',
+              title: 'Text Color',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Black', value: 'black' },
+                  { title: 'White', value: 'white' },
+                ],
+                layout: 'radio',
+                direction: 'horizontal',
+              },
+              initialValue: 'black',
+            }),
+            defineField({
+              name: 'project',
+              title: 'Project',
+              type: 'reference',
+              to: [{ type: 'projectPage' }],
+            })
+          ],
+          preview: {
+            select: {
+              title: 'project.title',
+              media: 'project.featuredMedia.asset',
+              color: 'color',
+            },
+            prepare: ({ title, media, color }) => ({
+              title,
+              subtitle: `Text Color: ${color}`,
+              media,
+            }),
+          },
+        }),
+      ]
     }),
   ],
 });

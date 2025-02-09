@@ -1,42 +1,39 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import localFont from "next/font/local";
-import "./globals.css";
+import { settingsQuery } from "@/sanity/queries/settings";
 
 import { LayoutTransition } from "@/components/global/layout-transition";
-import { SanityLive } from "@/sanity/lib/live";
+import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 import { VisualEditing } from "next-sanity";
 import { Header } from "@/components/global/header";
 import { Footer } from "@/components/global/footer";
+import { ThemeSwitcher } from "@/components/global/theme-switcher";
 import { ReactLenis } from "lenis/react";
 
-const timesNow = localFont({
-  src: [
-    {
-      path: '../fonts/TimesNow-SemiBold.woff',
-      weight: '600',
-      style: 'normal'
-    }
-  ],
-  display: 'swap',
-  variable: '--font-times-now'
-})
+import "./globals.css";
+import { InformationPage } from "@/components/information/information-page";
 
-const grotesqueMT = localFont({
+const ArizonaText = localFont({
   src: [
     {
-      path: '../fonts/GrotesqueMTStd.woff',
+      path: '../fonts/ABCArizonaText-Regular.woff2',
       weight: '400',
       style: 'normal'
+    },
+    {
+      path: '../fonts/ABCArizonaText-RegularItalic.woff2',
+      weight: '400',
+      style: 'italic'
     }
   ],
   display: 'swap',
-  variable: '--font-grotesque-mt'
+  variable: '--font-arizona-text'
 })
 
 export const metadata: Metadata = {
-  title: "Soft Union",
-  description: "Soft Union is ...",
+  title: "Supper",
+  description: "Supper is ...",
 };
 
 export default async function RootLayout({
@@ -44,17 +41,23 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { data: settings } = await sanityFetch({ query: settingsQuery });
+
   return (
     <html lang="en">
       <body
-        className={`${timesNow.variable} ${grotesqueMT.variable} antialiased font-sans font-normal bg-off-white dark:bg-article-black text-black dark:text-off-white transition-colors duration-300 ease`}
+        className={`${ArizonaText.variable} antialiased font-serif font-normal bg-grey-light text-black dark:text-white transition-colors duration-500 ease`}
       >
-        <Header />
+        <Header {...settings?.header} />
+        <InformationPage />
         <SanityLive />
+        <ThemeSwitcher />
         <LayoutTransition>
-          <ReactLenis root>
+          <ReactLenis
+            root
+          >
             {children}
-            <Footer />
+            {/* <Footer /> */}
           </ReactLenis>
         </LayoutTransition>
         {(await draftMode()).isEnabled && <VisualEditing />}

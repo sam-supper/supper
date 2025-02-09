@@ -13,7 +13,20 @@ export default defineType({
     defineField({
       name: 'url',
       title: 'URL',
-      type: 'url'
+      type: 'url',
+      validation: (Rule) => Rule.uri({
+        scheme: ['http', 'https', 'mailto', 'tel']
+      })
     })
-  ]
+  ],
+  preview: {
+    select: {
+      label: 'label',
+      url: 'url'
+    },
+    prepare: ({ label, url }) => ({
+      title: label,
+      subtitle: url ? `url: ${url}` : ''
+    })
+  }
 })

@@ -6,53 +6,64 @@ export default defineType({
   type: "document",
   fields: [
     defineField({
-      name: "title",
-      title: "Title",
-      type: "string",
-      initialValue: 'Soft Union'
-    }),
-    defineField({
       name: 'links',
-      title: 'Links',
+      title: 'Main Links',
       type: 'array',
       of: [
         defineArrayMember({
-          name: 'search',
-          title: 'Search Link',
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'label',
-              title: 'Label',
-              type: 'string',
-            })
-          ]
-        }),
-        defineArrayMember({
-          name: 'mainMenu',
-          title: 'Main Menu Link',
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'label',
-              title: 'Label',
-              type: 'string',
-            })
-          ]
-        }),
-        defineArrayMember({
-          name: 'bag',
-          title: 'Bag Link',
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'label',
-              title: 'Label',
-              type: 'string',
-            })
-          ]
-        }),
+          name: 'link',
+          title: 'Link',
+          type: 'internalLink'
+        })
       ],
+    }),
+    defineField({
+      name: 'contact',
+      title: 'Contact',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'label',
+          title: 'Label',
+          type: 'string',
+        }),
+        defineField({
+          name: 'content',
+          title: 'Expanded Content',
+          type: 'array',
+          of: [
+            defineField({
+              name: 'row',
+              title: 'Content Row',
+              type: 'externalLink',
+              description: 'Leave url blank for simple text'
+            })
+          ]
+        }),
+      ]
+    }),
+    defineField({
+      name: 'information',
+      title: 'Information',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'label',
+          title: 'Label',
+          type: 'string',
+        }),
+        defineField({
+          name: 'content',
+          title: 'Content',
+          type: 'richTextSimple'
+        })
+      ]
     })
   ],
+  preview: {
+    select: {},
+    prepare: () => ({
+      title: 'Header'
+    })
+  }
 });

@@ -14,7 +14,7 @@ export default defineConfig({
   basePath: '/studio',
   projectId,
   dataset,
-  title: 'Soft Union',
+  title: 'Supper',
   perspective: 'published',
 
   schema: {

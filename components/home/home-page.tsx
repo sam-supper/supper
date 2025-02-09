@@ -1,13 +1,19 @@
-import type { HomePageQueryResult } from "@/sanity.types";
+import { ProjectCarousel } from "./project-carousel";
 
-export const HomePage = (props: HomePageQueryResult) => {
+export interface HomePageProps {
+  title: string
+  featuredProjects: any
+}
+
+export const HomePage = (props: HomePageProps) => {
   if (!props) return null
 
-  const { title, content } = props
+  const { title, featuredProjects } = props
 
   return (
-    <div className="site-container flex flex-col gap-20">
-      <h1>{title}</h1>
+    <div className="min-h-screen grid grid-cols-1 *:col-start-1 *:col-span-1 *:row-start-1 *:row-span-1">
+      <h1 className="sr-only">{title}</h1>
+      <ProjectCarousel projects={featuredProjects} />
     </div>
   );
 };

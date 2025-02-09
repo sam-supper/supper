@@ -1,7 +1,7 @@
 import { defineType, defineField } from "sanity";
 
 export default defineType({
-  name: 'link',
+  name: 'internalLink',
   title: 'Internal Link',
   type: 'object',
   fields: [
@@ -18,6 +18,7 @@ export default defineType({
         { type: 'homePage' },
         { type: 'aboutPage' },
         { type: 'projectPage' },
+        { type: 'worksPage' },
       ]
     })
   ]

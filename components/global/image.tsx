@@ -22,7 +22,7 @@ export const Image: FC<ImageProps> = ({ image, quality = 90, alt, className, siz
 
   return (
     <img
-      src={initialSrc}
+      src={image.lqip ?? initialSrc}
       srcSet={srcSet}
       alt={alt}
       className={className}

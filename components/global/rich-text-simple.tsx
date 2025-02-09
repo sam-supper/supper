@@ -16,15 +16,22 @@ const defaultComponents: Partial<PortableTextReactComponents> = {
     normal: ({ children }) => <p className="text-sans-small [&_em]:font-serif [&_em]:text-serif-small">{children}</p>,
   },
   marks: {
-    em: ({ children }) => <em>{children}</em>,
+    em: ({ children }) => <em className="italic">{children}</em>,
     year: () => <>{new Date().getFullYear()}</>,
     internalLink: ({ children, value }) => {
-      const { to, arrow } = value
+      const { to } = value
 
       return (
         <Link href={`/${to.slug}`} className="relative group text-royal-blue dark:text-royal-blue-dark">
           {children}
         </Link>
+      )
+    },
+    externalLink: ({ children, value }) => {
+      const { url } = value
+
+      return (
+        <a href={url} target="_blank" rel="noopener noreferrer" className="relative group text-royal-blue dark:text-royal-blue-dark">{children}</a>
       )
     }
   }

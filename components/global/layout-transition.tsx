@@ -5,6 +5,7 @@ import { useSelectedLayoutSegment } from "next/navigation";
 import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
  
 import { useContext, useEffect, useRef } from "react";
+import { easeInOutQuart } from "@/lib/easings";
  
 function usePreviousValue<T>(value: T): T | undefined {
   const prevValue = useRef<T | undefined>(undefined);
@@ -51,7 +52,8 @@ const defaultExit = {
 }
 
 const defaultTransition = {
-  duration: 0.3,
+  duration: 0.45,
+  ease: easeInOutQuart
 }
  
 interface LayoutTransitionProps {
@@ -68,8 +70,8 @@ export function LayoutTransition({
   children,
   className,
   style,
-  initial,
-  animate,
+  initial = defaultInitial,
+  animate = defaultAnimate,
   exit = defaultExit,
   transition = defaultTransition,
 }: LayoutTransitionProps) {

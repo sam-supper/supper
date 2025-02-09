@@ -125,8 +125,8 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type Link = {
-  _type: "link";
+export type InternalLink = {
+  _type: "internalLink";
   label?: string;
   to?: {
     _ref: string;
@@ -143,6 +143,11 @@ export type Link = {
     _type: "reference";
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "projectPage";
+  } | {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "worksPage";
   };
 };
 
@@ -177,6 +182,11 @@ export type RichTextSimple = Array<{
       _type: "reference";
       _weak?: boolean;
       [internalGroqTypeReferenceTo]?: "projectPage";
+    } | {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "worksPage";
     };
     arrow?: boolean;
     _type: "internalLink";
@@ -238,6 +248,36 @@ export type SettingsFooter = {
   }>;
 };
 
+export type SettingsHeader = {
+  _id: string;
+  _type: "settingsHeader";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  links?: Array<{
+    _key: string;
+  } & InternalLink>;
+  contact?: {
+    label?: string;
+    content?: Array<{
+      _key: string;
+    } & ExternalLink>;
+  };
+  information?: {
+    label?: string;
+    content?: RichTextSimple;
+  };
+};
+
+export type WorksPage = {
+  _id: string;
+  _type: "worksPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+};
+
 export type ProjectPage = {
   _id: string;
   _type: "projectPage";
@@ -272,29 +312,7 @@ export type AboutPage = {
   title?: string;
 };
 
-export type SettingsHeader = {
-  _id: string;
-  _type: "settingsHeader";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  links?: Array<{
-    label?: string;
-    _type: "search";
-    _key: string;
-  } | {
-    label?: string;
-    _type: "mainMenu";
-    _key: string;
-  } | {
-    label?: string;
-    _type: "bag";
-    _key: string;
-  }>;
-};
-
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | SanityAssetSourceData | Link | ExternalLink | RichTextSimple | RichText | SettingsFooter | ProjectPage | Slug | HomePage | AboutPage | SettingsHeader;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | SanityAssetSourceData | InternalLink | ExternalLink | RichTextSimple | RichText | SettingsFooter | SettingsHeader | WorksPage | ProjectPage | Slug | HomePage | AboutPage;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/queries/home.ts
 // Variable: homePageQuery
@@ -318,27 +336,39 @@ export type ProjectQueryResult = {
 
 // Source: ./sanity/queries/settings.ts
 // Variable: settingsHeaderQuery
-// Query: *[_type == "settingsHeader"][0]
+// Query: *[_type == "settingsHeader"][0] {    links[] {        _key,  _type,  label,  to -> {    _type,    "slug": slug.current  }    },    contact {      label,      content[] {        _key,        _type,        label,        url      }    },    information {      label,      content    }  }
 export type SettingsHeaderQueryResult = {
-  _id: string;
-  _type: "settingsHeader";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  links?: Array<{
-    label?: string;
-    _type: "bag";
+  links: Array<{
     _key: string;
-  } | {
-    label?: string;
-    _type: "mainMenu";
-    _key: string;
-  } | {
-    label?: string;
-    _type: "search";
-    _key: string;
-  }>;
+    _type: "internalLink";
+    label: string | null;
+    to: {
+      _type: "aboutPage";
+      slug: null;
+    } | {
+      _type: "homePage";
+      slug: null;
+    } | {
+      _type: "projectPage";
+      slug: string | null;
+    } | {
+      _type: "worksPage";
+      slug: null;
+    } | null;
+  }> | null;
+  contact: {
+    label: string | null;
+    content: Array<{
+      _key: string;
+      _type: "externalLink";
+      label: string | null;
+      url: string | null;
+    }> | null;
+  } | null;
+  information: {
+    label: string | null;
+    content: RichTextSimple | null;
+  } | null;
 } | null;
 // Variable: settingsFooterQuery
 // Query: *[_type == "settingsFooter"][0] {    siteInfo[] {      _key,      _type,      _type == "textBlock" => {        text[] {          ...,          markDefs[] {            ...,            _type == "internalLink" => {              to->{                "slug": slug.current              },              arrow            },            _type == "externalLink" => {              url,              arrow            }          }        }      },      _type == "credit" => {        title,        credits[] {          _key,          label,          url        }      }    }  }
@@ -377,28 +407,40 @@ export type SettingsFooterQueryResult = {
   }> | null;
 } | null;
 // Variable: settingsQuery
-// Query: {    "header": *[_type == "settingsHeader"][0],    "footer": *[_type == "settingsFooter"][0] {    siteInfo[] {      _key,      _type,      _type == "textBlock" => {        text[] {          ...,          markDefs[] {            ...,            _type == "internalLink" => {              to->{                "slug": slug.current              },              arrow            },            _type == "externalLink" => {              url,              arrow            }          }        }      },      _type == "credit" => {        title,        credits[] {          _key,          label,          url        }      }    }  },  }
+// Query: {    "header": *[_type == "settingsHeader"][0] {    links[] {        _key,  _type,  label,  to -> {    _type,    "slug": slug.current  }    },    contact {      label,      content[] {        _key,        _type,        label,        url      }    },    information {      label,      content    }  },    "footer": *[_type == "settingsFooter"][0] {    siteInfo[] {      _key,      _type,      _type == "textBlock" => {        text[] {          ...,          markDefs[] {            ...,            _type == "internalLink" => {              to->{                "slug": slug.current              },              arrow            },            _type == "externalLink" => {              url,              arrow            }          }        }      },      _type == "credit" => {        title,        credits[] {          _key,          label,          url        }      }    }  },  }
 export type SettingsQueryResult = {
   header: {
-    _id: string;
-    _type: "settingsHeader";
-    _createdAt: string;
-    _updatedAt: string;
-    _rev: string;
-    title?: string;
-    links?: Array<{
-      label?: string;
-      _type: "bag";
+    links: Array<{
       _key: string;
-    } | {
-      label?: string;
-      _type: "mainMenu";
-      _key: string;
-    } | {
-      label?: string;
-      _type: "search";
-      _key: string;
-    }>;
+      _type: "internalLink";
+      label: string | null;
+      to: {
+        _type: "aboutPage";
+        slug: null;
+      } | {
+        _type: "homePage";
+        slug: null;
+      } | {
+        _type: "projectPage";
+        slug: string | null;
+      } | {
+        _type: "worksPage";
+        slug: null;
+      } | null;
+    }> | null;
+    contact: {
+      label: string | null;
+      content: Array<{
+        _key: string;
+        _type: "externalLink";
+        label: string | null;
+        url: string | null;
+      }> | null;
+    } | null;
+    information: {
+      label: string | null;
+      content: RichTextSimple | null;
+    } | null;
   } | null;
   footer: {
     siteInfo: Array<{
@@ -443,8 +485,8 @@ declare module "@sanity/client" {
     "*[_type == \"homePage\"][0] {\n    title,\n  }": HomePageQueryResult;
     "*[_type == \"projectPage\"] {\n    \"slug\": slug.current\n  }": ProjectPathsQueryResult;
     "*[_type == \"projectPage\" && slug.current == $slug][0] {\n    title,\n    \"slug\": slug.current\n  }": ProjectQueryResult;
-    "*[_type == \"settingsHeader\"][0]": SettingsHeaderQueryResult;
+    "*[_type == \"settingsHeader\"][0] {\n    links[] {\n      \n  _key,\n  _type,\n  label,\n  to -> {\n    _type,\n    \"slug\": slug.current\n  }\n\n    },\n    contact {\n      label,\n      content[] {\n        _key,\n        _type,\n        label,\n        url\n      }\n    },\n    information {\n      label,\n      content\n    }\n  }": SettingsHeaderQueryResult;
     "*[_type == \"settingsFooter\"][0] {\n    siteInfo[] {\n      _key,\n      _type,\n      _type == \"textBlock\" => {\n        text[] {\n          ...,\n          markDefs[] {\n            ...,\n            _type == \"internalLink\" => {\n              to->{\n                \"slug\": slug.current\n              },\n              arrow\n            },\n            _type == \"externalLink\" => {\n              url,\n              arrow\n            }\n          }\n        }\n      },\n      _type == \"credit\" => {\n        title,\n        credits[] {\n          _key,\n          label,\n          url\n        }\n      }\n    }\n  }": SettingsFooterQueryResult;
-    "{\n    \"header\": *[_type == \"settingsHeader\"][0],\n    \"footer\": *[_type == \"settingsFooter\"][0] {\n    siteInfo[] {\n      _key,\n      _type,\n      _type == \"textBlock\" => {\n        text[] {\n          ...,\n          markDefs[] {\n            ...,\n            _type == \"internalLink\" => {\n              to->{\n                \"slug\": slug.current\n              },\n              arrow\n            },\n            _type == \"externalLink\" => {\n              url,\n              arrow\n            }\n          }\n        }\n      },\n      _type == \"credit\" => {\n        title,\n        credits[] {\n          _key,\n          label,\n          url\n        }\n      }\n    }\n  },\n  }": SettingsQueryResult;
+    "{\n    \"header\": *[_type == \"settingsHeader\"][0] {\n    links[] {\n      \n  _key,\n  _type,\n  label,\n  to -> {\n    _type,\n    \"slug\": slug.current\n  }\n\n    },\n    contact {\n      label,\n      content[] {\n        _key,\n        _type,\n        label,\n        url\n      }\n    },\n    information {\n      label,\n      content\n    }\n  },\n    \"footer\": *[_type == \"settingsFooter\"][0] {\n    siteInfo[] {\n      _key,\n      _type,\n      _type == \"textBlock\" => {\n        text[] {\n          ...,\n          markDefs[] {\n            ...,\n            _type == \"internalLink\" => {\n              to->{\n                \"slug\": slug.current\n              },\n              arrow\n            },\n            _type == \"externalLink\" => {\n              url,\n              arrow\n            }\n          }\n        }\n      },\n      _type == \"credit\" => {\n        title,\n        credits[] {\n          _key,\n          label,\n          url\n        }\n      }\n    }\n  },\n  }": SettingsQueryResult;
   }
 }

@@ -18,7 +18,7 @@ type SingletonType = SchemaTypeDefinition | SchemaTypeGroup
 import richText from './blocks/rich-text'
 import richTextSimple from './blocks/rich-text-simple'
 import externalLink from './blocks/external-link'
-import link from './blocks/link'
+import internalLink from './blocks/internal-link'
 
 /** Settings */
 import settingsHeader from './settings/settings-header'
@@ -28,6 +28,10 @@ import settingsFooter from './settings/settings-footer'
 import homePage from './documents/home-page'
 import aboutPage from './documents/about-page'
 import projectPage from './documents/project-page'
+import worksPage from './documents/works-page'
+import client from './documents/client'
+import service from './documents/service'
+import infoPage from './documents/info-page'
 
 export const allTypes: SchemaTypeDefinition[] = [
   // Settings
@@ -38,12 +42,16 @@ export const allTypes: SchemaTypeDefinition[] = [
   homePage,
   aboutPage,
   projectPage,
-  
+  worksPage,
+  client,
+  service,
+  infoPage,
+
   // Blocks
   richText,
   richTextSimple,
   externalLink,
-  link
+  internalLink
 ]
 
 export const singletonTypes: SingletonType[] = [
@@ -54,8 +62,10 @@ export const singletonTypes: SingletonType[] = [
     singleton: true,
     divider: true,
   },
+  worksPage,
   homePage,
   aboutPage,
+  infoPage,
 ]
 
 export const hiddenTypes: SchemaTypeDefinition[] = []

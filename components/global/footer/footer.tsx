@@ -1,31 +1,48 @@
-import { type ComponentProps } from "react";
-
+import type { FC } from "react";
 import { sanityFetch } from "@/sanity/lib/live";
 import { settingsFooterQuery } from "@/sanity/queries/settings";
 
 import { RichTextSimple } from '@/components/global/rich-text-simple'
 
-export const Footer = async () => {
-  const { data: footer } = await sanityFetch({ query: settingsFooterQuery });
-  
-  return (
-    <footer className="bg-grey-light px-site-x py-site-x flex flex-col justify-between w-full aspect-footer text-sans-small">
-      <div className="w-full site-grid">
-        <div className="col-span-3 flex flex-col gap-18">
-          Info
-        </div>
-        <div className="col-start-6 col-span-7 pr-[4%] grid grid-cols-4 gap-20">
-          Links
-        </div>
-      </div>
+interface FooterProps {
+  columns: any
+  externalLinks: any
+}
 
-      <div className="w-full site-grid items-end">
-        <div className="col-span-3">
-          <div className="max-w-[240px]">Sign up for our newsletter to stay notified of New Literature.</div>
-        </div>
-        <div className="col-span-7 col-start-6">
-          <span className="text-grey">Generously supported by</span> Garden Variety
-        </div>
+export const Footer: FC<FooterProps> = ({ columns, externalLinks }) => {
+  return (
+    <footer className="px-site-x py-site-y flex flex-col md:site-grid text-footer">
+      <div className="md:col-span-6 flex items-end justify-between gap-site-x">
+        {columns?.map((column: any, index: number) => {
+          const visibleOnMobile = index === 0
+          return (
+            <div
+              key={column._key}
+              className={`${!visibleOnMobile ? 'hidden md:block' : ''} relative max-w-140`}
+            >
+              <RichTextSimple value={column.text} />
+            </div>
+          )
+        })}
+      </div>
+      <div className="hidden md:flex items-end justify-end gap-50 md:col-span-6">
+        <ul className="flex items-center gap-3">
+          {externalLinks?.map((link: any, index: number) => {
+            return (
+              <li key={link._key}>
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative group text-footer"
+                >
+                  {link.label}{index < externalLinks?.length - 1 ? ',' : ''}
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+        <p>(C){new Date().getFullYear()}</p>
       </div>
     </footer>
   )

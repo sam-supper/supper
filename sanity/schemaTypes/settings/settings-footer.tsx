@@ -1,7 +1,4 @@
-import { PortableTextBlock } from "next-sanity";
 import { defineType, defineField, defineArrayMember } from "sanity";
-import {TextIcon} from '@sanity/icons'
-import { MediaIcon } from "@/sanity/components/media-icon";
 
 export default defineType({
   name: "settingsFooter",
@@ -9,21 +6,13 @@ export default defineType({
   type: "document",
   fields: [
     defineField({
-      name: "title",
-      title: "Title",
-      type: "string",
-      initialValue: 'Footer',
-      readOnly: true,
-      hidden: true
-    }),
-    defineField({
-      name: 'siteInfo',
-      title: 'Site Info',
+      name: 'columns',
+      title: 'Columns',
       type: 'array',
       of: [
         defineArrayMember({
-          name: 'textBlock',
-          title: 'Text Block',
+          name: 'column',
+          title: 'Column',
           type: 'object',
           fields: [
             defineField({
@@ -36,66 +25,24 @@ export default defineType({
             select: {
               text: 'text'
             },
-            prepare: ({ text }) => {
-              const textString = text.reduce((acc: string, item: PortableTextBlock) => {
-                const childText = item.children?.map((child) => {
-                  return child.text;
-                }).join(' ');
-                return `${acc} ${childText}`;
-              }, '');
-
-              return {
-                title: textString,
-                subtitle: 'Text Block',
-                media: <MediaIcon icon={<TextIcon />} />
-              }
-            }
+            prepare: ({ text }) => ({
+              title: text?.[0]?.children?.[0]?.text
+            })
           }
         })
       ]
     }),
     defineField({
-      name: 'links',
-      title: 'Links',
+      name: 'externalLinks',
+      title: 'External Links',
       type: 'array',
-      of: [
-        defineArrayMember({
-          name: 'search',
-          title: 'Search Link',
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'label',
-              title: 'Label',
-              type: 'string',
-            })
-          ]
-        }),
-        defineArrayMember({
-          name: 'mainMenu',
-          title: 'Main Menu Link',
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'label',
-              title: 'Label',
-              type: 'string',
-            })
-          ]
-        }),
-        defineArrayMember({
-          name: 'bag',
-          title: 'Bag Link',
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'label',
-              title: 'Label',
-              type: 'string',
-            })
-          ]
-        }),
-      ],
+      of: [{ type: 'externalLink' }]
     })
   ],
+  preview: {
+    select: {},
+    prepare: () => ({
+      title: 'Footer'
+    })
+  }
 });

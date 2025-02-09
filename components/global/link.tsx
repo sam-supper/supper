@@ -4,8 +4,9 @@ import type { LinkProps as NextLinkProps } from "next/link";
 import { cva } from "class-variance-authority";
 
 import NextLink from "next/link";
+import { InternalLink } from "@/sanity.types";
 
-interface LinkProps extends NextLinkProps, Omit<ComponentProps<'a'>, 'href'> {
+interface LinkProps extends NextLinkProps, InternalLink, Omit<ComponentProps<'a'>, 'href'> {
   children: React.ReactNode;
   className?: string;
   underline?: boolean;

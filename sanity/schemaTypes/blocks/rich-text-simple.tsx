@@ -29,7 +29,8 @@ export default defineType({
                 to: [
                   { type: 'aboutPage' },
                   { type: 'homePage' },
-                  { type: 'projectPage' }
+                  { type: 'projectPage' },
+                  { type: 'worksPage' }
                 ]
               }),
               defineField({
@@ -49,14 +50,12 @@ export default defineType({
               defineField({
                 name: 'url',
                 title: 'URL',
-                type: 'url'
+                type: 'url',
+                validation: (Rule) => Rule.uri({
+                  allowRelative: true,
+                  scheme: ['http', 'https', 'mailto', 'tel']
+                })
               }),
-              defineField({
-                name: 'arrow',
-                title: 'With Arrow',
-                type: 'boolean',
-                initialValue: false
-              })
             ],
             icon: () => <ArrowTopRightIcon />
           })

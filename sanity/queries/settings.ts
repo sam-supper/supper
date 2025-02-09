@@ -1,40 +1,37 @@
 import { defineQuery, groq } from "next-sanity";
+import { linkFields } from "./fragments";
 
 export const settingsHeaderQuery = defineQuery(
-  groq`*[_type == "settingsHeader"][0]`
+  groq`*[_type == "settingsHeader"][0] {
+    links[] {
+      ${linkFields}
+    },
+    contact {
+      label,
+      content[] {
+        _key,
+        _type,
+        label,
+        url
+      }
+    },
+    information {
+      label,
+      content
+    }
+  }`
 )
 
 export const settingsFooterQuery = defineQuery(
   groq`*[_type == "settingsFooter"][0] {
-    siteInfo[] {
+    columns[] {
       _key,
-      _type,
-      _type == "textBlock" => {
-        text[] {
-          ...,
-          markDefs[] {
-            ...,
-            _type == "internalLink" => {
-              to->{
-                "slug": slug.current
-              },
-              arrow
-            },
-            _type == "externalLink" => {
-              url,
-              arrow
-            }
-          }
-        }
-      },
-      _type == "credit" => {
-        title,
-        credits[] {
-          _key,
-          label,
-          url
-        }
-      }
+      text
+    },
+    externalLinks[] {
+      _key,
+      label,
+      url
     }
   }`
 )

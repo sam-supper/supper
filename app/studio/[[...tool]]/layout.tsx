@@ -1,28 +1,21 @@
 import './studio.css'
 import localFont from 'next/font/local'
 
-const timesNow = localFont({
+const ArizonaText = localFont({
   src: [
     {
-      path: '../../fonts/TimesNow-SemiBold.woff',
-      weight: '600',
-      style: 'normal'
-    }
-  ],
-  display: 'swap',
-  variable: '--font-times-now'
-})
-
-const grotesqueMT = localFont({
-  src: [
-    {
-      path: '../../fonts/GrotesqueMTStd.woff',
+      path: '../../fonts/ABCArizonaText-Regular.woff2',
       weight: '400',
       style: 'normal'
+    },
+    {
+      path: '../../fonts/ABCArizonaText-RegularItalic.woff2',
+      weight: '400',
+      style: 'italic'
     }
   ],
   display: 'swap',
-  variable: '--font-grotesque-mt'
+  variable: '--font-arizona-text'
 })
 
 export default function StudioLayout({
@@ -32,7 +25,7 @@ export default function StudioLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${timesNow.variable} ${grotesqueMT.variable}`}>
+      <body className={`${ArizonaText.variable}`}>
         {children}
       </body>
     </html>
