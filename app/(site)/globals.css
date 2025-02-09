@@ -6,6 +6,34 @@
   --site-x: 14px;
   --site-y: 16px;
 
+  --title-lg-font-size: 16px;
+  --title-lg-line-height: 20px;
+  --title-lg-letter-spacing: -0.03em;
+
+  --title-font-size: 20px;
+  --title-line-height: 20px;
+  --title-letter-spacing: -0.03em;
+
+  --subtitle-font-size: 14px;
+  --subtitle-line-height: 18px;
+  --subtitle-letter-spacing: -0.03em;
+
+  --nav-font-size: 12px;
+  --nav-line-height: 14px;
+  --nav-letter-spacing: -0.03em;
+
+  --list-title-font-size: 12px;
+  --list-title-line-height: 15px;
+  --list-title-letter-spacing: -0.05em;
+
+  --eyebrow-font-size: 10px;
+  --eyebrow-line-height: 18px;
+  --eyebrow-letter-spacing: -0.03em;
+
+  --footer-font-size: 10px;
+  --footer-line-height: 12px;
+  --footer-letter-spacing: 0em;
+
   --grid-columns: 8;
 }
 
@@ -13,6 +41,34 @@
   :root {
     --site-x: 20px;
     --site-y: 20px;
+
+    --title-lg-font-size: 36px;
+    --title-lg-line-height: 42px;
+    --title-lg-letter-spacing: -0.03em;
+
+    --title-font-size: 32px;
+    --title-line-height: 32px;
+    --title-letter-spacing: -0.03em;
+
+    --subtitle-font-size: 20px;
+    --subtitle-line-height: 24px;
+    --subtitle-letter-spacing: -0.03em;
+
+    --nav-font-size: 15px;
+    --nav-line-height: 18px;
+    --nav-letter-spacing: -0.03em;
+
+    --list-title-font-size: 16px;
+    --list-title-line-height: 20px;
+    --list-title-letter-spacing: -0.05em;
+
+    --eyebrow-font-size: 12px;
+    --eyebrow-line-height: 12px;
+    --eyebrow-letter-spacing: -0.03em;
+
+    --footer-font-size: 13px;
+    --footer-line-height: 16px;
+    --footer-letter-spacing: 0em;
     
     --grid-columns: 12;
   }
@@ -21,14 +77,6 @@
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-
-.site-grid {
-  display: grid;
-  grid-template-columns: repeat(var(--grid-columns), 1fr);
-  column-gap: 20px;
-  row-gap: 20px;
 }
 
 i, em {
@@ -51,7 +99,7 @@ a:focus-visible, button:focus-visible {
   }
 
   .site-grid {
-    @apply md:grid md:grid-cols-12 md:gap-x-20;
+    @apply grid grid-cols-6 gap-x-10 md:grid-cols-12 md:gap-x-20;
   }
 
   .grid-contain {

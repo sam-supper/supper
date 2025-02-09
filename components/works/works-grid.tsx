@@ -13,7 +13,7 @@ interface WorksGridProps {
 export const WorksGrid: FC<WorksGridProps> = ({ projects }) => {
   return (
     <motion.div
-      className="w-full grid grid-cols-4 gap-100"
+      className="w-full grid grid-cols-4 gap-32 lg:gap-100"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

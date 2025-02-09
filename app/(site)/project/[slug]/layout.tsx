@@ -7,7 +7,7 @@ export default async function ProjectLayout({ children }: { children: React.Reac
   const { data: footer } = await sanityFetch({ query: settingsFooterQuery });
 
   return (
-    <div className="min-h-screen flex flex-col gap-140">
+    <div className="min-h-screen flex flex-col gap-80 md:gap-140">
       <div className="w-full flex-1">
         {children}
       </div>

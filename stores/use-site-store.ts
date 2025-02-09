@@ -5,6 +5,8 @@ interface SiteStore {
   setInformationOpen: (open: boolean) => void;
   contactOpen: boolean;
   setContactOpen: (open: boolean) => void;
+  mobileMenuOpen: boolean;
+  setMobileMenuOpen: (open: boolean) => void;
 }
 
 export const useSiteStore = create<SiteStore>((set) => ({
@@ -12,4 +14,6 @@ export const useSiteStore = create<SiteStore>((set) => ({
   setInformationOpen: (open: boolean) => set({ informationOpen: open }),
   contactOpen: false,
   setContactOpen: (open: boolean) => set({ contactOpen: open }),
+  mobileMenuOpen: false,
+  setMobileMenuOpen: (open: boolean) => set({ mobileMenuOpen: open }),
 }))

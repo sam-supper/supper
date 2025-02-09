@@ -14,12 +14,12 @@ export const WorksListItem: FC<WorksListItemProps> = (props) => {
       className="w-full site-grid text-list-title group-hover:text-grey group-hover:hover:text-black group-hover:hover:underline pb-5 last-of-type:pb-0 transition-colors duration-200 ease"
       {...rest}
     >
-      <div className="md:col-span-9 md:grid md:grid-cols-[30%_30%_40%] gap-x-20">
-        <div>{client?.title}</div>
+      <div className="col-span-4 md:col-span-9 md:grid md:grid-cols-[30%_30%_40%] gap-x-20">
+        <div className="hidden md:block">{client?.title}</div>
         <div>{title}</div>
-        <div>Service:</div>
+        <div className="hidden md:block">Service:</div>
       </div>
-      <div className="md:col-span-3">
+      <div className="col-span-2 md:col-span-3 text-right md:text-left">
         {year}
       </div>
     </Link>

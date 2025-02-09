@@ -28,33 +28,33 @@ export default {
       'serif': ['var(--font-arizona-text)', 'serif']
     },
     fontSize: {
-      'title-lg': ['36px', {
-        lineHeight: '42px',
-        letterSpacing: '-0.03em'
+      'title-lg': ["var(--title-lg-font-size)", {
+        lineHeight: "var(--title-lg-line-height)",
+        letterSpacing: "var(--title-lg-letter-spacing)"
       }],
-      'title': ['32px', {
-        lineHeight: '32px',
-        letterSpacing: '-0.03em'
+      'title': ["var(--title-font-size)", {
+        lineHeight: "var(--title-line-height)",
+        letterSpacing: "var(--title-letter-spacing)"
       }],
-      'subtitle': ['20px', {
-        lineHeight: '24px',
-        letterSpacing: '-0.03em'
+      'subtitle': ["var(--subtitle-font-size)", {
+        lineHeight: "var(--subtitle-line-height)",
+        letterSpacing: "var(--subtitle-letter-spacing)"
       }],
-      'nav': ['15px', {
-        lineHeight: '18px',
-        letterSpacing: '-0.03em'
+      'nav': ["var(--nav-font-size)", {
+        lineHeight: "var(--nav-line-height)",
+        letterSpacing: "var(--nav-letter-spacing)"
       }],
-      'list-title': ['16px', {
-        lineHeight: '20px',
-        letterSpacing: '-0.05em'
+      'list-title': ["var(--list-title-font-size)", {
+        lineHeight: "var(--list-title-line-height)",
+        letterSpacing: "var(--list-title-letter-spacing)"
       }],
-      'eyebrow': ['12px', {
-        lineHeight: '12px',
-        letterSpacing: '-0.03em'
+      'eyebrow': ["var(--eyebrow-font-size)", {
+        lineHeight: "var(--eyebrow-line-height)",
+        letterSpacing: "var(--eyebrow-letter-spacing)"
       }],
-      'footer': ['13px', {
-        lineHeight: '16px',
-        letterSpacing: '0em'
+      'footer': ["var(--footer-font-size)", {
+        lineHeight: "var(--footer-line-height)",
+        letterSpacing: "var(--footer-letter-spacing)"
       }]
     },
     fontWeight: {
@@ -83,6 +83,10 @@ export default {
     extend: {
       transitionDuration: {
         '400': '400ms'
+      },
+      transitionTimingFunction: {
+        'in-out-quart': 'cubic-bezier(0.76, 0, 0.24, 1)',
+        'ease-out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)'
       }
     },
   },

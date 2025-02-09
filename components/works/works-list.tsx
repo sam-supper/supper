@@ -18,19 +18,19 @@ export const WorksList: FC<WorksListProps> = ({ projects }) => {
 
   return (
     <motion.div
-      className="w-full flex flex-col gap-25 min-h-[600px] relative"
+      className="w-full flex flex-col gap-25 md:min-h-[600px] relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.35, ease: easeInOutQuart }}
     >
       <div className="w-full site-grid text-list-title italic">
-        <div className="md:col-span-9 md:grid md:grid-cols-[30%_30%_40%] gap-x-20">
-          <div>Client:</div>
+        <div className="col-span-4 md:col-span-9 md:grid md:grid-cols-[30%_30%_40%] gap-x-20">
+          <div className="hidden md:block">Client:</div>
           <div>Project:</div>
-          <div>Service:</div>
+          <div className="hidden md:block">Service:</div>
         </div>
-        <div className="md:col-span-3">
+        <div className="col-span-2 md:col-span-3 text-right md:text-left">
           Year:
         </div>
       </div>

@@ -18,7 +18,8 @@ export const settingsHeaderQuery = defineQuery(
     information {
       label,
       content
-    }
+    },
+    "projectCount": count(*[_type == "projectPage"])
   }`
 )
 
