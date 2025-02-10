@@ -30,7 +30,7 @@ services[] -> {
 export const worksPageQuery = defineQuery(
   groq`*[_type == "worksPage"][0] {
     ${seoQuery},
-    "projects": *[_type == "projectPage"] {
+    "projects": *[_type == "projectPage"] | order(orderRank) {
       ${worksProjectFields},
     },
     "services": *[_type == "service"] {

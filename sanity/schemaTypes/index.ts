@@ -71,4 +71,6 @@ export const singletonTypes: SingletonType[] = [
 
 export const hiddenTypes: SchemaTypeDefinition[] = []
 
-export const orderableTypes: SchemaTypeDefinition[] = []
+export const orderableTypes: SchemaTypeDefinition[] = [
+  projectPage,
+]

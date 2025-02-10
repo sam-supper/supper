@@ -1,9 +1,10 @@
 import type {StructureResolver} from 'sanity/structure'
+import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list'
 
 import { singletonTypes, hiddenTypes, orderableTypes } from './schemaTypes'
 
 // https://www.sanity.io/docs/structure-builder-cheat-sheet
-export const structure: StructureResolver = (S) => {
+export const structure: StructureResolver = (S, context) => {
   
   const singletons = singletonTypes.map((typeDef) => {
     if ('types' in typeDef) {
@@ -66,22 +67,21 @@ export const structure: StructureResolver = (S) => {
       )
   )
 
-  // const orderableListItems = orderableTypes?.map((orderableTypeDef) => {
-  //   return orderableDocumentListDeskItem({
-  //     type: orderableTypeDef.name,
-  //     title: orderableTypeDef.title,
-  //     S,
-  //     context,
-  //     icon: orderableTypeDef.icon,
-  //   })
-  // })
+  const orderableListItems = orderableTypes?.map((orderableTypeDef) => {
+    return orderableDocumentListDeskItem({
+      type: orderableTypeDef.name,
+      title: orderableTypeDef.title,
+      S,
+      context,
+    })
+  })
 
   return S.list()
     .title('Content')
     .items([
       ...singletons,
       S.divider(),
-      // ...orderableListItems,
+      ...orderableListItems,
       ...defaultListItems,
     ])
 }

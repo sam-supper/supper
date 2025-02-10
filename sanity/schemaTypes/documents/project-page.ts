@@ -1,5 +1,6 @@
 import { defineType, defineField } from "sanity";
 import {HomeIcon} from '@sanity/icons'
+import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 
 import { VideoAspect } from '../../components/video-aspect'
 
@@ -13,11 +14,15 @@ export default defineType({
   title: "Projects",
   type: "document",
   icon: HomeIcon,
+  orderings: [orderRankOrdering],
   groups: [
     { name: 'content', title: 'Content' },
     { name: 'media', title: 'Media' },
   ],
   fields: [
+    orderRankField({
+      type: 'projectPage',
+    }),
     defineField({
       name: 'seo',
       title: 'SEO Meta',
@@ -66,37 +71,6 @@ export default defineType({
       name: 'explanation',
       title: 'Explanation',
       type: 'richTextSimple',
-    }),
-    defineField({
-      name: 'featuredMedia',
-      title: 'Featured Media',
-      type: 'object',
-      fields: [
-        defineField({
-          name: 'mediaType',
-          title: 'Media Type',
-          type: 'string',
-          options: {
-            list: ['image', 'video'],
-          },
-          initialValue: 'image',
-        }),
-        defineField({
-          name: 'image',
-          title: 'Image',
-          type: 'image',
-          hidden: ({ parent }) => parent?.mediaType !== 'image',
-        }),
-        defineField({
-          name: 'video',
-          title: 'Video',
-          type: 'file',
-          options: {
-            accept: 'video/*',
-          },
-          hidden: ({ parent }) => parent?.mediaType !== 'video',
-        }),
-      ],
     }),
     defineField({
       name: 'media',

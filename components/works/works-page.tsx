@@ -1,6 +1,6 @@
 'use client'
 
-import { type FC } from "react";
+import { useMemo, type FC } from "react";
 import { useWorksStore } from "@/components/works/use-works-store";
 import type { Project, Service } from '@/components/project/project.types'
 
@@ -17,6 +17,16 @@ interface WorksPageProps {
 
 export const WorksPage: FC<WorksPageProps> = ({ projects, services }) => {
   const view = useWorksStore((state) => state.view)
+  const activeFilter = useWorksStore((state) => state.activeFilter)
+
+  const filteredProjects = useMemo(() => {
+    if (activeFilter === 'all' || !activeFilter) {
+      return projects
+    }
+
+    return projects.filter((project) => project.services.some((service) => service.slug === activeFilter))
+  }, [projects, activeFilter])
+
 
   return (
     <div className="w-full flex flex-col gap-30">
@@ -26,9 +36,9 @@ export const WorksPage: FC<WorksPageProps> = ({ projects, services }) => {
       <div className="w-full flex flex-col gap-10">
         <AnimatePresence mode="wait" initial={false}>
           {view === 'grid' ? (
-            <WorksGrid key="grid" projects={projects} />
+            <WorksGrid key={`grid-${activeFilter}`} projects={filteredProjects} />
           ) : (
-            <WorksList key="list" projects={projects} />
+            <WorksList key={`list-${activeFilter}`} projects={filteredProjects} />
           )}
         </AnimatePresence>
       </div>
