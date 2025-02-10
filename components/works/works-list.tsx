@@ -18,7 +18,7 @@ export const WorksList: FC<WorksListProps> = ({ projects }) => {
 
   return (
     <motion.div
-      className="w-full flex flex-col gap-25 md:min-h-[600px] relative"
+      className="w-full flex flex-col gap-25 md:min-h-[400px] relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
