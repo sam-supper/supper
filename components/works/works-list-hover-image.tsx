@@ -1,6 +1,7 @@
 import { type FC } from "react";
 import { Project } from "../project/project.types";
-import { Media } from "../global/media";
+import { Image } from "../global/image";
+import { Video } from "../global/video";
 
 interface WorksListHoverImageProps {
   projects: Project[]
@@ -12,7 +13,9 @@ export const WorksListHoverImage: FC<WorksListHoverImageProps> = ({ projects, ac
     <div className="absolute bottom-0 right-0 w-[calc((100%/12)*3-150px)] z-[2] grid-contain place-items-end">
       {projects?.map((project, index) => {
         const { featuredMedia, title } = project;
-        const aspectRatio = featuredMedia?.image?.aspectRatio ?? (4/5);
+        const aspectRatio = featuredMedia?.aspectRatio ?? (4/5);
+
+        if (!featuredMedia) return null;
 
         return (
           <div
@@ -20,7 +23,12 @@ export const WorksListHoverImage: FC<WorksListHoverImageProps> = ({ projects, ac
             className={`w-full h-auto ${index === activeIndex ? 'opacity-100' : 'opacity-0'}`}
             style={{ aspectRatio }}
           >
-            <Media {...featuredMedia} alt={`Project: ${title}`} fit="cover" />
+            {featuredMedia._type === "image" ? (
+              <Image image={featuredMedia} className="object-contain w-full h-full" />
+            ) : null}
+            {featuredMedia._type === "video" ? (
+              <Video {...featuredMedia} className="object-contain w-full h-full" />
+            ) : null}
           </div>
         )
       })}

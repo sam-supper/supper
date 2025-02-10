@@ -1,6 +1,8 @@
 import { useMemo, type FC } from "react";
 import type { Project } from "@/components/project/project.types";
-import { Media } from "../global/media";
+
+import { Image } from "../global/image";
+import { Video } from "../global/video";
 import Link from "next/link";
 
 interface WorksGridItemProps extends Partial<Project> {}
@@ -9,13 +11,16 @@ export const WorksGridItem: FC<WorksGridItemProps> = (props) => {
   const { title, slug, featuredMedia } = props;
 
   const aspectRatio = useMemo(() => {
-    return featuredMedia?.image?.aspectRatio || 1;
+    return featuredMedia?.aspectRatio || 1;
   }, [featuredMedia])
 
   return (
     <Link href={`/project/${slug}`} className="w-full relative" style={{ aspectRatio }}>
-      {featuredMedia ? (
-        <Media {...featuredMedia} alt={`Project: ${title}`} fit="cover" />
+      {featuredMedia?._type === "image" ? (
+        <Image image={featuredMedia} className="object-contain w-full h-full" />
+      ) : null}
+      {featuredMedia?._type === "video" ? (
+        <Video {...featuredMedia} className="object-contain w-full h-full" />
       ) : null}
     </Link>
   )

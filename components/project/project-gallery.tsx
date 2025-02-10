@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Image as ImageType, Video as VideoType } from "@/sanity/types";
 import { Image } from "../global/image";
 import { Cursor } from "../global/cursor";
+import { Video } from "../global/video";
 
 interface ProjectGalleryProps {
   media: (ImageType | VideoType)[]
@@ -26,7 +27,9 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
   }, [])
 
   const handleMouseEnter = useCallback(() => {
-    setHovered(true)
+    if (!hovered) {
+      setHovered(true)
+    }
   }, [])
 
   const handleMouseLeave = useCallback(() => {
@@ -36,8 +39,9 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
   return (
     <div 
       ref={galleryRef} 
-      className="absolute inset-0 w-full h-full grid-contain cursor-none"
+      className="w-full flex-1 grid-contain cursor-none"
       onMouseEnter={handleMouseEnter}
+      onMouseMove={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <Cursor
@@ -56,11 +60,11 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
       >
         <span className="sr-only">Next</span>
       </button>
-      {media?.map((item, index) => {
-        const isActive = index === activeIndex
-        const opacity = isActive ? 1 : 0
+      <div className="w-full h-full relative md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[75%] md:h-[65%] grid-contain">
+        {media?.map((item, index) => {
+          const isActive = index === activeIndex
+          const opacity = isActive ? 1 : 0
 
-        if (item._type === 'image') {
           return (
             <motion.div
               key={item._key}
@@ -69,11 +73,16 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
               transition={{ duration: 0.25, ease: easeInOutQuart }}
               className="w-full h-full"
             >
-              <Image image={item} className="object-contain w-full h-full" />
+              {item._type === 'image' ? (
+                <Image image={item} className="object-contain w-full h-full" />
+              ) : null}
+              {item._type === 'video' ? (
+                <Video {...item} className="object-contain w-full h-full" />
+              ) : null}
             </motion.div>
           )
-        }
-      })}
+        })}
+      </div>
     </div>
   )
 }

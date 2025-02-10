@@ -1,6 +1,8 @@
 import { defineType, defineField } from "sanity";
 import {HomeIcon} from '@sanity/icons'
 
+import { VideoAspect } from '../../components/video-aspect'
+
 const lastTenYears = () => {
   const currentYear = new Date().getFullYear();
   return Array.from({ length: 10 }, (_, i) => (currentYear - i).toString());
@@ -108,6 +110,26 @@ export default defineType({
           type: 'file',
           options: {
             accept: 'video/*',
+          },
+          fields: [
+            defineField({
+              name: 'aspectRatio',
+              title: 'Aspect Ratio',
+              type: 'number',
+              components: {
+                input: VideoAspect,
+              },
+            })
+          ],
+          preview: {
+            select: {
+              filename: 'asset.originalFilename',
+              aspectRatio: 'aspectRatio',
+            },
+            prepare: ({ filename, aspectRatio }) => ({
+              title: filename,
+              subtitle: aspectRatio,
+            }),
           },
         },
       ],

@@ -13,16 +13,18 @@ export const Image: FC<ImageProps> = ({ image, quality = 90, alt, className, siz
   const deviceSizes = [320, 480, 768, 1024, 1280, 1536]
 
   const initialSrc = useMemo(() => {
+    if (!image) return '';
     return urlFor(image).width(320).auto('format').quality(quality).url()
   }, [image, quality])
 
   const srcSet = useMemo(() => {
+    if (!image) return '';
     return deviceSizes.map(size => `${urlFor(image).width(size).auto('format').quality(quality).url()} ${size}w`).join(', ')
   }, [image, quality])
 
   return (
     <img
-      src={image.lqip ?? initialSrc}
+      src={image?.lqip ?? initialSrc}
       srcSet={srcSet}
       alt={alt}
       className={className}

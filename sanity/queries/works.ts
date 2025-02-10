@@ -1,5 +1,5 @@
 import { defineQuery, groq } from "next-sanity";
-import { mediaFields, seoQuery } from "./fragments";
+import { imageFields, videoFields, seoQuery } from "./fragments";
 
 const worksProjectFields = groq`
 _id,
@@ -16,8 +16,14 @@ services[] -> {
   title,
   "slug": slug.current
 },
-featuredMedia {
-  ${mediaFields}
+"featuredMedia": media[0] {
+  _type,
+  _type == "image" => {
+    ${imageFields}
+  },
+  _type == "video" => {
+    ${videoFields}
+  }
 }
 `
 

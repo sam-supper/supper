@@ -5,13 +5,15 @@ export const imageFields = groq`
   _type,
   asset,
   alt,
-  "aspectRatio": asset -> metadata.dimensions.aspectRatio
+  "aspectRatio": asset -> metadata.dimensions.aspectRatio,
+  "lqip": asset -> metadata.lqip
 `
 
 export const videoFields = groq`
-  _id,
+  _key,
   _type,
-  "url": asset -> url
+  "url": asset -> url,
+  aspectRatio
 `
 
 export const linkFields = groq`

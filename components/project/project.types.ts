@@ -1,6 +1,6 @@
 import type { PortableTextBlock } from "@portabletext/types";
 
-import type { Image, Video, Media } from "@/sanity/types";
+import type { Image, Video } from "@/sanity/types";
 
 export interface Client {
   _id: string;
@@ -23,7 +23,7 @@ export interface Project {
   year: string;
   services: Service[];
   explanation: PortableTextBlock[];
-  featuredMedia: Media;
-  media: Image[] | Video[]
-  related?: Project[]
+  featuredMedia: Image | Video;
+  media: Image[] | Video[];
+  related?: Project[];
 }

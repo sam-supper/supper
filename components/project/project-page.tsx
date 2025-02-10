@@ -13,11 +13,11 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
 
   return (
     <div className="w-full pt-80 md:pt-150 px-site-x md:px-0">
-      <div className="w-full min-h-[calc(100svh-80px)] md:min-h-[calc(100svh-150px)] flex flex-col gap-20">
+      <div className="w-full min-h-[calc(100svh-80px)] md:min-h-[calc(100svh-150px)] flex flex-col gap-20 md:gap-32">
         <div className="w-full md:px-site-x">
           <Link href="/works" className="italic text-footer">[Back]</Link>
         </div>
-        <div className="w-full flex-1 relative overflow-hidden">
+        <div className="w-full flex-1 overflow-hidden flex">
           <ProjectGallery media={media} />
         </div>
         <div className="w-full flex flex-col gap-5 pb-site-y md:px-site-x">
@@ -26,18 +26,20 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
         </div>
       </div>
       <div className="flex flex-col md:pt-20 gap-y-20 md:gap-y-40 md:px-site-x">
-        <div className="w-full md:site-grid">
-          <div className="w-full md:col-span-9">
-            <PortableText
-              value={explanation}
-              components={{
-                block: {
-                  normal: ({ children }) => <p className="text-subtitle pb-24 last-of-type:pb-0">{children}</p>
-                }
-              }}
-            />
+        {explanation ? (
+          <div className="w-full md:site-grid">
+            <div className="w-full md:col-span-9">
+              <PortableText
+                value={explanation}
+                components={{
+                  block: {
+                    normal: ({ children }) => <p className="text-subtitle pb-24 last-of-type:pb-0">{children}</p>
+                  }
+                }}
+              />
+            </div>
           </div>
-        </div>
+        ) : null}
         
         <div className="w-full site-grid">
             <div className="w-full col-span-3 flex flex-col gap-y-5">
