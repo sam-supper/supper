@@ -10,7 +10,7 @@ interface WorksListHoverImageProps {
 
 export const WorksListHoverImage: FC<WorksListHoverImageProps> = ({ projects, activeIndex }) => {
   return (
-    <div className="absolute bottom-0 right-0 w-[calc((100%/12)*3-150px)] z-[2] grid-contain place-items-end">
+    <div className="absolute bottom-0 right-0 w-[calc((100%/12)*3-100px)] z-[2] grid-contain place-items-end">
       {projects?.map((project, index) => {
         const { featuredMedia, title } = project;
         const aspectRatio = featuredMedia?.aspectRatio ?? (4/5);
