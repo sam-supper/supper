@@ -14,7 +14,7 @@ export const useWorksStore = create<{
 }>((set) => ({
   view: 'list',
   setView: (view) => set({ view }),
-  activeFilter: null,
+  activeFilter: 'all',
   setActiveFilter: (filter) => set({ activeFilter: filter }),
   filtersExpanded: false,
   setFiltersExpanded: (expanded) => set({ filtersExpanded: expanded }),

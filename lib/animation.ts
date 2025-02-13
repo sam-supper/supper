@@ -52,13 +52,13 @@ export const revealBottom: TransitionTemplate = {
   }
 }
 
-export const transitionWithDelay = ({ delay, template }: { delay: number, onEnter?: boolean, onExit?: boolean, template: TransitionTemplate }) => {
+export const transitionWithDelay = ({ enter = 0, exit = 0, template }: { enter?: number, exit?: number, template: TransitionTemplate }) => {
   return {
     ...template,
     variants: {
       ...template.variants,
-      [template.show]: { ...template.variants[template.show], transition: { ...template.variants[template.show].transition, delay } },
-      [template.hide]: { ...template.variants[template.hide], transition: { ...template.variants[template.hide].transition, delay } }
+      [template.show]: { ...template.variants[template.show], transition: { ...template.variants[template.show].transition, delay: enter } },
+      [template.hide]: { ...template.variants[template.hide], transition: { ...template.variants[template.hide].transition, delay: exit } }
     }
   }
 }

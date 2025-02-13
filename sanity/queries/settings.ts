@@ -8,6 +8,7 @@ export const settingsHeaderQuery = defineQuery(
     },
     contact {
       label,
+      url,
       content[] {
         _key,
         _type,

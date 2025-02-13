@@ -11,10 +11,11 @@ interface ProjectCarouselItemProps {
   featuredMedia: any
   title: string
   slug: string
+  color?: string
 }
 
 export const ProjectCarouselItem: FC<ProjectCarouselItemProps> = (props) => {
-  const {featuredMedia, title, slug } = props;
+  const {featuredMedia, title, color, slug } = props;
 
   const isFullWidth = useMemo(() => {
     return featuredMedia?.aspectRatio > 1
@@ -25,7 +26,7 @@ export const ProjectCarouselItem: FC<ProjectCarouselItemProps> = (props) => {
   }, [isFullWidth])
 
   return (
-    <div className="w-full h-full relative">
+    <div className={`w-full h-full relative ${color === 'white' ? 'text-white' : ''}`}>
       {featuredMedia._type === 'image' ? (
         <Image image={featuredMedia} alt={title} className={`w-full h-full ${fitClass}`} />
       ) : null}

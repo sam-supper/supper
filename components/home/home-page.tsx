@@ -19,7 +19,7 @@ export const HomePage = (props: HomePageProps) => {
       <h1 className="sr-only">{title}</h1>
       <ProjectCarousel projects={featuredProjects} />
 
-      <div className="w-full pt-80 md:pt-150 px-site-x flex flex-col gap-80 md:gap-140 text-black">
+      <div className="w-full pt-40 px-site-x flex flex-col gap-80 md:gap-140 text-black">
         <WorksPage projects={projects} services={services} />
       </div>
     </div>

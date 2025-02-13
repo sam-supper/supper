@@ -22,6 +22,7 @@ export interface HeaderProps {
   links: SanityLink[]
   contact: {
     label: string
+    url?: string
     content: {
       _key: string
       label: string
@@ -39,28 +40,30 @@ export const Header: FC<HeaderProps> = (props) => {
   const { links, contact, information } = props
   
   const [hasScrolled, setHasScrolled] = useState(false)
+  const [disableTheme, setDisableTheme] = useState(false)
   const informationOpen = useSiteStore((state) => state.informationOpen)
   const contactOpen = useSiteStore((state) => state.contactOpen)
+  const setMobileMenuOpen = useSiteStore((state) => state.setMobileMenuOpen)
   const pathname = usePathname()
   
   const setInformationOpen = useSiteStore((state) => state.setInformationOpen)
   const setContactOpen = useSiteStore((state) => state.setContactOpen)
   
-  const lenis = useLenis(({ scroll }) => {
-    if (typeof window !== 'undefined' && scroll > (window.innerHeight - 50)) {
-      setHasScrolled(true)
-      console.log('setting has scrolled to true')
-    } else {
-      setHasScrolled(false)
-      console.log('setting has scrolled to false')
-    }
+  useLenis(({ scroll }) => {
+    if (typeof window === 'undefined') return
+
+    const themeDisabled = scroll > (window.innerHeight - 50)
+    const hasScrolled = scroll > 100
+    
+    setDisableTheme(themeDisabled)
+    setHasScrolled(hasScrolled)
   });
 
   const headerRef = useRef<HTMLDivElement>(null)
 
   const isActive = useMemo(() => {
-    return pathname === '/' || contactOpen
-  }, [pathname, contactOpen])
+    return (pathname === '/' || contactOpen) && !hasScrolled
+  }, [pathname, contactOpen, hasScrolled])
 
   const toggleInfo = useCallback(() => {
     setInformationOpen(!informationOpen)
@@ -79,6 +82,7 @@ export const Header: FC<HeaderProps> = (props) => {
 
   useClickAway(headerRef, () => {
     setContactOpen(false)
+    setMobileMenuOpen(false)
   })
 
   useKeyPress('Escape', () => {
@@ -90,7 +94,7 @@ export const Header: FC<HeaderProps> = (props) => {
       ref={headerRef}
       className={`
         w-full fixed top-0 left-0 px-site-x z-[100] py-16 md:pt-16 md:pb-12 bg-translucent backdrop-blur-nav text-nav text-black transition-colors duration-500 ease
-        ${!hasScrolled ? 'dark:text-white' : ''}`
+        ${!disableTheme && !informationOpen ? 'dark:text-white' : ''}`
       }
     >
       <div className="w-full flex items-start justify-between md:site-grid place-items-start">
@@ -114,6 +118,7 @@ export const Header: FC<HeaderProps> = (props) => {
         <div className="hidden md:grid md:col-span-3 grid-contain">
           <ToggleRow
             label={contact.label}
+            url={contact.url}
             enabled={isActive}
             onLabelClick={toggleContact}
           >
@@ -121,7 +126,7 @@ export const Header: FC<HeaderProps> = (props) => {
               {contact.content?.map((row) => (
                 <div key={row._key}>
                   {row.url ? (
-                    <a href={row.url} target="_blank">{row.label}</a>
+                    <a className="site-link" href={row.url} target="_blank">{row.label}</a>
                   ) : (
                     <div>{row.label}</div>
                   )}
@@ -130,16 +135,23 @@ export const Header: FC<HeaderProps> = (props) => {
             </div>
           </ToggleRow>
         </div>
-        <div className="hidden md:grid md:col-span-3">
+        <div className="hidden md:grid md:col-span-3 w-full">
           <ToggleRow
             label={information.label}
+            suffix={(<span>(C){new Date().getFullYear()}</span>)}
             enabled={isActive}
             onLabelClick={toggleInfo}
           >
-            <div className="w-full flex items-start justify-end">
-              <div className="w-full max-w-[350px]">
-                <PortableText value={information.content} />
-              </div>
+            <div className="w-full flex items-start justify-start">
+              <button onClick={toggleInfo} className="site-link w-full max-w-[350px] text-left">
+                <PortableText value={information.content} components={{
+                  block: {
+                    normal: ({ children }) => (
+                      <span>{children}</span>
+                    )
+                  }
+                }} />
+              </button>
             </div>
           </ToggleRow>
         </div>
@@ -150,39 +162,43 @@ export const Header: FC<HeaderProps> = (props) => {
   )
 }
 
-const ToggleRow = ({ label, children, enabled, onLabelClick }: { label: string, children: ReactNode, enabled: boolean, onLabelClick?: () => void }) => {
+const ToggleRow = ({ label, children, enabled, onLabelClick, suffix, url }: { label: string, children: ReactNode, enabled: boolean, suffix?: ReactNode, onLabelClick?: () => void, url?: string }) => {
   return (
     <div className="w-full grid-contain">
-      <AnimatePresence initial={false} mode="wait">
+      <AnimatePresence initial={false}>
         {enabled ? (
           <motion.div
             key={`${label}-content`}
             className="w-full overflow-hidden"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0, height: 0, y: 4 }}
+            animate={{ opacity: 1, height: 'auto', y: 0, transition: { duration: 0.55, ease: easeInOutQuart, delay: 0.15 } }}
+            exit={{ opacity: 0, height: 0, y: 4 }}
             transition={{
-              duration: 0.45,
+              duration: 0.55,
               ease: easeInOutQuart
             }}
           >
             <div className="w-full">{children}</div>
           </motion.div>
         ) : (
-          <motion.button
+          <motion.div
             key={label}
-            className="w-full"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onLabelClick}
+            className="w-full flex items-start justify-between"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0, transition: { duration: 0.55, ease: easeInOutQuart, delay: 0.15 } }}
+            exit={{ opacity: 0, y: -4 }}
             transition={{
-              duration: 0.45,
+              duration: 0.55,
               ease: easeInOutQuart
             }}
           >
-            {label}
-          </motion.button>
+            {url ? (
+              <a href={url} target="_blank" className="site-link" onClick={onLabelClick}>{label}</a>
+            ) : (
+              <button className="site-link" onClick={onLabelClick}>{label}</button>
+            )}
+            {suffix ?? null}
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

@@ -55,7 +55,7 @@ export const WorksPage: FC<WorksPageProps> = ({ projects, services }) => {
 
 
   return (
-    <div className="w-full flex flex-col gap-20">
+    <div className="w-full flex flex-col gap-30">
       <div className="w-full flex items-center justify-between">
         <motion.div
           className="w-full text-nav"

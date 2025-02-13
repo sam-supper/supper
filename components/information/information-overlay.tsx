@@ -12,6 +12,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Footer } from "../global/footer";
 import { RichTextSimple } from "../global/rich-text-simple";
 import Link from "next/link";
+import { useLenis } from "lenis/react";
 
 interface InformationOverlayProps {
   content: any
@@ -48,6 +49,7 @@ const informationComponents: Partial<PortableTextReactComponents> = {
 export const InformationOverlay: FC<InformationOverlayProps> = ({ footer, seo, content }) => {
   const isOpen = useSiteStore((state) => state.informationOpen)
   const setIsOpen = useSiteStore((state) => state.setInformationOpen)
+  const lenis = useLenis();
 
   useDynamicMetaTitle({
     title: seo?.title,
@@ -64,6 +66,20 @@ export const InformationOverlay: FC<InformationOverlayProps> = ({ footer, seo, c
     window.addEventListener('keyup', handleKeyUp)
     return () => window.removeEventListener('keyup', handleKeyUp)
   }, [])
+
+  useEffect(() => {
+    if (isOpen) {
+      lenis?.stop()
+    } else {
+      lenis?.start()
+    }
+
+    return () => {
+      if (lenis) {
+        lenis.start()
+      }
+    }
+  }, [isOpen])
 
   return (
     <AnimatePresence>

@@ -28,6 +28,14 @@ export default defineType({
           type: 'string',
         }),
         defineField({
+          name: 'url',
+          title: 'Contact URL',
+          type: 'url',
+          validation: (Rule) => Rule.uri({
+            scheme: ['http', 'https', 'mailto', 'tel']
+          }),
+        }),
+        defineField({
           name: 'content',
           title: 'Expanded Content',
           type: 'array',

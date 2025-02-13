@@ -109,7 +109,7 @@ interface ToggleButtonProps extends HTMLMotionProps<'button'> {
   toggleView: (view: 'grid' | 'list') => void
 }
 
-const toggleButtonStyles = cva(["text-nav transition-colors duration-200 py-10 ease"], {
+const toggleButtonStyles = cva(["text-nav transition-colors duration-200 ease"], {
   variants: {
     active: {
       true: ["text-black"],

@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { useRef, type FC } from "react";
 import { useSiteStore } from "@/stores/use-site-store";
 import { easeOutExpo } from "@/lib/animation";
 
@@ -8,11 +8,13 @@ import type { PortableTextBlock } from "@portabletext/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { PortableText } from "next-sanity";
 import Link from "next/link";
+import { useClickAway } from "react-use";
 
 interface MobileMenuProps {
   links: SanityLink[]
   contact: {
     label: string
+    url?: string
     content: {
       _key: string
       label: string
@@ -40,16 +42,16 @@ export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, p
           exit={{ opacity: 0, y: -2, height: 0 }}
           transition={{ duration: 0.55, ease: easeOutExpo }}
         >
-          <div className="w-full pt-20 grid grid-cols-[auto_1fr] gap-x-30 gap-y-12">
+          <div className="w-full pt-20 pb-5 grid grid-cols-[auto_1fr] gap-x-30 gap-y-12">
             <div>
-              {information.label}
+              <button className="underline">{information.label}</button>
             </div>
             <div>
               <PortableText value={information.content} />
             </div>
 
             <div>
-              {contact.label}
+              <a href={contact.url} target="_blank" className="underline">{contact.label}</a>
             </div>
             <div className="flex flex-col">
               {contact.content?.map((row) => (
@@ -64,7 +66,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, p
             </div>
 
             <div>
-              <Link href="/works">Works Index</Link>
+              <Link href="/works" className="underline">Works Index</Link>
             </div>
             <div>{projectCount} Case Studies</div>
           </div>
