@@ -1,11 +1,12 @@
 "use client";
  
-import { AnimatePresence, motion } from "framer-motion";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { useContext, useEffect, useRef, useCallback } from "react";
+import { usePathname, useSelectedLayoutSegment } from "next/navigation";
+import { useLenis } from "lenis/react";
+
 import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
- 
-import { useContext, useEffect, useRef } from "react";
-import { easeInOutQuart } from "@/lib/easings";
+import { AnimatePresence, motion } from "framer-motion";
+import { easeInOutQuart } from "@/lib/animation";
  
 function usePreviousValue<T>(value: T): T | undefined {
   const prevValue = useRef<T | undefined>(undefined);
@@ -76,6 +77,12 @@ export function LayoutTransition({
   transition = defaultTransition,
 }: LayoutTransitionProps) {
   const segment = useSelectedLayoutSegment();
+  const pathname = usePathname();
+  const lenis = useLenis();
+
+  const scrollToTop = useCallback(() => {
+    lenis?.scrollTo(0, { immediate: true });
+  }, [lenis])
  
   return (
     <AnimatePresence mode="wait" initial={false}>
@@ -85,7 +92,13 @@ export function LayoutTransition({
         key={segment}
         initial={initial}
         animate={animate}
-        exit={exit}
+        exit={{
+          opacity: 0,
+          transition: {
+            ...transition,
+            onComplete: scrollToTop
+          }
+        }}
         transition={transition}
       >
         <FrozenRouter>{children}</FrozenRouter>

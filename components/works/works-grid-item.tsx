@@ -1,26 +1,36 @@
 import { useMemo, type FC } from "react";
-import type { Project } from "@/components/project/project.types";
+import type { Image as ImageType, Video as VideoType } from "@/sanity/types";
 
 import { Image } from "../global/image";
 import { Video } from "../global/video";
 import Link from "next/link";
 
-interface WorksGridItemProps extends Partial<Project> {}
+interface WorksGridItemProps {
+  title: string;
+  slug: string;
+  media: ImageType | VideoType;
+  index: number
+}
 
 export const WorksGridItem: FC<WorksGridItemProps> = (props) => {
-  const { title, slug, featuredMedia } = props;
+  const { title, slug, media, index } = props;
 
   const aspectRatio = useMemo(() => {
-    return featuredMedia?.aspectRatio || 1;
-  }, [featuredMedia])
+    return media?.aspectRatio || 1;
+  }, [media])
 
   return (
-    <Link href={`/project/${slug}`} className="w-full relative" style={{ aspectRatio }}>
-      {featuredMedia?._type === "image" ? (
-        <Image image={featuredMedia} className="object-contain w-full h-full" />
+    <Link
+      scroll={false}
+      href={`/project/${slug}?mediaIndex=${index}`}
+      className="block w-full relative overflow-hidden"
+      style={{ aspectRatio }}
+    >
+      {media?._type === "image" ? (
+        <Image image={media} className="object-contain w-full h-full" alt={title} sizes="20vw" />
       ) : null}
-      {featuredMedia?._type === "video" ? (
-        <Video {...featuredMedia} className="object-contain w-full h-full" />
+      {media?._type === "video" ? (
+        <Video {...media} className="object-contain w-full h-full" />
       ) : null}
     </Link>
   )

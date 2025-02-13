@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, type FC } from "react";
-import { easeInOutQuart } from "@/lib/easings";
+import { easeInOutQuart } from "@/lib/animation";
 
 import type { Project } from "@/components/project/project.types";
 
@@ -22,7 +22,7 @@ export const WorksList: FC<WorksListProps> = ({ projects }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.35, ease: easeInOutQuart }}
+      transition={{ duration: 0.45, ease: easeInOutQuart }}
     >
       <div className="w-full site-grid text-list-title italic">
         <div className="col-span-4 md:col-span-9 md:grid md:grid-cols-[30%_30%_40%] gap-x-20">
@@ -37,7 +37,7 @@ export const WorksList: FC<WorksListProps> = ({ projects }) => {
       <div className="flex flex-col group">
         {projects.map((project, index) => (
           <WorksListItem
-            key={project.slug}
+            key={project._id}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
             {...project}

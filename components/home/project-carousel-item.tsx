@@ -17,7 +17,7 @@ export const ProjectCarouselItem: FC<ProjectCarouselItemProps> = (props) => {
   const {featuredMedia, title, slug } = props;
 
   const isFullWidth = useMemo(() => {
-    return featuredMedia?.aspectRatio > 1.5
+    return featuredMedia?.aspectRatio > 1
   }, [featuredMedia])
 
   const fitClass = useMemo(() => {

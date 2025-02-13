@@ -1,6 +1,6 @@
 import { type FC } from "react";
 import { useSiteStore } from "@/stores/use-site-store";
-import { easeOutExpo } from "@/lib/easings";
+import { easeOutExpo } from "@/lib/animation";
 
 import type { SanityLink } from "@/sanity/types";
 import type { PortableTextBlock } from "@portabletext/types";

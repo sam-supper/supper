@@ -5,7 +5,7 @@ import type { SEO } from "@/sanity/types";
 
 import { useDynamicMetaTitle } from "@/hooks/use-dynamic-meta-title";
 import { useSiteStore } from "@/stores/use-site-store";
-import { easeInOutQuart } from "@/lib/easings";
+import { easeInOutQuart } from "@/lib/animation";
 
 import { PortableTextReactComponents } from "@portabletext/react";
 import { AnimatePresence, motion } from "motion/react";

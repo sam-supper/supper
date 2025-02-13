@@ -1,19 +1,27 @@
+import { WorksPage } from "../works/works-page";
 import { ProjectCarousel } from "./project-carousel";
+import { ViewToggle } from "../works/view-toggle";
 
 export interface HomePageProps {
   title: string
   featuredProjects: any
+  projects: any
+  services: any
 }
 
 export const HomePage = (props: HomePageProps) => {
   if (!props) return null
 
-  const { title, featuredProjects } = props
+  const { title, featuredProjects, projects, services } = props
 
   return (
-    <div className="min-h-screen grid grid-cols-1 *:col-start-1 *:col-span-1 *:row-start-1 *:row-span-1">
+    <div>
       <h1 className="sr-only">{title}</h1>
       <ProjectCarousel projects={featuredProjects} />
+
+      <div className="w-full pt-80 md:pt-150 px-site-x flex flex-col gap-80 md:gap-140 text-black">
+        <WorksPage projects={projects} services={services} />
+      </div>
     </div>
   );
 };

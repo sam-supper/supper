@@ -3,7 +3,7 @@ import { useMouse, useRafLoop, useWindowSize } from 'react-use'
 
 import { clamp } from "@/lib/clamp";
 import { lerp } from "@/lib/lerp";
-import { easeInOutQuart, easeOutExpo } from "@/lib/easings";
+import { easeInOutQuart, easeOutExpo } from "@/lib/animation";
 
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -81,7 +81,7 @@ export const Cursor: FC<CursorProps> = (props) => {
   return (
     <motion.div
       ref={cursorRef}
-      className="fixed top-0 w-40 left-0 z-[5] pointer-events-none cursor-none text-nav hidden md:grid grid-contain text-center place-items-center text-white mix-blend-difference"
+      className="fixed top-0 w-40 left-0 z-[3] pointer-events-none cursor-none text-nav hidden md:grid grid-contain text-center place-items-center text-white mix-blend-difference"
       initial={{ opacity: hidden ? 0 : 1 }}
       animate={{ opacity: hidden ? 0 : 1 }}
       transition={{ duration: 0.45, ease: easeOutExpo }}

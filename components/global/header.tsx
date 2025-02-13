@@ -1,11 +1,12 @@
 'use client'
 
-import { type FC, type ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
+import { type FC, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useSiteStore } from "@/stores/use-site-store";
 import { getRelativePath } from "@/lib/get-relative-path";
-import { easeInOutQuart } from "@/lib/easings";
+import { easeInOutQuart } from "@/lib/animation";
 import { useClickAway } from "react-use";
+import { useKeyPress } from "@/hooks/use-key-press";
 
 import type { SanityLink } from "@/sanity/types";
 
@@ -15,6 +16,7 @@ import { MobileMenuButton } from "../mobile-menu/mobile-menu-button";
 import { MobileMenu } from "../mobile-menu/mobile-menu";
 import { Logo } from "./logo";
 import Link from "next/link";
+import { useLenis } from "lenis/react";
 
 export interface HeaderProps {
   links: SanityLink[]
@@ -35,12 +37,24 @@ export interface HeaderProps {
 
 export const Header: FC<HeaderProps> = (props) => {
   const { links, contact, information } = props
-
-  const setInformationOpen = useSiteStore((state) => state.setInformationOpen)
-  const setContactOpen = useSiteStore((state) => state.setContactOpen)
+  
+  const [hasScrolled, setHasScrolled] = useState(false)
   const informationOpen = useSiteStore((state) => state.informationOpen)
   const contactOpen = useSiteStore((state) => state.contactOpen)
   const pathname = usePathname()
+  
+  const setInformationOpen = useSiteStore((state) => state.setInformationOpen)
+  const setContactOpen = useSiteStore((state) => state.setContactOpen)
+  
+  const lenis = useLenis(({ scroll }) => {
+    if (typeof window !== 'undefined' && scroll > (window.innerHeight - 50)) {
+      setHasScrolled(true)
+      console.log('setting has scrolled to true')
+    } else {
+      setHasScrolled(false)
+      console.log('setting has scrolled to false')
+    }
+  });
 
   const headerRef = useRef<HTMLDivElement>(null)
 
@@ -67,23 +81,19 @@ export const Header: FC<HeaderProps> = (props) => {
     setContactOpen(false)
   })
 
-  useEffect(() => {
-    const handleKeyUp = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setContactOpen(false)
-      }
-    }
-
-    window.addEventListener('keyup', handleKeyUp)
-    return () => window.removeEventListener('keyup', handleKeyUp)
-  }, [])
+  useKeyPress('Escape', () => {
+    setContactOpen(false)
+  })
 
   return (
     <header 
       ref={headerRef}
-      className="w-full fixed top-0 left-0 px-site-x z-[100] py-16 md:pt-16 md:pb-12 bg-translucent backdrop-blur-nav text-nav"
+      className={`
+        w-full fixed top-0 left-0 px-site-x z-[100] py-16 md:pt-16 md:pb-12 bg-translucent backdrop-blur-nav text-nav text-black transition-colors duration-500 ease
+        ${!hasScrolled ? 'dark:text-white' : ''}`
+      }
     >
-      <div className="w-full flex items-center justify-between md:site-grid place-items-start">
+      <div className="w-full flex items-start justify-between md:site-grid place-items-start">
         <nav className="hidden md:flex items-center md:col-span-3">
           {links?.map((link) => {
             const { _key, label, to } = link;
@@ -120,13 +130,17 @@ export const Header: FC<HeaderProps> = (props) => {
             </div>
           </ToggleRow>
         </div>
-        <div className="hidden md:grid md:col-span-3 grid-contain">
+        <div className="hidden md:grid md:col-span-3">
           <ToggleRow
             label={information.label}
             enabled={isActive}
             onLabelClick={toggleInfo}
           >
-            <PortableText value={information.content} />
+            <div className="w-full flex items-start justify-end">
+              <div className="w-full max-w-[350px]">
+                <PortableText value={information.content} />
+              </div>
+            </div>
           </ToggleRow>
         </div>
         <MobileMenuButton />
@@ -144,9 +158,9 @@ const ToggleRow = ({ label, children, enabled, onLabelClick }: { label: string, 
           <motion.div
             key={`${label}-content`}
             className="w-full overflow-hidden"
-            initial={{ opacity: 0, height: 0, y: 2 }}
-            animate={{ opacity: 1, height: 'auto', y: 0 }}
-            exit={{ opacity: 0, height: 0, y: 2 }}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
             transition={{
               duration: 0.45,
               ease: easeInOutQuart
@@ -158,9 +172,9 @@ const ToggleRow = ({ label, children, enabled, onLabelClick }: { label: string, 
           <motion.button
             key={label}
             className="w-full"
-            initial={{ opacity: 0, y: 2 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 2 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             onClick={onLabelClick}
             transition={{
               duration: 0.45,

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useThemeStore } from "@/stores/use-theme-store";
-import { easeInOutQuart } from "@/lib/easings";
+import { easeInOutQuart } from "@/lib/animation";
 import { useWindowSize } from "react-use";
 import { useMouse } from "react-use";
 import { usePathname } from "next/navigation";
@@ -18,11 +18,14 @@ interface ProjectCarouselProps {
 export const ProjectCarousel = (props: ProjectCarouselProps) => {
   const { projects } = props
   const [activeIndex, setActiveIndex] = useState(0)
+  const [cursorVisible, setCursorVisible] = useState(false)
   const carouselRef = useRef<any>(null)
-  const setTheme = useThemeStore((state) => state.setTheme)
   const { width } = useWindowSize()
   const { docX } = useMouse(carouselRef)
   const pathname = usePathname()
+  
+  const setTheme = useThemeStore((state) => state.setTheme)
+  
 
   useEffect(() => {
     const currentColor = projects[activeIndex].color
@@ -59,13 +62,28 @@ export const ProjectCarousel = (props: ProjectCarouselProps) => {
     }
   }, [docX, width, nextIndex, previousIndex, setActiveIndex])
 
+  const showCursor = useCallback(() => {
+    if (cursorVisible) return
+
+    setCursorVisible(true)
+  }, [cursorVisible])
+
+  const hideCursor = useCallback(() => {
+    if (!cursorVisible) return
+    
+    setCursorVisible(false)
+  }, [cursorVisible])
+
   return (
     <div 
       ref={carouselRef}
       className="w-full h-screen cursor-none grid-contain"
       onClick={handleCarouselClick}
+      onMouseEnter={showCursor}
+      onMouseLeave={hideCursor}
+      onMouseMove={showCursor}
     >
-      <Cursor text={cursorLabel} />
+      <Cursor text={cursorLabel} hidden={!cursorVisible} />
       <AnimatePresence>
         <motion.div
           key={`${activeIndex}-${projects[activeIndex]._key}`}

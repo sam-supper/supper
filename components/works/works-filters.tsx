@@ -1,10 +1,12 @@
 'use client'
 
-import { ComponentProps, useCallback, useEffect, type FC } from "react"
+import { ComponentProps, useCallback, useEffect, useRef, type FC } from "react"
 import { useWorksStore } from "./use-works-store"
 import { AnimatePresence, motion } from "motion/react"
-import { easeOutExpo } from "@/lib/easings"
+import { revealTop, revealBottom, transitionWithDelay } from "@/lib/animation"
 import { cva } from "class-variance-authority"
+import { useClickAway } from "react-use"
+import { useKeyPress } from "@/hooks/use-key-press"
 
 interface WorksFiltersProps {
   filters: {
@@ -19,6 +21,8 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters }) => {
   const setActiveFilter = useWorksStore((state) => state.setActiveFilter)
   const filtersExpanded = useWorksStore((state) => state.filtersExpanded)
   const setFiltersExpanded = useWorksStore((state) => state.setFiltersExpanded)
+
+  const filtersRef = useRef<HTMLDivElement>(null)
 
   const toggleFilters = () => {
     setFiltersExpanded(!filtersExpanded)
@@ -39,6 +43,10 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters }) => {
     return () => window.removeEventListener('keyup', handleKeyUp)
   }, [])
 
+  const closeFilters = useCallback(() => {
+    setFiltersExpanded(false)
+  }, [setFiltersExpanded, setActiveFilter])
+
   const toggleFilter = (slug: string) => {
     if (activeFilter === slug) {
       setActiveFilter(null)
@@ -47,40 +55,55 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters }) => {
     }
   }
 
+  useClickAway(filtersRef, closeFilters)
+  useKeyPress('Escape', closeFilters)
+
   return (
-    <div className="grid-contain place-items-start">
+    <div className="grid-contain place-items-start" ref={filtersRef}>
       <AnimatePresence initial={false}>
         {filtersExpanded ? (
           // Filter List
           <motion.ul
             key="filters"
             className="group flex items-center gap-3"
-            initial={{ opacity: 0, y: '60%' }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: '60%' }}
-            transition={{ duration: 0.75, ease: easeOutExpo }}
+            variants={revealBottom.variants}
+            initial={revealBottom.hide}
+            animate={revealBottom.show}
+            exit={revealBottom.hide}
           >
             <motion.li
-              key="all"
-              initial={{ opacity: 0, y: '60%' }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: '60%' }}
-              transition={{ duration: 0.75, ease: easeOutExpo }}
+              {...revealBottom}
             >
-              <FilterButton toggleFilter={toggleFilter} slug="all" active={isActiveFilter('all')}>
+              <FilterButton onClick={closeFilters} active={false}>
+                Close
+              </FilterButton>
+            </motion.li>
+            <motion.li
+              key="all"
+              {...transitionWithDelay({
+                delay: 0.035,
+                template: revealBottom
+              })}
+            >
+              <FilterButton onClick={() => toggleFilter('all')} slug="all" active={isActiveFilter('all')}>
                 All,
               </FilterButton>
             </motion.li>
             {filters?.map((filter, index) => {
+              const transition = transitionWithDelay({
+                delay: (index + 2) * 0.035,
+                template: revealBottom
+              })
+
               return (
                 <motion.li
                   key={filter._id}
-                  initial={{ opacity: 0, y: '60%' }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: '60%' }}
-                  transition={{ duration: 0.75, delay: (index + 1) * 0.035, ease: easeOutExpo }}
+                  variants={transition.variants}
+                  initial={transition.hide}
+                  animate={transition.show}
+                  exit={transition.hide}
                 >
-                  <FilterButton toggleFilter={toggleFilter} slug={filter.slug} active={isActiveFilter(filter.slug)}>
+                  <FilterButton onClick={() => toggleFilter(filter.slug)} slug={filter.slug} active={isActiveFilter(filter.slug)}>
                     {filter.title.trim()}{index < filters.length - 1 ? ',' : ''}
                   </FilterButton>
                 </motion.li>
@@ -91,12 +114,12 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters }) => {
           // Filter Toggle
           <motion.button
             key="filters-toggle"
-            className="text-nav py-4"
+            className="text-nav py-10"
             onClick={toggleFilters}
-            initial={{ opacity: 0, y: '-60%' }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: '-60%' }}
-            transition={{ duration: 0.75, ease: easeOutExpo }}
+            variants={revealTop.variants}
+            initial={revealTop.hide}
+            animate={revealTop.show}
+            exit={revealTop.hide}
           >
             Filter
           </motion.button>
@@ -107,12 +130,11 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters }) => {
 }
 
 interface FilterButtonProps extends ComponentProps<'button'> {
-  slug: string
+  slug?: string
   active?: boolean
-  toggleFilter: (slug: string) => void
 }
 
-const filterButtonStyles = cva([' py-4 transition-colors duration-200 ease transform-gpu'], {
+const filterButtonStyles = cva([' py-10 transition-colors duration-200 ease transform-gpu'], {
   variants: {
     active: {
       true: 'text-black group-hover:text-grey group-hover:hover:text-black group-hover:active:text-black',
@@ -122,7 +144,7 @@ const filterButtonStyles = cva([' py-4 transition-colors duration-200 ease trans
 })
 
 const FilterButton: FC<FilterButtonProps> = (props) => {
-  const { children, slug, active, toggleFilter, ...rest } = props
+  const { children, active, ...rest } = props
 
-  return <button {...rest} onClick={() => toggleFilter(slug)} className={filterButtonStyles({ active })}>{children}</button>
+  return <button {...rest} className={filterButtonStyles({ active })}>{children}</button>
 }

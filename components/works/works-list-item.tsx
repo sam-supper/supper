@@ -9,6 +9,7 @@ export const WorksListItem: FC<WorksListItemProps> = (props) => {
 
   return (
     <Link
+      scroll={false}
       aria-labelledby={slug}
       href={`/project/${slug}`}
       className="w-full site-grid text-list-title group-hover:text-grey group-hover:hover:text-black group-hover:hover:underline pb-5 last-of-type:pb-0 transition-colors duration-200 ease"

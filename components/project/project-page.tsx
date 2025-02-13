@@ -3,19 +3,20 @@ import { Project } from "./project.types";
 import { PortableText } from "next-sanity";
 import Link from "next/link";
 import { ProjectGallery } from "./project-gallery";
+import { BackButton } from "../global/back-button";
 
 export interface ProjectPageProps extends Project {}
 
 export const ProjectPage: FC<ProjectPageProps> = (props) => {
   if (!props) return null
-
+  
   const { title, year, client, services, explanation, media, related } = props
 
   return (
     <div className="w-full pt-80 md:pt-150 px-site-x md:px-0">
       <div className="w-full min-h-[calc(100svh-80px)] md:min-h-[calc(100svh-150px)] flex flex-col gap-20 md:gap-32">
-        <div className="w-full md:px-site-x">
-          <Link href="/works" className="italic text-footer">[Back]</Link>
+        <div className="w-full md:px-site-x relative z-[6]">
+          <BackButton href="/" className="py-10">[Back]</BackButton>
         </div>
         <div className="w-full flex-1 overflow-hidden flex">
           <ProjectGallery media={media} />

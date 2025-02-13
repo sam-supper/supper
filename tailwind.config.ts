@@ -87,6 +87,15 @@ export default {
       transitionTimingFunction: {
         'in-out-quart': 'cubic-bezier(0.76, 0, 0.24, 1)',
         'ease-out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)'
+      },
+      height: {
+        'screen': 'calc(var(--vh, 1vh) * 100)'
+      },
+      minHeight: {
+        'screen': 'calc(var(--vh, 1vh) * 100)'
+      },
+      maxHeight: {
+        'screen': 'calc(var(--vh, 1vh) * 100)'
       }
     },
   },

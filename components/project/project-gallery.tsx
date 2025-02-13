@@ -1,22 +1,34 @@
 'use client'
 
-import { type FC, useState, useRef, useCallback } from "react";
-import { easeInOutQuart } from "@/lib/easings";
+import { type FC, useState, useRef, useCallback, useEffect } from "react";
+import { easeInOutQuart } from "@/lib/animation";
 import { motion } from "framer-motion";
 
 import { Image as ImageType, Video as VideoType } from "@/sanity/types";
 import { Image } from "../global/image";
 import { Cursor } from "../global/cursor";
 import { Video } from "../global/video";
+import { useSearchParams } from "next/navigation";
 
 interface ProjectGalleryProps {
   media: (ImageType | VideoType)[]
 }
 
 export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
+  const queryParams = useSearchParams();
+  const mediaIndex = queryParams?.get('mediaIndex')
+  
   const [hovered, setHovered] = useState(false)
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState<number>(mediaIndex ? parseInt(mediaIndex) : 0)
   const galleryRef = useRef<any>(null)
+
+  useEffect(() => {
+    if (mediaIndex && typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      url.searchParams.delete('mediaIndex')
+      window.history.replaceState({}, '', url)
+    }
+  }, [])
 
   const onPrevClick = useCallback(() => {
     setActiveIndex(prev => prev === 0 ? media.length - 1 : prev - 1)
@@ -49,13 +61,13 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
         hidden={!hovered}
       />
       <button
-        className="absolute left-0 top-0 z-[10] w-1/2 h-screen appearance-none border-none outline-none cursor-none"
+        className="absolute left-0 top-0 z-[5] w-1/2 h-screen appearance-none border-none outline-none cursor-none"
         onClick={onPrevClick}
       >
         <span className="sr-only">Previous</span>
       </button>
       <button
-        className="absolute right-0 top-0 z-[10] w-1/2 h-screen appearance-none bg-transparent border-none outline-none cursor-none"
+        className="absolute right-0 top-0 z-[5] w-1/2 h-screen appearance-none bg-transparent border-none outline-none cursor-none"
         onClick={onNextClick}
       >
         <span className="sr-only">Next</span>

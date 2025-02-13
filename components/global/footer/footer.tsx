@@ -11,7 +11,7 @@ interface FooterProps {
 
 export const Footer: FC<FooterProps> = ({ columns, externalLinks }) => {
   return (
-    <footer className="px-site-x py-site-y flex flex-col md:site-grid text-footer">
+    <footer className="px-site-x py-site-y mt-200 flex flex-col md:site-grid text-footer">
       <div className="md:col-span-6 flex items-end justify-between gap-site-x">
         {columns?.map((column: any, index: number) => {
           const visibleOnMobile = index === 0
