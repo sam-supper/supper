@@ -23,7 +23,6 @@ export default async function WorksLayout({ children }: { children: React.ReactN
         </div>
         {children}
       </div>
-      <Footer {...footer} />
     </div>
   )
 }
