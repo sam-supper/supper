@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { Suspense, type FC } from "react";
 import { Project } from "./project.types";
 import { PortableText } from "next-sanity";
 import Link from "next/link";
@@ -19,7 +19,9 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
           <BackButton href="/" className="py-10">[Back]</BackButton>
         </div>
         <div className="w-full flex-1 overflow-hidden flex">
-          <ProjectGallery media={media} />
+          <Suspense>
+            <ProjectGallery media={media} />
+          </Suspense>
         </div>
         <div className="w-full flex flex-col gap-5 pb-site-y md:px-site-x">
           <div className="italic text-eyebrow">Project:</div>
