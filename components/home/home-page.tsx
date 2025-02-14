@@ -20,7 +20,7 @@ export const HomePage = (props: HomePageProps) => {
       <ProjectCarousel projects={featuredProjects} />
 
       <div className="w-full pt-40 px-site-x flex flex-col gap-80 md:gap-140 text-black">
-        <WorksPage projects={projects} services={services} />
+        <WorksPage initialView="grid" projects={projects} services={services} />
       </div>
     </div>
   );

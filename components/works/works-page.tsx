@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, type FC } from "react";
+import { useEffect, useMemo, type FC } from "react";
 import { useWorksStore } from "@/components/works/use-works-store";
 import { shuffleArray } from "@/lib/shuffle-array";
 
@@ -17,11 +17,19 @@ import { ViewToggle } from "./view-toggle";
 interface WorksPageProps {
   projects: Project[]
   services: Service[]
+  initialView?: 'grid' | 'list'
 }
 
-export const WorksPage: FC<WorksPageProps> = ({ projects, services }) => {
+export const WorksPage: FC<WorksPageProps> = ({ projects, services, initialView }) => {
   const view = useWorksStore((state) => state.view)
+  const setView = useWorksStore((state) => state.setView)
   const activeFilter = useWorksStore((state) => state.activeFilter)
+
+  useEffect(() => {
+    if (initialView) {
+      setView(initialView)
+    }
+  }, [])
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === 'all' || !activeFilter) {
