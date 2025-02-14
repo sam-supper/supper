@@ -23,15 +23,17 @@ export const WorksGridItem: FC<WorksGridItemProps> = (props) => {
     <Link
       scroll={false}
       href={`/project/${slug}?mediaIndex=${index}`}
-      className="block w-full relative overflow-hidden"
-      style={{ aspectRatio }}
+      className="block w-full relative overflow-hidden h-0"
+      style={{ paddingBottom: `${100 / aspectRatio}%` }}
     >
-      {media?._type === "image" ? (
-        <Image image={media} className="object-contain w-full h-full" alt={title} sizes="20vw" />
-      ) : null}
-      {media?._type === "video" ? (
-        <Video {...media} className="object-contain w-full h-full" />
-      ) : null}
+      <div className="absolute inset-0 w-full h-full">
+        {media?._type === "image" ? (
+          <Image image={media} className="object-contain w-full h-full" alt={title} sizes="20vw" />
+        ) : null}
+        {media?._type === "video" ? (
+          <Video {...media} className="object-contain w-full h-full" />
+        ) : null}
+      </div>
     </Link>
   )
 }
