@@ -17,13 +17,7 @@ export default async function WorksLayout({ children }: { children: React.ReactN
 
   return (
     <div className="w-full pt-80 md:pt-150 px-site-x min-h-screen flex flex-col gap-80 md:gap-140">
-      <div className="w-full relative flex-1">
-        <div className="absolute top-0 right-0">
-          <ViewToggle />
-        </div>
-        {children}
-      </div>
-      <Footer {...footer} />
+      {children}
     </div>
   )
 }

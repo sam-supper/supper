@@ -1,4 +1,4 @@
-import { useRef, type FC } from "react";
+import { useCallback, useEffect, type FC } from "react";
 import { useSiteStore } from "@/stores/use-site-store";
 import { easeOutExpo } from "@/lib/animation";
 
@@ -8,7 +8,6 @@ import type { PortableTextBlock } from "@portabletext/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { PortableText } from "next-sanity";
 import Link from "next/link";
-import { useClickAway } from "react-use";
 
 interface MobileMenuProps {
   links: SanityLink[]
@@ -30,7 +29,26 @@ interface MobileMenuProps {
 
 export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, projectCount }) => {
   const isOpen = useSiteStore((state) => state.mobileMenuOpen)
-  const setIsOpen = useSiteStore((state) => state.setMobileMenuOpen)
+  const setMobileMenuOpen = useSiteStore((state) => state.setMobileMenuOpen)
+  const informationOpen = useSiteStore((state) => state.informationOpen)
+  const setInformationOpen = useSiteStore((state) => state.setInformationOpen)
+
+  const toggleInformation = useCallback(() => {
+    const isInfoOpen = !informationOpen
+
+    if (isInfoOpen) {
+      setMobileMenuOpen(false)
+    }
+    
+    setInformationOpen(isInfoOpen)
+  }, [informationOpen])
+
+  useEffect(() => {
+    return () => {
+      setInformationOpen(false)
+      setMobileMenuOpen(false)
+    }
+  }, [])
 
   return (
     <AnimatePresence>
@@ -44,7 +62,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, p
         >
           <div className="w-full pt-20 pb-5 grid grid-cols-[auto_1fr] gap-x-30 gap-y-12">
             <div>
-              <button className="underline">{information.label}</button>
+              <button className="underline" onClick={toggleInformation}>{information.label}</button>
             </div>
             <div>
               <PortableText value={information.content} />

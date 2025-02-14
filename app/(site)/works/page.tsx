@@ -6,6 +6,6 @@ export default async function WorksRoute() {
   const { data: worksPage } = await sanityFetch({ query: worksPageQuery })
 
   return (
-    <WorksPage {...worksPage} />
+    <WorksPage {...worksPage} initialView="list" />
   )
 }

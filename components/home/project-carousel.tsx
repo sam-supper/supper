@@ -77,7 +77,7 @@ export const ProjectCarousel = (props: ProjectCarouselProps) => {
   return (
     <div 
       ref={carouselRef}
-      className="w-full h-screen cursor-none grid-contain"
+      className="w-full h-[100svh] cursor-none grid-contain"
       onClick={handleCarouselClick}
       onMouseEnter={showCursor}
       onMouseLeave={hideCursor}

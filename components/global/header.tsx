@@ -43,10 +43,10 @@ export const Header: FC<HeaderProps> = (props) => {
   const [disableTheme, setDisableTheme] = useState(false)
   const informationOpen = useSiteStore((state) => state.informationOpen)
   const contactOpen = useSiteStore((state) => state.contactOpen)
-  const setMobileMenuOpen = useSiteStore((state) => state.setMobileMenuOpen)
   const pathname = usePathname()
   
   const setInformationOpen = useSiteStore((state) => state.setInformationOpen)
+  const setMobileMenuOpen = useSiteStore((state) => state.setMobileMenuOpen)
   const setContactOpen = useSiteStore((state) => state.setContactOpen)
   
   useLenis(({ scroll }) => {

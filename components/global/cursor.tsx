@@ -31,7 +31,7 @@ export const Cursor: FC<CursorProps> = (props) => {
   const setTargetPositions = useCallback(() => {
     const bounds = {
       x: (elW / 2) + BOUNDS_PADDING.x,
-      y: (elH / 2) + BOUNDS_PADDING.y
+      y: ((elH / 2) + BOUNDS_PADDING.y) + window.scrollY
     }
 
     cursorPos.current.target.x = clamp({ value: docX, min: bounds.x, max: width - bounds.x })
@@ -41,7 +41,7 @@ export const Cursor: FC<CursorProps> = (props) => {
   const setCurrentPositions = useCallback(() => {
     const bounds = {
       x: (elW / 2) + BOUNDS_PADDING.x,
-      y: (elH / 2) + BOUNDS_PADDING.y
+      y: ((elH / 2) + BOUNDS_PADDING.y) + window.scrollY
     }
 
     cursorPos.current.current.x = clamp({ value: docX, min: bounds.x, max: width - bounds.x })

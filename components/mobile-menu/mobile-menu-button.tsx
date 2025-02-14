@@ -8,8 +8,14 @@ interface MobileMenuButtonProps extends ComponentProps<'button'> {}
 export const MobileMenuButton: FC<MobileMenuButtonProps> = ({ ...props }) => {
   const isOpen = useSiteStore(state => state.mobileMenuOpen);
   const setIsOpen = useSiteStore(state => state.setMobileMenuOpen);
+  const isInfoOpen = useSiteStore(state => state.informationOpen);
+  const setInfoOpen = useSiteStore(state => state.setInformationOpen);
 
   const toggleOpen = () => {
+    if (isInfoOpen) {
+      return setInfoOpen(false)
+    }
+
     setIsOpen(!isOpen);
   }
 
@@ -18,7 +24,7 @@ export const MobileMenuButton: FC<MobileMenuButtonProps> = ({ ...props }) => {
       className={`
         md:hidden grid-contain w-18 h-18 place-items-center
         transition-transform duration-300 ease-in-out-quart
-        ${isOpen ? '-rotate-45' : ''}
+        ${isOpen || isInfoOpen ? '-rotate-45' : ''}
       `}
       onClick={toggleOpen}
     >

@@ -95,7 +95,7 @@ export const InformationOverlay: FC<InformationOverlayProps> = ({ footer, seo, c
           }}
         >
           <div className="w-full min-h-full flex flex-col">
-            <div className="w-full flex-1 px-site-x pt-150 text-title-lg flex flex-col gap-80">
+            <div className="w-full flex-1 px-site-x pt-110 md:pt-150 text-title-lg flex flex-col gap-40 md:gap-80">
               {content?.map((item: any) => {
                 if (item._type === "splitTextRow") {
                   return (

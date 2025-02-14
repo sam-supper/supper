@@ -1,6 +1,9 @@
+'use client'
+
+import { useWorksView } from "../works/use-works-view";
 import { WorksPage } from "../works/works-page";
+import { WorksSection } from "../works/works-section";
 import { ProjectCarousel } from "./project-carousel";
-import { ViewToggle } from "../works/view-toggle";
 
 export interface HomePageProps {
   title: string
@@ -10,6 +13,8 @@ export interface HomePageProps {
 }
 
 export const HomePage = (props: HomePageProps) => {
+  const [view, setView] = useWorksView('grid')
+
   if (!props) return null
 
   const { title, featuredProjects, projects, services } = props
@@ -20,7 +25,7 @@ export const HomePage = (props: HomePageProps) => {
       <ProjectCarousel projects={featuredProjects} />
 
       <div className="w-full pt-40 px-site-x flex flex-col gap-80 md:gap-140 text-black">
-        <WorksPage initialView="grid" projects={projects} services={services} />
+        <WorksSection projects={projects} services={services} view={view} setView={setView} />
       </div>
     </div>
   );

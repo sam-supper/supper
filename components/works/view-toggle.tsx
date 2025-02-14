@@ -9,15 +9,16 @@ import { cva } from "class-variance-authority";
 import { AnimatePresence, motion, HTMLMotionProps } from "motion/react";
 import { useKeyPress } from "@/hooks/use-key-press";
 
-interface ViewToggleProps extends ComponentProps<'div'> {}
+interface ViewToggleProps extends ComponentProps<'div'> {
+  view: 'grid' | 'list'
+  setView: (view: 'grid' | 'list') => void
+}
 
 export const ViewToggle: FC<ViewToggleProps> = (props) => {
-  const { ...rest } = props
+  const { view, setView, ...rest } = props
 
   const gridControlsRef = useRef<HTMLDivElement>(null)
 
-  const view = useWorksStore((state) => state.view)
-  const setView = useWorksStore((state) => state.setView)
   const gridControlsActive = useWorksStore((state) => state.gridControlsActive)
   const setGridControlsActive = useWorksStore((state) => state.setGridControlsActive)
   const gridSize = useWorksStore((state) => state.gridSize)
