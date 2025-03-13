@@ -53,12 +53,12 @@ export const Cursor: FC<CursorProps> = (props) => {
   }, [docX, docY])
 
   const [stopLoop, startLoop] = useRafLoop(() => {
-    cursorPos.current.current.x = lerp({ start: cursorPos.current.current.x, end: cursorPos.current.target.x, time: 0.125 })
-    cursorPos.current.current.y = lerp({ start: cursorPos.current.current.y, end: cursorPos.current.target.y, time: 0.125 })
+    cursorPos.current.current.x = lerp({ start: cursorPos.current.current.x, end: cursorPos.current.target.x, time: 0.25 })
+    cursorPos.current.current.y = lerp({ start: cursorPos.current.current.y, end: cursorPos.current.target.y, time: 0.25 })
 
     if (!cursorRef.current) return
 
-    cursorRef.current.style.transform = `translate(${cursorPos.current.current.x - (elW / 2)}px, ${cursorPos.current.current.y - (elH / 2)}px)`
+    cursorRef.current.style.transform = `translate3d(${cursorPos.current.current.x - (elW / 2)}px, ${cursorPos.current.current.y - (elH / 2)}px, 0)`
   })
 
   useEffect(() => {
@@ -81,7 +81,7 @@ export const Cursor: FC<CursorProps> = (props) => {
   return (
     <motion.div
       ref={cursorRef}
-      className="fixed top-0 w-40 left-0 z-[3] pointer-events-none cursor-none text-nav hidden md:grid grid-contain text-center place-items-center text-white mix-blend-difference"
+      className="fixed isolate top-0 w-40 left-0 z-[3] pointer-events-none cursor-none text-nav hidden md:grid grid-contain text-center place-items-center text-white mix-blend-difference"
       initial={{ opacity: hidden ? 0 : 1 }}
       animate={{ opacity: hidden ? 0 : 1 }}
       transition={{ duration: 0.45, ease: easeOutExpo }}
@@ -90,10 +90,10 @@ export const Cursor: FC<CursorProps> = (props) => {
         <motion.div
           key={text}
           className="relative will-change-transform origin-center"
-          initial={{ opacity: 0, y: '90%', scale: 0.8 }}
+          initial={{ opacity: 0, y: '50%', scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: '-90%', scale: 0.8 }}
-          transition={{ duration: 0.65, ease: easeOutExpo }}
+          exit={{ opacity: 0, y: '-50%', scale: 0.8 }}
+          transition={{ duration: 0.35, ease: easeOutExpo }}
         >
           {text}
         </motion.div>

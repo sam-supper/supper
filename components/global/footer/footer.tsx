@@ -42,7 +42,6 @@ export const Footer: FC<FooterProps> = ({ columns, externalLinks }) => {
             )
           })}
         </ul>
-        <p>(C){new Date().getFullYear()}</p>
       </div>
     </footer>
   )

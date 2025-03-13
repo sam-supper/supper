@@ -4,6 +4,7 @@ import { PortableText } from "next-sanity";
 import Link from "next/link";
 import { ProjectGallery } from "./project-gallery";
 import { BackButton } from "../global/back-button";
+import { ProjectMedia } from "./project-media";
 
 export interface ProjectPageProps extends Project {}
 
@@ -60,6 +61,19 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
               <div className="text-subtitle">{year}</div>
             </div>
         </div>
+
+        {related?.length ? (
+          <div className="w-full flex flex-col gap-y-5">
+            <div className="text-eyebrow italic">Related:</div>
+            {related?.map(project => {
+              return (
+                <Link href={`/project/${project.slug}`} key={project._id} className="text-subtitle">{project.title}</Link>
+              )
+            })}
+          </div>
+        ) : null}
+
+        <ProjectMedia media={media} />
 
         {related?.length ? (
           <div className="w-full flex flex-col gap-y-5">

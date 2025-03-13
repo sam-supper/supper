@@ -1,4 +1,4 @@
-import { defineType, defineField } from "sanity";
+import { defineType, defineField, defineArrayMember } from "sanity";
 import {HomeIcon} from '@sanity/icons'
 import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 
@@ -71,6 +71,7 @@ export default defineType({
       name: 'explanation',
       title: 'Explanation',
       type: 'richTextSimple',
+      group: 'content',
     }),
     defineField({
       name: 'media',
@@ -78,7 +79,26 @@ export default defineType({
       type: 'array',
       group: 'media',
       of: [
-        { type: 'image' },
+        { 
+          type: 'image',
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+            })
+          ],
+          preview: {
+            select: {
+              filename: 'asset.originalFilename',
+              media: 'asset'
+            },
+            prepare: ({ filename, media }) => ({
+              title: filename,
+              media: media,
+            }),
+          },
+        },
         { 
           name: 'video',
           type: 'file',
@@ -102,10 +122,85 @@ export default defineType({
             },
             prepare: ({ filename, aspectRatio }) => ({
               title: filename,
-              subtitle: aspectRatio,
+              subtitle: `aspect: ${aspectRatio}`,
             }),
           },
         },
+        defineArrayMember({
+          name: 'mediaRow',
+          title: 'Media Row',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'media',
+              title: 'Media',
+              type: 'array',
+              of: [
+                { 
+                  type: 'image',
+                  fields: [
+                    defineField({
+                      name: 'alt',
+                      title: 'Alt Text',
+                      type: 'string',
+                    })
+                  ],
+                  preview: {
+                    select: {
+                      filename: 'asset.originalFilename',
+                      media: 'asset'
+                    },
+                    prepare: ({ filename, media }) => ({
+                      title: filename,
+                      media: media,
+                    }),
+                  },
+                },
+                { 
+                  name: 'video',
+                  type: 'file',
+                  options: {
+                    accept: 'video/*',
+                  },
+                  fields: [
+                    defineField({
+                      name: 'aspectRatio',
+                      title: 'Aspect Ratio',
+                      type: 'number',
+                      components: {
+                        input: VideoAspect,
+                      },
+                    })
+                  ],
+                  preview: {
+                    select: {
+                      filename: 'asset.originalFilename',
+                      aspectRatio: 'aspectRatio',
+                    },
+                    prepare: ({ filename, aspectRatio }) => ({
+                      title: filename,
+                      subtitle: `aspect: ${aspectRatio}`,
+                    }),
+                  },
+                },
+              ],
+            })
+          ],
+          preview: {
+            select: {
+              media: 'media',
+              mediaOneFilename: 'media.0.asset.originalFilename',
+              mediaTwoFilename: 'media.1.asset.originalFilename',
+              mediaOne: 'media.0.asset',
+              mediaTwo: 'media.1.asset',
+            },
+            prepare: ({ media, mediaOneFilename, mediaTwoFilename, mediaOne, mediaTwo }) => ({
+              title: `${mediaOneFilename} & ${mediaTwoFilename}`,
+              subtitle: media ? `${Object.keys(media).length} media` : 'No media',
+              media: mediaOne ?? mediaTwo,
+            }),
+          }
+        })
       ],
     }),
     defineField({

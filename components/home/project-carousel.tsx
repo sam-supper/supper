@@ -90,8 +90,12 @@ export const ProjectCarousel = (props: ProjectCarouselProps) => {
           className="w-full h-full relative"
           initial={{ opacity: 0, zIndex: 1 }}
           animate={{ opacity: 1, zIndex: 2 }}
-          exit={{ opacity: 0, zIndex: 1 }}
-          transition={{ duration: 0.25, ease: easeInOutQuart }}
+          exit={{ opacity: 0, zIndex: 1, transition: {
+            duration: 0.35,
+            ease: easeInOutQuart,
+            delay: 0.35,
+          } }}
+          transition={{ duration: 0.35, ease: easeInOutQuart }}
         >
           <ProjectCarouselItem {...projects[activeIndex]} />
         </motion.div>

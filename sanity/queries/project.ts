@@ -32,6 +32,18 @@ export const projectQuery = defineQuery(
       },
       _type == "video" => {
         ${videoFields}
+      },
+      _type == "mediaRow" => {
+        media[] {
+          _type,
+          _key,
+          _type == "image" => {
+            ${imageFields}
+          },
+          _type == "video" => {
+            ${videoFields}
+          }
+        }
       }
     },
     related[] -> {

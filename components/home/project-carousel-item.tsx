@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, type FC } from "react";
+import { useCallback, useMemo, type FC } from "react";
 
 import { Media } from "@/components/global/media";
 import Link from "next/link";
@@ -25,16 +25,20 @@ export const ProjectCarouselItem: FC<ProjectCarouselItemProps> = (props) => {
     return isFullWidth ? 'object-cover' : 'object-contain'
   }, [isFullWidth])
 
+  const handleLinkClick = useCallback((e: any) => {
+    e.stopPropagation()
+  }, [])
+
   return (
-    <div className={`w-full h-full relative ${color === 'white' ? 'text-white' : ''}`}>
+    <div className={`w-full h-full relative text-white`}>
       {featuredMedia._type === 'image' ? (
         <Image image={featuredMedia} alt={title} className={`w-full h-full ${fitClass}`} />
       ) : null}
       {featuredMedia._type === 'video' ? (
         <Video {...featuredMedia} className={`w-full h-full ${fitClass}`} />
       ) : null}
-      <Link href={`/project/${slug}`} className="absolute bottom-0 left-0 z-[2] pl-20 pb-15">
-        {title}: See More
+      <Link href={`/project/${slug}`} onClick={handleLinkClick} className="absolute bottom-0 left-0 z-[2] pl-20 pb-15 text-title hover:underline">
+        {title}
       </Link>
     </div>
   )

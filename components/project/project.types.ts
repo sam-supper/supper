@@ -15,6 +15,12 @@ export interface Service {
   slug: string;
 }
 
+export interface MediaRow {
+  _key: string;
+  _type: 'mediaRow';
+  media: (Image | Video)[];
+}
+
 export interface Project {
   _id: string;
   title: string;
@@ -24,6 +30,6 @@ export interface Project {
   services: Service[];
   explanation: PortableTextBlock[];
   featuredMedia: Image | Video;
-  media: Image[] | Video[];
+  media: Image[] | Video[] | MediaRow[];
   related?: Project[];
 }

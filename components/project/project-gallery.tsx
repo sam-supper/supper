@@ -21,6 +21,7 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
   const [hovered, setHovered] = useState(false)
   const [activeIndex, setActiveIndex] = useState<number>(mediaIndex ? parseInt(mediaIndex) : 0)
   const galleryRef = useRef<any>(null)
+  const [pageDirection, setPageDirection] = useState<'Previous' | 'Next' | null>(null)
 
   useEffect(() => {
     if (mediaIndex && typeof window !== 'undefined') {
@@ -57,18 +58,20 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
       onMouseLeave={handleMouseLeave}
     >
       <Cursor
-        text={`${(activeIndex + 1).toString().padStart(2, '0')}/${media?.length.toString().padStart(2, '0')}`}
+        text={`${pageDirection}`}
         hidden={!hovered}
       />
       <button
         className="absolute left-0 top-0 z-[5] w-1/2 h-screen appearance-none border-none outline-none cursor-none"
         onClick={onPrevClick}
+        onMouseEnter={() => setPageDirection('Previous')}
       >
         <span className="sr-only">Previous</span>
       </button>
       <button
         className="absolute right-0 top-0 z-[5] w-1/2 h-screen appearance-none bg-transparent border-none outline-none cursor-none"
         onClick={onNextClick}
+        onMouseEnter={() => setPageDirection('Next')}
       >
         <span className="sr-only">Next</span>
       </button>
