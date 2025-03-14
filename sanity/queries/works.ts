@@ -18,6 +18,16 @@ services[] -> {
 },
 media[] {
   _type,
+  _type == "mediaRow" => {
+    media[] {
+      _type == "image" => {
+        ${imageFields}
+      },
+      _type == "video" => {
+        ${videoFields}
+      }
+    }
+  },
   _type == "image" => {
     ${imageFields}
   },
@@ -27,6 +37,16 @@ media[] {
 },
 "featuredMedia": media[0] {
   _type,
+  _type == "mediaRow" => {
+    media[] {
+      _type == "image" => {
+        ${imageFields}
+      },
+      _type == "video" => {
+        ${videoFields}
+      }
+    }
+  },
   _type == "image" => {
     ${imageFields}
   },

@@ -28,19 +28,35 @@ export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, 
       return projects
     }
 
-    return projects.filter((project) => project.services.some((service) => service.slug === activeFilter))
+    return projects.filter((project) => project.services?.some((service) => service.slug === activeFilter))
   }, [activeFilter])
 
   const mediaItems: any = useMemo(() => {
     const allMedia = filteredProjects?.reduce((acc, project) => {
       if (project.media?.length > 0) {
         project.media?.forEach((item, index) => {
-          acc.push({
-            index,
-            title: project.title,
-            slug: project.slug,
-            media: item as Image | Video
-          })
+          const firstMedia = project.media?.[0] as Image | Video
+          const secondMedia = project.media?.[1] as Image | Video
+
+          if (item._type === 'mediaRow') {
+            item.media?.forEach((mediaItem) => {
+              acc.push({
+                index,
+                title: project.title,
+                slug: project.slug,
+                media: mediaItem as Image | Video,
+                hoverMedia: mediaItem._id === firstMedia._id ? secondMedia : firstMedia
+              })
+            })
+          } else {
+            acc.push({
+              index,
+              title: project.title,
+              slug: project.slug,
+              media: item as Image | Video,
+              hoverMedia: item._id === firstMedia._id ? secondMedia : firstMedia
+            })
+          }
         })
       }
       return acc

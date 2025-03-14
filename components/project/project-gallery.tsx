@@ -2,16 +2,17 @@
 
 import { type FC, useState, useRef, useCallback, useEffect } from "react";
 import { easeInOutQuart } from "@/lib/animation";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 
 import { Image as ImageType, Video as VideoType } from "@/sanity/types";
+import { MediaRow } from "./project.types";
 import { Image } from "../global/image";
 import { Cursor } from "../global/cursor";
 import { Video } from "../global/video";
-import { useSearchParams } from "next/navigation";
 
 interface ProjectGalleryProps {
-  media: (ImageType | VideoType)[]
+  media: (ImageType | VideoType | MediaRow)[]
 }
 
 export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {

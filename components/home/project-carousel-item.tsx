@@ -10,12 +10,13 @@ import { Video } from "../global/video";
 interface ProjectCarouselItemProps {
   featuredMedia: any
   title: string
+  client?: string
   slug: string
   color?: string
 }
 
 export const ProjectCarouselItem: FC<ProjectCarouselItemProps> = (props) => {
-  const {featuredMedia, title, color, slug } = props;
+  const {featuredMedia, title, client, color, slug } = props;
 
   const isFullWidth = useMemo(() => {
     return featuredMedia?.aspectRatio > 1
@@ -38,7 +39,7 @@ export const ProjectCarouselItem: FC<ProjectCarouselItemProps> = (props) => {
         <Video {...featuredMedia} className={`w-full h-full ${fitClass}`} />
       ) : null}
       <Link href={`/project/${slug}`} onClick={handleLinkClick} className="absolute bottom-0 left-0 z-[2] pl-20 pb-15 text-title hover:underline">
-        {title}
+        {client ?? title}
       </Link>
     </div>
   )

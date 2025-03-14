@@ -9,9 +9,20 @@ export const homePageQuery = defineQuery(
     featuredProjects[] {
       _key,
       "title": project -> title,
+      "client": project -> client -> title,
       "slug": project -> slug.current,
       "featuredMedia": project -> media[0] {
         _type,
+        _type == "mediaRow" => {
+          media[] {
+            _type == "image" => {
+              ${imageFields}
+            },
+            _type == "video" => {
+              ${videoFields}
+            }
+          }
+        },
         _type == "image" => {
           ${imageFields}
         },

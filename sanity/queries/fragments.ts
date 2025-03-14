@@ -1,16 +1,17 @@
 import { groq } from "next-sanity";
 
 export const imageFields = groq`
-  _id,
   _type,
   asset,
   alt,
+  "_id": asset._ref,
   "aspectRatio": asset -> metadata.dimensions.aspectRatio,
   "lqip": asset -> metadata.lqip
 `
 
 export const videoFields = groq`
   _key,
+  "_id": asset._ref,
   _type,
   "url": asset -> url,
   aspectRatio

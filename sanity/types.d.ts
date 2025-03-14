@@ -12,6 +12,7 @@ export type MediaType = 'image' | 'video'
 
 export interface Video {
   _key?: string
+  _id?: string
   _type: 'video' | 'file'
   url: string
   aspectRatio?: number
@@ -19,6 +20,7 @@ export interface Video {
 
 export interface Image {
   _key?: string
+  _id?: string
   _type: 'image'
   asset: any
   alt?: string
