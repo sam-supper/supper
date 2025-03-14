@@ -17,19 +17,22 @@ interface WorksSectionProps {
   projects: Project[]
   services: Service[]
   view: 'grid' | 'list'
+  initialFilter?: string
   setView: (view: 'grid' | 'list') => void
 }
 
-export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, setView }) => {
-  const activeFilter = useWorksStore((state) => state.activeFilter)
+export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, setView, initialFilter }) => {
+  const activeFilter = useWorksStore((state) => state.activeFilter);
 
   const filteredProjects = useMemo(() => {
-    if (activeFilter === 'all' || !activeFilter) {
+    const currentFilter = activeFilter ?? initialFilter;
+
+    if (currentFilter === 'all' || !currentFilter) {
       return projects
     }
 
-    return projects.filter((project) => project.services?.some((service) => service.slug === activeFilter))
-  }, [activeFilter])
+    return projects.filter((project) => project.services?.some((service) => service.slug === currentFilter))
+  }, [activeFilter, initialFilter])
 
   const mediaItems: any = useMemo(() => {
     const allMedia = filteredProjects?.reduce((acc, project) => {
@@ -45,7 +48,7 @@ export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, 
                 title: project.title,
                 slug: project.slug,
                 media: mediaItem as Image | Video,
-                hoverMedia: mediaItem._id === firstMedia._id ? secondMedia : firstMedia
+                hoverMedia: item._id === firstMedia._id ? secondMedia : firstMedia
               })
             })
           } else {
@@ -72,14 +75,14 @@ export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, 
 
   return (
     <div className="w-full flex flex-col gap-30">
-      <div className="w-full flex items-center justify-between">
+      <div className="w-full flex items-center justify-between gap-x-20">
         <motion.div
           className="w-full text-nav"
           initial={{ opacity: isGrid ? 1 : 0, pointerEvents: isGrid ? 'auto' : 'none' }}
           animate={{ opacity: isGrid ? 1 : 0, pointerEvents: isGrid ? 'auto' : 'none' }}
           transition={{ duration: 0.45, ease: easeInOutQuart, delay: isGrid ? 0.45 : 0 }}
         >
-          <WorksFilters filters={services} />
+          <WorksFilters filters={services} initialFilter={initialFilter} />
         </motion.div>
         <ViewToggle view={view} setView={setView} />
       </div>

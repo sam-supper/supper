@@ -1,12 +1,14 @@
 'use client'
 
-import { ComponentProps, useCallback, useEffect, useRef, type FC } from "react"
+import { ComponentProps, useCallback, useEffect, useRef, useState, type FC } from "react"
 import { useWorksStore } from "./use-works-store"
-import { AnimatePresence, motion } from "motion/react"
 import { revealTop, revealBottom, transitionWithDelay } from "@/lib/animation"
 import { cva } from "class-variance-authority"
 import { useClickAway } from "react-use"
 import { useKeyPress } from "@/hooks/use-key-press"
+
+import { AnimatePresence, motion } from "motion/react"
+import Link from "next/link"
 
 interface WorksFiltersProps {
   filters: {
@@ -14,13 +16,13 @@ interface WorksFiltersProps {
     title: string
     slug: string
   }[]
+  initialFilter?: string
 }
 
-export const WorksFilters: FC<WorksFiltersProps> = ({ filters }) => {
-  const activeFilter = useWorksStore((state) => state.activeFilter)
+export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) => {
+  const activeFilter = useWorksStore((state) => state.activeFilter) ?? initialFilter
   const setActiveFilter = useWorksStore((state) => state.setActiveFilter)
-  const filtersExpanded = useWorksStore((state) => state.filtersExpanded)
-  const setFiltersExpanded = useWorksStore((state) => state.setFiltersExpanded)
+  const [filtersExpanded, setFiltersExpanded] = useState(initialFilter ? true : false)
 
   const filtersRef = useRef<HTMLDivElement>(null)
 
@@ -47,7 +49,13 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters }) => {
     setFiltersExpanded(false)
   }, [setFiltersExpanded, setActiveFilter])
 
-  const toggleFilter = (slug: string) => {
+  const toggleFilter = (e: React.MouseEvent<HTMLAnchorElement>, slug: string) => {
+    e.preventDefault()
+
+    if (typeof window !== 'undefined') {
+      window.history.replaceState({}, '', `/works/${slug}`)
+    }
+
     if (activeFilter === slug) {
       setActiveFilter(null)
     } else {
@@ -88,7 +96,7 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters }) => {
                   template: revealBottom
                 })}
               >
-                <FilterButton onClick={() => toggleFilter('all')} slug="all" active={isActiveFilter('all')}>
+                <FilterButton onClick={(e) => toggleFilter(e, 'all')} slug="all" active={isActiveFilter('all')}>
                   All,
                 </FilterButton>
               </motion.li>
@@ -99,11 +107,6 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters }) => {
                   template: revealBottom
                 })
 
-                console.log(
-                  (index + 2) * 0.035,
-                  (filters?.length + 2) * 0.035
-                )
-
                 return (
                   <motion.li
                     key={filter._id}
@@ -112,7 +115,11 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters }) => {
                     animate={transition.show}
                     exit={transition.hide}
                   >
-                    <FilterButton onClick={() => toggleFilter(filter.slug)} slug={filter.slug} active={isActiveFilter(filter.slug)}>
+                    <FilterButton
+                      onClick={(e) => toggleFilter(e, filter.slug)}
+                      slug={filter.slug}
+                      active={isActiveFilter(filter.slug)}
+                    >
                       {filter.title.trim()}{index < filters.length - 1 ? ',' : ''}
                     </FilterButton>
                   </motion.li>
@@ -139,7 +146,7 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters }) => {
   )
 }
 
-interface FilterButtonProps extends ComponentProps<'button'> {
+interface FilterButtonProps extends ComponentProps<'a'> {
   slug?: string
   active?: boolean
 }
@@ -154,7 +161,7 @@ const filterButtonStyles = cva(['lg:py-10 transition-colors duration-200 ease tr
 })
 
 const FilterButton: FC<FilterButtonProps> = (props) => {
-  const { children, active, ...rest } = props
+  const { children, active, slug, ...rest } = props
 
-  return <button {...rest} className={filterButtonStyles({ active })}>{children}</button>
+  return <Link href={`/works/${slug}`} scroll={false} shallow {...rest} className={filterButtonStyles({ active })}>{children}</Link>
 }

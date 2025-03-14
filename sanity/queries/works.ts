@@ -69,3 +69,9 @@ export const worksPageQuery = defineQuery(
     }
   }`
 )
+
+export const worksPagePathsQuery = defineQuery(
+  groq`*[_type == "service" && defined(slug.current)] {
+    "slug": slug.current
+  }`
+)

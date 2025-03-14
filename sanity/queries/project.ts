@@ -18,7 +18,8 @@ export const projectQuery = defineQuery(
     },
     services[] -> {
       _id,
-      title
+      title,
+      "slug": slug.current
     },
     explanation,
     featuredMedia {

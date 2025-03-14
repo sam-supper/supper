@@ -17,6 +17,7 @@ export interface Service {
 
 export interface MediaRow {
   _key: string;
+  _id?: string;
   _type: 'mediaRow';
   media: (Image | Video)[];
 }

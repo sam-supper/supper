@@ -51,7 +51,9 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
               <ul className="flex flex-col">
                 {services?.map(service => {
                   return (
-                    <li key={service._id} className="text-subtitle">{service.title}</li>
+                    <li key={service._id} className="text-subtitle">
+                      <Link href={`/works/${service.slug}`} scroll={false} className="hover:underline">{service.title}</Link>
+                    </li>
                   )
                 })}
               </ul>
