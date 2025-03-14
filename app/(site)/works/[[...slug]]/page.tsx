@@ -6,7 +6,7 @@ import { worksPageQuery, worksPagePathsQuery } from "@/sanity/queries/works";
 
 export const dynamicParams = false
 
-export default async function WorksRoute({ params }: { params: { slug: string[] } }) {
+export default async function WorksRoute({ params }: any) {
   const { slug } = await params
   const { data: worksPage } = await sanityFetch({ query: worksPageQuery })
 
