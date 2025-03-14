@@ -22,7 +22,7 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
   const [hovered, setHovered] = useState(false)
   const [activeIndex, setActiveIndex] = useState<number>(mediaIndex ? parseInt(mediaIndex) : 0)
   const galleryRef = useRef<any>(null)
-  const [pageDirection, setPageDirection] = useState<'Previous' | 'Next' | null>(null)
+  const [pageDirection, setPageDirection] = useState<'Previous' | 'Next'>('Next')
 
   useEffect(() => {
     if (mediaIndex && typeof window !== 'undefined') {

@@ -11,7 +11,7 @@ export interface ProjectPageProps extends Project {}
 export const ProjectPage: FC<ProjectPageProps> = (props) => {
   if (!props) return null
   
-  const { title, year, client, services, explanation, media, related } = props
+  const { title, year, services, explanation, media, related } = props
 
   return (
     <div className="w-full pt-80 md:pt-150 px-site-x md:px-0">
@@ -52,7 +52,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
                 {services?.map(service => {
                   return (
                     <li key={service._id} className="text-subtitle">
-                      <Link href={`/works/${service.slug}`} scroll={false} className="hover:underline">{service.title}</Link>
+                      <Link href={`/works/${service.slug}`} className="hover:underline">{service.title}</Link>
                     </li>
                   )
                 })}
