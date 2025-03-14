@@ -65,7 +65,7 @@ export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, 
       return acc
     }, [] as Array<any>)
 
-    return shuffleArray(allMedia, 4)
+    return shuffleArray(allMedia, 2)
   }, [filteredProjects])
 
   const isGrid = useMemo(() => {
