@@ -25,6 +25,6 @@ export const Link: FC<LinkProps> = (props) => {
   const { children, className, active = false, ...rest } = props;
 
   return (
-    <NextLink className={`${className} ${linkStyles({ active })}`} {...rest}>{children}</NextLink>
+    <NextLink scroll={false} className={`${className} ${linkStyles({ active })}`} {...rest}>{children}</NextLink>
   )
 }

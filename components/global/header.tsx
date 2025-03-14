@@ -108,11 +108,11 @@ export const Header: FC<HeaderProps> = (props) => {
             })
 
             return (
-              <Link key={_key} href={url}>{label}</Link>
+              <Link key={_key} scroll={false} href={url}>{label}</Link>
             )
           })}
         </nav>
-        <Link href="/" className="md:col-span-3">
+        <Link scroll={false} href="/" className="md:col-span-3">
           <Logo className="w-full h-auto max-w-70 md:max-w-100" />
         </Link>
         <div className="hidden md:grid md:col-span-3 grid-contain">

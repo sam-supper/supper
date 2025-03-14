@@ -22,7 +22,7 @@ const defaultComponents: Partial<PortableTextReactComponents> = {
       const { to } = value
 
       return (
-        <Link href={`/${to.slug}`} className="relative group text-royal-blue dark:text-royal-blue-dark">
+        <Link href={`/${to.slug}`} scroll={false} className="relative group text-royal-blue dark:text-royal-blue-dark">
           {children}
         </Link>
       )

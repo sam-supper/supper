@@ -31,7 +31,7 @@ const informationComponents: Partial<PortableTextReactComponents> = {
       const { to } = value
 
       return (
-        <Link href={`/${to.slug}`} className="relative text-grey underline hover:text-black active:text-black transition-colors duration-300 ease">
+        <Link href={`/${to.slug}`} scroll={false} className="relative text-grey underline hover:text-black active:text-black transition-colors duration-300 ease">
           {children}
         </Link>
       )

@@ -52,7 +52,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
                 {services?.map(service => {
                   return (
                     <li key={service._id} className="text-subtitle">
-                      <Link href={`/works/${service.slug}`} className="hover:underline">{service.title}</Link>
+                      <Link href={`/works/${service.slug}`} scroll={false} className="hover:underline">{service.title}</Link>
                     </li>
                   )
                 })}
@@ -69,7 +69,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             <div className="text-eyebrow italic">Related:</div>
             {related?.map(project => {
               return (
-                <Link href={`/project/${project.slug}`} key={project._id} className="text-subtitle">{project.title}</Link>
+                <Link href={`/project/${project.slug}`} scroll={false} key={project._id} className="text-subtitle">{project.title}</Link>
               )
             })}
           </div>
@@ -82,7 +82,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             <div className="text-eyebrow italic">Related:</div>
             {related?.map(project => {
               return (
-                <Link href={`/project/${project.slug}`} key={project._id} className="text-subtitle">{project.title}</Link>
+                <Link href={`/project/${project.slug}`} scroll={false} key={project._id} className="text-subtitle">{project.title}</Link>
               )
             })}
           </div>

@@ -24,6 +24,6 @@ export const BackButton: FC<BackButtonProps> = (props) => {
     onClick?.(e)
   }
 
-  return <Link href={href} onClick={onBackClick} {...rest}>{children}</Link>
+  return <Link href={href} scroll={false} onClick={onBackClick} {...rest}>{children}</Link>
 }
 

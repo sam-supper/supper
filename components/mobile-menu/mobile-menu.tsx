@@ -84,7 +84,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, p
             </div>
 
             <div>
-              <Link href="/works" className="underline">Works Index</Link>
+              <Link href="/works" scroll={false} className="underline">Works Index</Link>
             </div>
             <div>{projectCount} Case Studies</div>
           </div>
