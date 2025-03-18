@@ -1,7 +1,6 @@
 'use client'
 
 import { useWorksView } from "../works/use-works-view";
-import { WorksPage } from "../works/works-page";
 import { WorksSection } from "../works/works-section";
 import { ProjectCarousel } from "./project-carousel";
 

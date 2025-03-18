@@ -55,10 +55,10 @@ export const ViewToggle: FC<ViewToggleProps> = (props) => {
     <div className={"flex items-center gap-0 relative z-[10]"} {...rest}>
       <div
         ref={gridControlsRef}
-        className="grid-contain place-items-end"
+        className="hidden md:block grid-contain place-items-end"
       >
         <AnimatePresence initial={false}>
-          {gridControlsActive ? (
+          {view === 'grid' ? (
             <motion.div
               key="grid-controls"
               className="flex items-center pr-5"
@@ -82,15 +82,25 @@ export const ViewToggle: FC<ViewToggleProps> = (props) => {
             <ToggleButton
               animate
               key="toggle-button"
-              active={view === 'grid'}
+              active={false}
               view="grid"
-              toggleView={view === 'grid' ? toggleGridControls : handleViewChange}
+              toggleView={handleViewChange}
             >
               Grid
             </ToggleButton>
           )}
         </AnimatePresence>
       </div>
+      <ToggleButton
+        animate
+        key="toggle-button"
+        active={view === 'grid'}
+        view="grid"
+        toggleView={handleViewChange}
+        className="md:hidden"
+      >
+        Grid
+      </ToggleButton>
       <span className="text-grey">/</span>
       <ToggleButton
         active={view === 'list'}

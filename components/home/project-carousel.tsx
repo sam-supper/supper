@@ -9,7 +9,6 @@ import { usePathname } from "next/navigation";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { ProjectCarouselItem } from "./project-carousel-item";
-import { Cursor } from "../global/cursor";
 
 interface ProjectCarouselProps {
   projects: any
@@ -18,7 +17,6 @@ interface ProjectCarouselProps {
 export const ProjectCarousel = (props: ProjectCarouselProps) => {
   const { projects } = props
   const [activeIndex, setActiveIndex] = useState(0)
-  const [cursorVisible, setCursorVisible] = useState(false)
   const carouselRef = useRef<any>(null)
   const { width } = useWindowSize()
   const { docX } = useMouse(carouselRef)
@@ -50,10 +48,6 @@ export const ProjectCarousel = (props: ProjectCarouselProps) => {
     return activeIndex === 0 ? projects.length - 1 : activeIndex - 1
   }, [activeIndex, projects])
 
-  const cursorLabel = useMemo(() => {
-    return (docX > (width / 2)) ? `Next` : `Previous`
-  }, [docX, width, nextIndex, previousIndex])
-
   const handleCarouselClick = useCallback(() => {
     if (docX > (width / 2)) {
       setActiveIndex(nextIndex)
@@ -62,26 +56,11 @@ export const ProjectCarousel = (props: ProjectCarouselProps) => {
     }
   }, [docX, width, nextIndex, previousIndex, setActiveIndex])
 
-  const showCursor = useCallback(() => {
-    if (cursorVisible) return
-
-    setCursorVisible(true)
-  }, [cursorVisible])
-
-  const hideCursor = useCallback(() => {
-    if (!cursorVisible) return
-    
-    setCursorVisible(false)
-  }, [cursorVisible])
-
   return (
     <div 
       ref={carouselRef}
       className="w-full h-[100svh] grid-contain"
       onClick={handleCarouselClick}
-      onMouseEnter={showCursor}
-      onMouseLeave={hideCursor}
-      onMouseMove={showCursor}
     >
       <AnimatePresence>
         <motion.div
