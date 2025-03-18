@@ -71,7 +71,8 @@ export const Header: FC<HeaderProps> = (props) => {
 
   const toggleContact = useCallback(() => {
     setContactOpen(!contactOpen)
-  }, [contactOpen, setContactOpen])
+    setInformationOpen(false)
+  }, [contactOpen, setContactOpen, setInformationOpen])
 
   useEffect(() => {
     setInformationOpen(false)
@@ -83,10 +84,16 @@ export const Header: FC<HeaderProps> = (props) => {
   useClickAway(headerRef, () => {
     setContactOpen(false)
     setMobileMenuOpen(false)
+    setInformationOpen(false)
   })
+
+  const handleLinkClick = useCallback(() => {
+    setInformationOpen(false)
+  }, [setContactOpen, setInformationOpen])
 
   useKeyPress('Escape', () => {
     setContactOpen(false)
+    setInformationOpen(false)
   })
 
   return (
@@ -108,7 +115,7 @@ export const Header: FC<HeaderProps> = (props) => {
             })
 
             return (
-              <Link key={_key} scroll={false} href={url}>{label}</Link>
+              <Link key={_key} scroll={false} onClick={handleLinkClick} href={url}>{label}</Link>
             )
           })}
         </nav>

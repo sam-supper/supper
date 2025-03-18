@@ -36,9 +36,9 @@ export const ViewToggle: FC<ViewToggleProps> = (props) => {
   }
 
   const handleGridSizeChange = (action: 'decrease' | 'increase') => {
-    if (action === 'increase' && gridSize > 4) {
+    if (action === 'decrease' && gridSize > 4) {
       setGridSize(gridSize - 2)
-    } else if (action === 'decrease' && gridSize < 10) {
+    } else if (action === 'increase' && gridSize < 10) {
       setGridSize(gridSize + 2)
     }
   }
@@ -69,12 +69,12 @@ export const ViewToggle: FC<ViewToggleProps> = (props) => {
             >
               <GridControlsButton
                 action="increase"
-                disabled={gridSize === 4}
+                disabled={gridSize === 10}
                 onClick={() => handleGridSizeChange('increase')}
               />
               <GridControlsButton
                 action="decrease"
-                disabled={gridSize === 10}
+                disabled={gridSize === 4}
                 onClick={() => handleGridSizeChange('decrease')}
               />
             </motion.div>
@@ -147,7 +147,7 @@ interface GridControlsButtonProps extends HTMLMotionProps<'button'> {
   action: 'decrease' | 'increase'
 }
 
-const gridControlButtonStyles = cva(['relative w-18 h-38 transition-colors duration-200 ease grid-contain place-items-center'], {
+const gridControlButtonStyles = cva(['relative w-18 h-18 transition-colors duration-200 ease grid-contain place-items-center'], {
   variants: {
     disabled: {
       true: ['text-grey cursor-not-allowed'],

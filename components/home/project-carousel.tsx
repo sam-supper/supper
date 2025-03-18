@@ -77,17 +77,16 @@ export const ProjectCarousel = (props: ProjectCarouselProps) => {
   return (
     <div 
       ref={carouselRef}
-      className="w-full h-[100svh] cursor-none grid-contain"
+      className="w-full h-[100svh] grid-contain"
       onClick={handleCarouselClick}
       onMouseEnter={showCursor}
       onMouseLeave={hideCursor}
       onMouseMove={showCursor}
     >
-      <Cursor text={cursorLabel} hidden={!cursorVisible} />
       <AnimatePresence>
         <motion.div
           key={`${activeIndex}-${projects[activeIndex]._key}`}
-          className="w-full h-full relative"
+          className="w-full h-full relative cursor-pointer"
           initial={{ opacity: 0, zIndex: 1 }}
           animate={{ opacity: 1, zIndex: 2 }}
           exit={{ opacity: 0, zIndex: 1, transition: {

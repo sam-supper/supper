@@ -24,10 +24,10 @@ export const WorksListHoverImage: FC<WorksListHoverImageProps> = ({ projects, ac
             style={{ aspectRatio }}
           >
             {featuredMedia._type === "image" ? (
-              <Image image={featuredMedia} className="object-contain w-full h-full" sizes="20vw" />
+              <Image image={featuredMedia} className="object-contain object-bottom w-full h-full" sizes="20vw" />
             ) : null}
             {featuredMedia._type === "video" ? (
-              <Video {...featuredMedia} className="object-contain w-full h-full" />
+              <Video {...featuredMedia} className="object-contain object-bottom w-full h-full" />
             ) : null}
           </div>
         )
