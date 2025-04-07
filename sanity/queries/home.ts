@@ -9,7 +9,7 @@ export const homePageQuery = defineQuery(
     featuredProjects[] {
       _key,
       "title": project -> title,
-      "client": project -> client -> title,
+      "client": project -> client.title,
       "slug": project -> slug.current,
       "featuredMedia": project -> media[0] {
         _type,

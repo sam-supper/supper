@@ -14,16 +14,20 @@
   --title-line-height: 20px;
   --title-letter-spacing: -0.03em;
 
+  --title-sm-font-size: 20px;
+  --title-sm-line-height: 20px;
+  --title-sm-letter-spacing: -0.03em;
+
   --subtitle-font-size: 14px;
   --subtitle-line-height: 18px;
   --subtitle-letter-spacing: -0.03em;
 
-  --nav-font-size: 12px;
-  --nav-line-height: 14px;
+  --nav-font-size: 14px;
+  --nav-line-height: 16px;
   --nav-letter-spacing: -0.03em;
 
-  --list-title-font-size: 12px;
-  --list-title-line-height: 15px;
+  --list-title-font-size: 15px;
+  --list-title-line-height: 16px;
   --list-title-letter-spacing: -0.05em;
 
   --eyebrow-font-size: 10px;
@@ -49,6 +53,10 @@
     --title-font-size: 32px;
     --title-line-height: 32px;
     --title-letter-spacing: -0.03em;
+
+    --title-sm-font-size: 24px;
+    --title-sm-line-height: 24px;
+    --title-sm-letter-spacing: -0.03em;
 
     --subtitle-font-size: 20px;
     --subtitle-line-height: 24px;

@@ -11,12 +11,14 @@ import { useKeyPress } from "@/hooks/use-key-press";
 import type { SanityLink } from "@/sanity/types";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { PortableText, PortableTextBlock } from "next-sanity";
+import { PortableTextBlock } from "next-sanity";
 import { MobileMenuButton } from "../mobile-menu/mobile-menu-button";
 import { MobileMenu } from "../mobile-menu/mobile-menu";
 import { Logo } from "./logo";
 import Link from "next/link";
 import { useLenis } from "lenis/react";
+import { ThemeToggle } from "./theme-toggle";
+import { useThemeStore } from "@/stores/use-theme-store";
 
 export interface HeaderProps {
   links: SanityLink[]
@@ -37,10 +39,14 @@ export interface HeaderProps {
 }
 
 export const Header: FC<HeaderProps> = (props) => {
-  const { links, contact, information } = props
+  const { links, contact } = props
   
   const [hasScrolled, setHasScrolled] = useState(false)
-  const [disableTheme, setDisableTheme] = useState(false)
+  const [disableHeroTheme, setDisableHeroTheme] = useState(false)
+
+  const theme = useThemeStore((state) => state.theme)
+  const heroTheme = useSiteStore((state) => state.heroTheme)
+  
   const informationOpen = useSiteStore((state) => state.informationOpen)
   const contactOpen = useSiteStore((state) => state.contactOpen)
   const pathname = usePathname()
@@ -52,10 +58,10 @@ export const Header: FC<HeaderProps> = (props) => {
   useLenis(({ scroll }) => {
     if (typeof window === 'undefined') return
 
-    const themeDisabled = scroll > (window.innerHeight - 50)
+    const heroThemeDisabled = scroll > (window.innerHeight - 50)
     const hasScrolled = scroll > 100
     
-    setDisableTheme(themeDisabled)
+    setDisableHeroTheme(heroThemeDisabled)
     setHasScrolled(hasScrolled)
   });
 
@@ -65,9 +71,9 @@ export const Header: FC<HeaderProps> = (props) => {
     return (pathname === '/' || contactOpen) && !hasScrolled
   }, [pathname, contactOpen, hasScrolled])
 
-  const toggleInfo = useCallback(() => {
-    setInformationOpen(!informationOpen)
-  }, [informationOpen, setInformationOpen])
+  // const toggleInfo = useCallback(() => {
+  //   setInformationOpen(!informationOpen)
+  // }, [informationOpen, setInformationOpen])
 
   const toggleContact = useCallback(() => {
     setContactOpen(!contactOpen)
@@ -96,12 +102,20 @@ export const Header: FC<HeaderProps> = (props) => {
     setInformationOpen(false)
   })
 
+  const colorClass = useMemo(() => {
+    if (!disableHeroTheme) {
+      return heroTheme === 'dark' ? 'text-white' : 'text-black'
+    }
+
+    return theme === 'dark' ? 'text-white' : 'text-black'
+  }, [theme, heroTheme, disableHeroTheme])
+
   return (
     <header 
       ref={headerRef}
       className={`
         w-full fixed top-0 left-0 px-site-x z-[100] py-16 md:pt-16 md:pb-12 bg-translucent backdrop-blur-nav text-nav text-black transition-colors duration-500 ease
-        ${!disableTheme && !informationOpen ? 'dark:text-white' : ''}`
+        ${colorClass}`
       }
     >
       <div className="w-full flex items-start justify-between md:site-grid place-items-start">
@@ -115,7 +129,7 @@ export const Header: FC<HeaderProps> = (props) => {
             })
 
             return (
-              <Link key={_key} scroll={false} onClick={handleLinkClick} href={url}>{label}</Link>
+              <Link key={_key} scroll={false} onClick={handleLinkClick} href={url} className="site-link">{label}</Link>
             )
           })}
         </nav>
@@ -143,24 +157,7 @@ export const Header: FC<HeaderProps> = (props) => {
           </ToggleRow>
         </div>
         <div className="hidden md:grid md:col-span-3 w-full">
-          <ToggleRow
-            label={information.label}
-            suffix={(<span>(C){new Date().getFullYear()}</span>)}
-            enabled={isActive}
-            onLabelClick={toggleInfo}
-          >
-            <div className="w-full flex items-start justify-start">
-              <button onClick={toggleInfo} className="site-link w-full max-w-[350px] text-left">
-                <PortableText value={information.content} components={{
-                  block: {
-                    normal: ({ children }) => (
-                      <span>{children}</span>
-                    )
-                  }
-                }} />
-              </button>
-            </div>
-          </ToggleRow>
+          <ThemeToggle />
         </div>
         <MobileMenuButton />
       </div>
@@ -200,7 +197,10 @@ const ToggleRow = ({ label, children, enabled, onLabelClick, suffix, url }: { la
             }}
           >
             {url ? (
-              <a href={url} target="_blank" className="site-link" onClick={onLabelClick}>{label}</a>
+              <>
+                <a href={url} target="_blank" className="site-link md:hidden" onClick={onLabelClick}>{label}</a>
+                <button className="hidden md:flex site-link" onClick={onLabelClick}>{label}</button>
+              </>
             ) : (
               <button className="site-link" onClick={onLabelClick}>{label}</button>
             )}

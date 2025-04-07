@@ -2,10 +2,11 @@
 
 import { ComponentProps, useCallback, useEffect, useRef, useState, type FC } from "react"
 import { useWorksStore } from "./use-works-store"
-import { revealTop, revealBottom, transitionWithDelay } from "@/lib/animation"
+import { revealTop, revealBottom, transitionWithDelay, easeOutExpo } from "@/lib/animation"
 import { cva } from "class-variance-authority"
 import { useClickAway } from "react-use"
 import { useKeyPress } from "@/hooks/use-key-press"
+import { easeOutCubic } from "@/lib/animation"
 
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
@@ -71,11 +72,17 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) 
       <AnimatePresence initial={false}>
         {filtersExpanded ? (
           // Filter List
-          <div key="filters">
-            <h2 className="opacity-0">Filters</h2>
+          <motion.div
+            key="filters"
+            className="overflow-hidden will-change-auto"
+            initial={{ height: 0 }}
+            animate={{ height: 'auto' }}
+            exit={{ height: 0 }}
+            transition={{ duration: 0.65, ease: easeOutExpo }}
+          >
             <motion.ul
               key="filters-list"
-              className="absolute top-0 left-0 w-full group flex items-center gap-3 justify-start flex-wrap"
+              className="relative top-0 left-0 w-full group flex items-center gap-3 justify-start flex-wrap py-8"
               variants={revealBottom.variants}
               initial={revealBottom.hide}
               animate={revealBottom.show}
@@ -126,12 +133,12 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) 
                 )
               })}
             </motion.ul>
-          </div>
+          </motion.div>
         ) : (
           // Filter Toggle
           <motion.button
             key="filters-toggle"
-            className="text-nav lg:py-10"
+            className="text-nav py-4 lg:py-10"
             onClick={toggleFilters}
             variants={revealTop.variants}
             initial={revealTop.hide}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { useThemeStore } from "@/stores/use-theme-store";
+import { useSiteStore } from "@/stores/use-site-store";
 import { easeInOutQuart } from "@/lib/animation";
 import { useWindowSize } from "react-use";
 import { useMouse } from "react-use";
@@ -22,17 +22,16 @@ export const ProjectCarousel = (props: ProjectCarouselProps) => {
   const { docX } = useMouse(carouselRef)
   const pathname = usePathname()
   
-  const setTheme = useThemeStore((state) => state.setTheme)
-  
+  const setHeroTheme = useSiteStore((state) => state.setHeroTheme)
 
   useEffect(() => {
     const currentColor = projects[activeIndex].color
-    setTheme(currentColor === 'white' ? 'dark' : 'light')
+    setHeroTheme(currentColor === 'white' ? 'dark' : 'light')
   }, [activeIndex])
 
   useEffect(() => {
     const resetTheme = () => {
-      setTheme('light')
+      setHeroTheme('light')
     }
 
     if (pathname !== '/') {

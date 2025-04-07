@@ -38,7 +38,7 @@ export const ProjectCarouselItem: FC<ProjectCarouselItemProps> = (props) => {
       {featuredMedia._type === 'video' ? (
         <Video {...featuredMedia} className={`w-full h-full ${fitClass}`} />
       ) : null}
-      <Link href={`/project/${slug}`} onClick={handleLinkClick} className="absolute bottom-0 left-0 z-[2] pl-20 pb-15 text-title hover:underline">
+      <Link href={`/project/${slug}`} onClick={handleLinkClick} className="absolute bottom-0 left-0 z-[2] pl-20 pb-15 text-title-sm hover:underline">
         {client ?? title}
       </Link>
     </div>

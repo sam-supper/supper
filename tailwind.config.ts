@@ -14,7 +14,7 @@ export default {
     colors: {
       'current': 'currentColor',
       'transparent': 'transparent',
-      'white': '#F9F9F9',
+      'white': '#EBEBEB',
       'grey-light': '#F0F0F0',
       'grey': '#9C9C9C',
       'black': '#1E1E1E',
@@ -35,6 +35,10 @@ export default {
       'title': ["var(--title-font-size)", {
         lineHeight: "var(--title-line-height)",
         letterSpacing: "var(--title-letter-spacing)"
+      }],
+      'title-sm': ["var(--title-sm-font-size)", {
+        lineHeight: "var(--title-sm-line-height)",
+        letterSpacing: "var(--title-sm-letter-spacing)"
       }],
       'subtitle': ["var(--subtitle-font-size)", {
         lineHeight: "var(--subtitle-line-height)",

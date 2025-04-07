@@ -25,10 +25,10 @@ export const WorksList: FC<WorksListProps> = ({ projects }) => {
       transition={{ duration: 0.45, ease: easeInOutQuart }}
     >
       <div className="w-full site-grid text-list-title italic">
-        <div className="col-span-4 md:col-span-9 md:grid md:grid-cols-[30%_30%_40%] gap-x-20">
-          <div className="hidden md:block">Client:</div>
-          <div>Project:</div>
-          <div className="hidden md:block">Service:</div>
+        <div className="col-span-4 md:col-span-9 md:grid md:grid-cols-9 gap-x-20">
+          <div className="hidden md:block md:col-span-3">Client:</div>
+          <div className="md:col-span-3">Project:</div>
+          <div className="hidden md:block md:col-span-3">Service:</div>
         </div>
         <div className="col-span-2 md:col-span-3 text-right md:text-left">
           Year:

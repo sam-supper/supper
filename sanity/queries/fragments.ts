@@ -6,7 +6,7 @@ export const imageFields = groq`
   alt,
   "_id": asset._ref,
   "aspectRatio": asset -> metadata.dimensions.aspectRatio,
-  "lqip": asset -> metadata.lqip
+  "lqip": asset -> metadata.lqip,
 `
 
 export const videoFields = groq`

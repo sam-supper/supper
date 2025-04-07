@@ -11,7 +11,7 @@ interface WorksGridProps {
   projects: Project[]
 }
 
-const gridSizeStyles = cva(['w-full grid grid-auto-rows overflow-hidden place-items-start gap-y-100'], {
+const gridSizeStyles = cva(['w-full grid grid-auto-rows overflow-hidden place-items-start gap-y-36 md:gap-y-100'], {
   variants: {
     size: {
       4: 'grid-cols-4 gap-x-24 md:gap-x-[5%]',

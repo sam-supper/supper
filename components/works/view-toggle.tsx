@@ -3,7 +3,7 @@
 import { ComponentProps, type FC, useRef } from "react";
 import { useWorksStore } from "@/components/works/use-works-store";
 import { useClickAway } from "react-use";
-import { revealTop, revealBottom } from "@/lib/animation";
+import { revealTop, revealBottom, easeInOutExpo, easeOutExpo } from "@/lib/animation";
 import { cva } from "class-variance-authority";
 
 import { AnimatePresence, motion, HTMLMotionProps } from "motion/react";
@@ -14,12 +14,13 @@ interface ViewToggleProps extends ComponentProps<'div'> {
   setView: (view: 'grid' | 'list') => void
 }
 
+const gridSizes = [4, 6, 8, 10];
+
 export const ViewToggle: FC<ViewToggleProps> = (props) => {
   const { view, setView, ...rest } = props
 
   const gridControlsRef = useRef<HTMLDivElement>(null)
 
-  const gridControlsActive = useWorksStore((state) => state.gridControlsActive)
   const setGridControlsActive = useWorksStore((state) => state.setGridControlsActive)
   const gridSize = useWorksStore((state) => state.gridSize)
   const setGridSize = useWorksStore((state) => state.setGridSize)
@@ -29,18 +30,6 @@ export const ViewToggle: FC<ViewToggleProps> = (props) => {
     setView(view)
     setGridControlsActive(false)
     setActiveFilter(null)
-  }
-
-  const toggleGridControls = () => {
-    setGridControlsActive(!gridControlsActive)
-  }
-
-  const handleGridSizeChange = (action: 'decrease' | 'increase') => {
-    if (action === 'decrease' && gridSize > 4) {
-      setGridSize(gridSize - 2)
-    } else if (action === 'increase' && gridSize < 10) {
-      setGridSize(gridSize + 2)
-    }
   }
 
   useClickAway(gridControlsRef, () => {
@@ -55,28 +44,30 @@ export const ViewToggle: FC<ViewToggleProps> = (props) => {
     <div className={"flex items-center gap-0 relative z-[10]"} {...rest}>
       <div
         ref={gridControlsRef}
-        className="hidden md:block grid-contain place-items-end"
+        className="hidden md:grid grid-contain place-items-end"
       >
         <AnimatePresence initial={false}>
           {view === 'grid' ? (
             <motion.div
               key="grid-controls"
-              className="flex items-center pr-5"
+              className="flex items-center"
               variants={revealBottom.variants}
               initial={revealBottom.hide}
               animate={revealBottom.show}
               exit={revealBottom.hide}
             >
-              <GridControlsButton
-                action="increase"
-                disabled={gridSize === 10}
-                onClick={() => handleGridSizeChange('increase')}
-              />
-              <GridControlsButton
-                action="decrease"
-                disabled={gridSize === 4}
-                onClick={() => handleGridSizeChange('decrease')}
-              />
+              {gridSizes.map((size) => {
+                return (
+                  <GridControlsButton
+                    key={size}
+                    active={gridSize == size}
+
+                    onClick={() => setGridSize(size)}
+                  >
+                    {size}
+                  </GridControlsButton>
+                )
+              })}
             </motion.div>
           ) : (
             <ToggleButton
@@ -130,7 +121,7 @@ const toggleButtonStyles = cva(["text-nav transition-colors duration-200 ease"],
 });
 
 const ToggleButton: FC<ToggleButtonProps> = (props) => {
-  const { active, children, animate = false, toggleView, view, ...rest } = props;
+  const { active, className, children, animate = false, toggleView, view, ...rest } = props;
 
   const handleClick = () => {
     toggleView(view)
@@ -139,7 +130,7 @@ const ToggleButton: FC<ToggleButtonProps> = (props) => {
   return (
     <motion.button
       {...rest}
-      className={toggleButtonStyles({ active })}
+      className={toggleButtonStyles({ active, className })}
       onClick={handleClick}
       {...(animate ? {
         variants: revealTop.variants,
@@ -154,29 +145,38 @@ const ToggleButton: FC<ToggleButtonProps> = (props) => {
 }
 
 interface GridControlsButtonProps extends HTMLMotionProps<'button'> {
-  action: 'decrease' | 'increase'
+  active: boolean
+  children: React.ReactNode
 }
 
-const gridControlButtonStyles = cva(['relative w-18 h-18 transition-colors duration-200 ease grid-contain place-items-center'], {
+const gridControlButtonStyles = cva(['relative text-nav text-black px-4 h-18 transition-colors duration-200 ease grid-contain place-items-center'], {
   variants: {
-    disabled: {
-      true: ['text-grey cursor-not-allowed'],
-      false: ['text-black cursor-pointer']
+    active: {
+      true: [''],
+      false: ['']
     }
   }
 })
 
 const GridControlsButton: FC<GridControlsButtonProps> = (props) => {
-  const { action, disabled, ...rest } = props;
+  const { children, active = false, ...rest } = props;
 
   return (
     <motion.button
       {...rest}
-      className={gridControlButtonStyles({ disabled })}
+      className={gridControlButtonStyles({ active })}
     >
-      <div className="absolute w-10 h-1 bg-current" />
-      {action === 'increase' ? (
-        <div className="absolute w-10 h-1 bg-current rotate-90" />
+      <span>{children}</span>
+
+      {active ? (
+        <motion.div
+          layoutId="grid-control-underline"
+          className="absolute w-[calc(100%+2px)] bottom-0 -left-1 h-1 bg-black"
+          transition={{
+            duration: 0.45,
+            ease: easeOutExpo
+          }}
+        />
       ) : null}
     </motion.button>
   )

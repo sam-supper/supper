@@ -8,7 +8,6 @@ import localFont from "next/font/local";
 
 import { LayoutTransition } from "@/components/global/layout-transition";
 import { EnterAnimation } from "@/components/global/enter-animation";
-import { ThemeSwitcher } from "@/components/global/theme-switcher";
 import { ReactLenis } from "lenis/react";
 import { Header } from "@/components/global/header";
 import { SetVH } from "@/components/global/SetVH";
@@ -16,6 +15,7 @@ import { SetVH } from "@/components/global/SetVH";
 import "./globals.css";
 import { InformationPage } from "@/components/information/information-page";
 import { Footer } from '@/components/global/footer';
+import { ThemeProvider } from '@/components/global/theme-provider';
 
 const ArizonaText = localFont({
   src: [
@@ -51,19 +51,21 @@ export default async function RootLayout({
   ])
 
   return (
-    <html lang="en">
+    <ThemeProvider>
       <body
-        className={`${ArizonaText.variable} antialiased font-serif font-normal bg-grey-light text-black`}
+        className={`${ArizonaText.variable} antialiased font-serif font-normal bg-grey-light text-black dark:bg-black dark:text-grey-light transition-colors duration-[600ms] ease`}
       >
         <EnterAnimation />
         <Header {...settings?.header} />
         <SetVH />
         <InformationPage />
         <SanityLive />
-        <ThemeSwitcher />
         <LayoutTransition>
           <ReactLenis
             root
+            options={{
+              lerp: 0.15,
+            }}
           >
             {children}
             <Footer {...footerSettings} />
@@ -71,6 +73,6 @@ export default async function RootLayout({
         </LayoutTransition>
         {(await draftMode()).isEnabled && <VisualEditing />}
       </body>
-    </html>
+    </ThemeProvider>
   );
 }

@@ -17,7 +17,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
     <div className="w-full pt-80 md:pt-150 px-site-x md:px-0">
       <div className="w-full min-h-[calc(100svh-80px)] md:min-h-[calc(100svh-150px)] flex flex-col gap-20 md:gap-32">
         <div className="w-full md:px-site-x relative z-[6]">
-          <BackButton href="/" className="py-10">[Back]</BackButton>
+          <BackButton href="/" className="py-10 italic text-[15px]">[Back]</BackButton>
         </div>
         <div className="w-full flex-1 overflow-hidden flex">
           <Suspense>
@@ -32,7 +32,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
       <div className="flex flex-col md:pt-20 gap-y-20 md:gap-y-40 md:px-site-x">
         {explanation ? (
           <div className="w-full md:site-grid">
-            <div className="w-full md:col-span-9">
+            <div className="w-full md:col-span-6">
               <PortableText
                 value={explanation}
                 components={{

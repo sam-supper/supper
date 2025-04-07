@@ -111,8 +111,10 @@ export const InformationOverlay: FC<InformationOverlayProps> = ({ footer, seo, c
                 }
 
                 return (
-                  <div key={item._key}>
-                    <RichTextSimple value={item.text} components={informationComponents} />
+                  <div key={item._key} className="w-full site-grid">
+                    <div className="col-span-full md:col-span-9">
+                      <RichTextSimple value={item.text} components={informationComponents} />
+                    </div>
                   </div>
                 )
               })}

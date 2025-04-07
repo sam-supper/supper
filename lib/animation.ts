@@ -13,6 +13,7 @@ export interface TransitionTemplate {
   }
 }
 
+export const easeOutCubic: EasingCurve = [0.22, 1, 0.36, 1]
 export const easeInOutQuart: EasingCurve = [0.76, 0, 0.24, 1]
 export const easeOutExpo: EasingCurve = [0.16, 1, 0.3, 1]
 export const easeInExpo: EasingCurve = [0.7, 0, 0.84, 0]

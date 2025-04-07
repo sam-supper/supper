@@ -46,6 +46,7 @@ export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, 
               acc.push({
                 index,
                 title: project.title,
+                client: project.client,
                 slug: project.slug,
                 media: mediaItem as Image | Video,
                 hoverMedia: item._id === firstMedia._id ? secondMedia : firstMedia
@@ -55,6 +56,7 @@ export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, 
             acc.push({
               index,
               title: project.title,
+              client: project.client,
               slug: project.slug,
               media: item as Image | Video,
               hoverMedia: item._id === firstMedia._id ? secondMedia : firstMedia
@@ -74,8 +76,8 @@ export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, 
 
 
   return (
-    <div className="w-full flex flex-col gap-30">
-      <div className="w-full flex items-center justify-between gap-x-20">
+    <div className="w-full flex flex-col gap-14 md:gap-30">
+      <div className="w-full flex items-start justify-between gap-x-20">
         <motion.div
           className="w-full text-nav"
           initial={{ opacity: isGrid ? 1 : 0, pointerEvents: isGrid ? 'auto' : 'none' }}
