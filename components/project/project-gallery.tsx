@@ -26,7 +26,7 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
   // const [pageDirection, setPageDirection] = useState<'Previous' | 'Next'>('Next')
 
   const mediaItem = useMemo(() => {
-    return media?.[activeIndex]
+    return media?.[activeIndex] ?? media?.[0]
   }, [activeIndex, media])
 
   useEffect(() => {

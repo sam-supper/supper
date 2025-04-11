@@ -12,13 +12,13 @@ export const WorksListItem: FC<WorksListItemProps> = (props) => {
       scroll={false}
       aria-labelledby={slug}
       href={`/project/${slug}`}
-      className="w-full site-grid text-list-title group-hover:text-grey group-hover:hover:text-black group-hover:hover:underline pb-5 last-of-type:pb-0 transition-colors duration-200 ease"
+      className="w-full site-grid text-list-title text-black dark:text-grey dark:group-hover:text-grey dark:group-hover:hover:text-grey-light group-hover:text-grey group-hover:hover:text-black group-hover:hover:underline pb-5 last-of-type:pb-0 transition-colors duration-200 ease"
       {...rest}
     >
       <div className="col-span-4 md:col-span-9 md:grid md:grid-cols-9 gap-x-20">
         <div className="hidden md:block md:col-span-3">{client?.title}</div>
         <div className="md:col-span-3">{title}</div>
-        <div className="hidden md:block md:col-span-3">
+        <div className="hidden md:block md:col-span-3 whitespace-nowrap overflow-hidden text-ellipsis">
           {services?.map((service, index) => {
             return (
               <span key={service._id}>

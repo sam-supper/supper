@@ -18,6 +18,7 @@ export default {
       'grey-light': '#F0F0F0',
       'grey': '#9C9C9C',
       'black': '#1E1E1E',
+      'dark-black': '#0E0E0E',
       'translucent': 'rgba(217, 217, 217, 0.1)',
       'overlay': 'rgba(249, 249, 249, 0.97)',
     },

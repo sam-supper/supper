@@ -75,3 +75,27 @@ export const worksPagePathsQuery = defineQuery(
     "slug": slug.current
   }`
 )
+
+export const worksMediaQuery = defineQuery(
+  groq`*[_type == "projectPage"] {
+    "featuredMedia": media[0] {
+      _type,
+      _type == "mediaRow" => {
+        media[] {
+          _type == "image" => {
+            ${imageFields}
+          },
+          _type == "video" => {
+            ${videoFields}
+          }
+        }
+      },
+      _type == "image" => {
+        ${imageFields}
+      },
+      _type == "video" => {
+        ${videoFields}
+      }
+    }
+  }`
+)

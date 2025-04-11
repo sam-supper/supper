@@ -32,7 +32,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
       <div className="flex flex-col md:pt-20 gap-y-20 md:gap-y-40 md:px-site-x">
         {explanation ? (
           <div className="w-full md:site-grid">
-            <div className="w-full md:col-span-6">
+            <div className="w-full md:col-span-9">
               <PortableText
                 value={explanation}
                 components={{

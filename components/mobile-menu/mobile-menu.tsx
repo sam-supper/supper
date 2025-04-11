@@ -43,6 +43,11 @@ export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, p
     setInformationOpen(isInfoOpen)
   }, [informationOpen])
 
+  const closeMobileMenu = useCallback(() => {
+    setMobileMenuOpen(false)
+    setInformationOpen(false)
+  }, [setMobileMenuOpen, setInformationOpen])
+
   useEffect(() => {
     return () => {
       setInformationOpen(false)
@@ -69,13 +74,13 @@ export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, p
             </div>
 
             <div>
-              <a href={contact.url} target="_blank" className="underline">{contact.label}</a>
+              <a onClick={closeMobileMenu} href={contact.url} target="_blank" className="underline">{contact.label}</a>
             </div>
             <div className="flex flex-col">
               {contact.content?.map((row) => (
                 <div key={row._key}>
                   {row.url ? (
-                    <a href={row.url} target="_blank">{row.label}</a>
+                    <a onClick={closeMobileMenu} href={row.url} target="_blank">{row.label}</a>
                   ) : (
                     <div>{row.label}</div>
                   )}
@@ -84,7 +89,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, p
             </div>
 
             <div>
-              <Link href="/works" scroll={false} className="underline">Works Index</Link>
+              <Link href="/works" scroll={false} onClick={closeMobileMenu} className="underline">Works Index</Link>
             </div>
             <div>{projectCount} Case Studies</div>
           </div>

@@ -47,7 +47,6 @@ export const Header: FC<HeaderProps> = (props) => {
   const theme = useThemeStore((state) => state.theme)
   const heroTheme = useSiteStore((state) => state.heroTheme)
   
-  const informationOpen = useSiteStore((state) => state.informationOpen)
   const contactOpen = useSiteStore((state) => state.contactOpen)
   const pathname = usePathname()
   
@@ -97,6 +96,10 @@ export const Header: FC<HeaderProps> = (props) => {
     setInformationOpen(false)
   }, [setContactOpen, setInformationOpen])
 
+  const closeMobileMenu = useCallback(() => {
+    setMobileMenuOpen(false)
+  }, [setMobileMenuOpen])
+
   useKeyPress('Escape', () => {
     setContactOpen(false)
     setInformationOpen(false)
@@ -104,10 +107,10 @@ export const Header: FC<HeaderProps> = (props) => {
 
   const colorClass = useMemo(() => {
     if (!disableHeroTheme) {
-      return heroTheme === 'dark' ? 'text-white' : 'text-black'
+      return heroTheme === 'dark' ? 'text-white' : 'text-black dark:text-white'
     }
 
-    return theme === 'dark' ? 'text-white' : 'text-black'
+    return theme === 'dark' ? 'text-white' : 'text-black dark:text-white'
   }, [theme, heroTheme, disableHeroTheme])
 
   return (
@@ -133,7 +136,7 @@ export const Header: FC<HeaderProps> = (props) => {
             )
           })}
         </nav>
-        <Link scroll={false} href="/" className="md:col-span-3">
+        <Link onClick={closeMobileMenu} scroll={false} href="/" className="md:col-span-3">
           <Logo className="w-full h-auto max-w-70 md:max-w-100" />
         </Link>
         <div className="hidden md:grid md:col-span-3 grid-contain">

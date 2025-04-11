@@ -25,7 +25,7 @@ export const WorksList: FC<WorksListProps> = ({ projects }) => {
       transition={{ duration: 0.45, ease: easeInOutQuart }}
     >
       <div className="w-full site-grid text-list-title italic">
-        <div className="col-span-4 md:col-span-9 md:grid md:grid-cols-9 gap-x-20">
+        <div className="col-span-4 md:col-span-9 md:grid md:grid-cols-9 gap-x-20 text-black dark:text-grey">
           <div className="hidden md:block md:col-span-3">Client:</div>
           <div className="md:col-span-3">Project:</div>
           <div className="hidden md:block md:col-span-3">Service:</div>

@@ -48,7 +48,7 @@ export const WorksGridItem: FC<WorksGridItemProps> = (props) => {
 
       <div className="absolute inset-0 w-full h-full z-[1]">
         {media?._type === "image" && media?.asset ? (
-          <Image image={media} className="object-cover w-full h-full" alt={title} sizes="(max-width: 800px) 40vw, 20vw" />
+          <Image image={media} className="object-cover w-full h-full" alt={title} sizes="(max-width: 800px) 30vw, 20vw" />
         ) : null}
         {media?._type === "video" ? (
           <Video {...media} className="object-cover w-full h-full" />

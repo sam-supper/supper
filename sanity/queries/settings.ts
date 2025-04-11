@@ -57,3 +57,11 @@ export const settingsQuery = defineQuery(
     "footer": ${settingsFooterQuery},
   }`
 )
+
+export const settingsSplashQuery = defineQuery(
+  groq`*[_type == "settingsSplash"][0] {
+    images[] {
+      ${imageFields}
+    }
+  }`
+)

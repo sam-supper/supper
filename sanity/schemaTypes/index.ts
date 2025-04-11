@@ -25,7 +25,7 @@ import internalLink from './blocks/internal-link'
 import settingsSeo from './settings/settings-seo'
 import settingsHeader from './settings/settings-header'
 import settingsFooter from './settings/settings-footer'
-
+import settingsSplash from './settings/settings-splash'
 /** Documents */
 import homePage from './documents/home-page'
 import projectPage from './documents/project-page'
@@ -39,6 +39,7 @@ export const allTypes: SchemaTypeDefinition[] = [
   settingsSeo,
   settingsHeader,
   settingsFooter,
+  settingsSplash,
 
   // Documents
   homePage,
@@ -60,7 +61,7 @@ export const singletonTypes: SingletonType[] = [
   {
     title: 'Global Settings & Navigation',
     icon: EarthGlobeIcon,
-    types: [settingsHeader, settingsFooter, settingsSeo],
+    types: [settingsHeader, settingsFooter, settingsSeo, settingsSplash],
     singleton: true,
     divider: true,
   },

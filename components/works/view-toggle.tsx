@@ -92,7 +92,7 @@ export const ViewToggle: FC<ViewToggleProps> = (props) => {
       >
         Grid
       </ToggleButton>
-      <span className="text-grey">/</span>
+      <span className="text-grey dark:text-grey-light">/</span>
       <ToggleButton
         active={view === 'list'}
         view="list"
@@ -114,8 +114,8 @@ interface ToggleButtonProps extends HTMLMotionProps<'button'> {
 const toggleButtonStyles = cva(["text-nav transition-colors duration-200 ease"], {
   variants: {
     active: {
-      true: ["text-black"],
-      false: ["text-grey hover:text-black active:text-black"],
+      true: ["text-black dark:text-grey-light"],
+      false: ["text-grey dark:text-grey hover:text-black dark:hover:text-grey active:text-black dark:active:text-grey"],
     },
   },
 });
@@ -149,11 +149,11 @@ interface GridControlsButtonProps extends HTMLMotionProps<'button'> {
   children: React.ReactNode
 }
 
-const gridControlButtonStyles = cva(['relative text-nav text-black px-4 h-18 transition-colors duration-200 ease grid-contain place-items-center'], {
+const gridControlButtonStyles = cva(['relative text-nav px-4 h-18 transition-colors duration-200 ease grid-contain place-items-center'], {
   variants: {
     active: {
-      true: [''],
-      false: ['']
+      true: ['text-black dark:text-grey-light'],
+      false: ['text-grey hover:text-black dark:text-grey dark:hover:text-grey-light']
     }
   }
 })
