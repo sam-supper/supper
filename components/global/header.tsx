@@ -39,7 +39,7 @@ export interface HeaderProps {
 }
 
 export const Header: FC<HeaderProps> = (props) => {
-  const { links, contact } = props
+  const { links, contact, information } = props
   
   const [hasScrolled, setHasScrolled] = useState(false)
   const [disableHeroTheme, setDisableHeroTheme] = useState(false)
@@ -49,7 +49,8 @@ export const Header: FC<HeaderProps> = (props) => {
   
   const contactOpen = useSiteStore((state) => state.contactOpen)
   const pathname = usePathname()
-  
+
+  const informationOpen = useSiteStore((state) => state.informationOpen)
   const setInformationOpen = useSiteStore((state) => state.setInformationOpen)
   const setMobileMenuOpen = useSiteStore((state) => state.setMobileMenuOpen)
   const setContactOpen = useSiteStore((state) => state.setContactOpen)
@@ -70,9 +71,9 @@ export const Header: FC<HeaderProps> = (props) => {
     return (pathname === '/' || contactOpen) && !hasScrolled
   }, [pathname, contactOpen, hasScrolled])
 
-  // const toggleInfo = useCallback(() => {
-  //   setInformationOpen(!informationOpen)
-  // }, [informationOpen, setInformationOpen])
+  const toggleInfo = useCallback(() => {
+     setInformationOpen(!informationOpen)
+   }, [informationOpen, setInformationOpen])
 
   const toggleContact = useCallback(() => {
     setContactOpen(!contactOpen)
@@ -159,7 +160,27 @@ export const Header: FC<HeaderProps> = (props) => {
             </div>
           </ToggleRow>
         </div>
-        <div className="hidden md:grid md:col-span-3 w-full">
+        <div className="hidden md:grid md:col-span-3 grid-contain">
+          <ToggleRow
+            label={contact.label}
+            url={contact.url}
+            enabled={isActive}
+            onLabelClick={toggleContact}
+          >
+            <div className="w-full">
+              {contact.content?.map((row) => (
+                <div key={row._key}>
+                  {row.url ? (
+                    <a className="site-link" href={row.url} target="_blank">{row.label}</a>
+                  ) : (
+                    <div>{row.label}</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </ToggleRow>
+        </div>
+        <div className="hidden md:block w-auto absolute right-0 top-0">
           <ThemeToggle />
         </div>
         <MobileMenuButton />
