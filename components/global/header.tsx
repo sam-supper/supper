@@ -123,8 +123,8 @@ export const Header: FC<HeaderProps> = (props) => {
         ${colorClass}`
       }
     >
-      <div className="w-full flex items-start justify-between md:site-grid place-items-start">
-        <nav className="hidden md:flex items-center md:col-span-3">
+      <div className="w-full flex items-start justify-between">
+        <nav className="hidden md:flex items-center md:flex-1">
           {links?.map((link) => {
             const { _key, label, to } = link;
 
@@ -138,10 +138,10 @@ export const Header: FC<HeaderProps> = (props) => {
             )
           })}
         </nav>
-        <Link onClick={closeMobileMenu} scroll={false} href="/" className="md:col-span-3">
+        <Link onClick={closeMobileMenu} scroll={false} href="/" className="md:flex-1">
           <Logo className="w-full h-auto max-w-70 md:max-w-100" />
         </Link>
-        <div className="hidden md:grid md:col-span-3 grid-contain">
+        <div className="hidden md:grid md:flex-1 grid-contain">
           <ToggleRow
             label={contact.label}
             url={contact.url}
@@ -161,7 +161,7 @@ export const Header: FC<HeaderProps> = (props) => {
             </div>
           </ToggleRow>
         </div>
-        <div className="hidden md:grid md:col-span-3 grid-contain">
+        <div className="hidden md:grid md:flex-1 grid-contain">
           <ToggleRow
             label={information.label}
             enabled={isActive}
@@ -180,7 +180,7 @@ export const Header: FC<HeaderProps> = (props) => {
             </div>
           </ToggleRow>
         </div>
-        <div className="hidden md:block w-auto absolute right-site-x top-16">
+        <div className="hidden md:block w-auto">
           <ThemeToggle />
         </div>
         <MobileMenuButton />
