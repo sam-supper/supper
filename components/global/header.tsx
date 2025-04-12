@@ -180,7 +180,7 @@ export const Header: FC<HeaderProps> = (props) => {
             </div>
           </ToggleRow>
         </div>
-        <div className="hidden md:block w-auto absolute right-0 top-0">
+        <div className="hidden md:block w-auto absolute right-site-x top-16">
           <ThemeToggle />
         </div>
         <MobileMenuButton />
