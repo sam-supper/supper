@@ -166,16 +166,16 @@ export const Header: FC<HeaderProps> = (props) => {
             enabled={isActive}
             onLabelClick={toggleInfo}
           >
-            <div className="w-full">
-              {information.content?.map((row) => (
-                <div key={row._key}>
-                  {row.url ? (
-                    <a className="site-link" href={row.url} target="_blank">{row.label}</a>
-                  ) : (
-                    <div>{row.label}</div>
-                  )}
-                </div>
-              ))}
+            <div className="w-full flex items-start justify-start">
+              <button onClick={toggleInfo} className="site-link w-full max-w-[350px] text-left">
+                <PortableText value={information.content} components={{
+                  block: {
+                    normal: ({ children }) => (
+                      <span>{children}</span>
+                    )
+                  }
+                }} />
+              </button>
             </div>
           </ToggleRow>
         </div>
