@@ -78,7 +78,7 @@ export const SplashCarouselContent: React.FC<SplashCarouselProps> = (props) => {
     const containerRect = container.current.getBoundingClientRect()
     
     const scale = 1.65;
-    const defaultWidth = clamp(window.innerWidth * 0.12, 100, 400);
+    const defaultWidth = clamp({ value: window.innerWidth * 0.12, min: 100, max: 400});
     const activeWidth = defaultWidth * scale;
     const inactiveWidth = defaultWidth;
 
