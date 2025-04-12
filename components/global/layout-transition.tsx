@@ -62,7 +62,7 @@ const defaultExit = {
 
 const defaultTransition = {
   duration: 0.45,
-  ease: easings.inOutQuart
+  ease: "easeInOut"
 }
  
 interface LayoutTransitionProps {
