@@ -163,7 +163,6 @@ export const Header: FC<HeaderProps> = (props) => {
         <div className="hidden md:grid md:col-span-3 grid-contain">
           <ToggleRow
             label={information.label}
-            url={information.url}
             enabled={isActive}
             onLabelClick={toggleInfo}
           >
