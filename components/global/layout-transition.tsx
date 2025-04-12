@@ -6,7 +6,6 @@ import { useLenis } from "lenis/react";
 
 import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { AnimatePresence, motion } from "motion/react";
-import { easings } from "@/lib/easings";
  
 function usePreviousValue<T>(value: T): T | undefined {
   const prevValue = useRef<T | undefined>(undefined);
