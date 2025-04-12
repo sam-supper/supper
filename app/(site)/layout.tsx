@@ -16,7 +16,6 @@ import "./globals.css";
 import { InformationPage } from "@/components/information/information-page";
 import { Footer } from '@/components/global/footer';
 import { ThemeProvider } from '@/components/global/theme-provider';
-import { SplashOverlay } from '@/components/splash/splash-overlay';
 
 const ArizonaText = localFont({
   src: [
@@ -56,7 +55,6 @@ export default async function RootLayout({
       <body
         className={`${ArizonaText.variable} antialiased font-serif font-normal bg-grey-light text-black dark:bg-dark-black dark:text-grey-light transition-colors duration-[600ms] ease`}
       >
-        {/* <SplashOverlay /> */}
         <EnterAnimation />
         <Header {...settings?.header} />
         <SetVH />

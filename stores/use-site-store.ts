@@ -9,6 +9,8 @@ interface SiteStore {
   setMobileMenuOpen: (open: boolean) => void;
   heroTheme: 'light' | 'dark';
   setHeroTheme: (theme: 'light' | 'dark') => void;
+  hasLoaded: boolean;
+  setHasLoaded: (loaded: boolean) => void;
 }
 
 export const useSiteStore = create<SiteStore>((set) => ({
@@ -20,4 +22,6 @@ export const useSiteStore = create<SiteStore>((set) => ({
   setMobileMenuOpen: (open: boolean) => set({ mobileMenuOpen: open }),
   heroTheme: 'light',
   setHeroTheme: (theme: 'light' | 'dark') => set({ heroTheme: theme }),
+  hasLoaded: false,
+  setHasLoaded: (loaded: boolean) => set({ hasLoaded: loaded }),
 }))

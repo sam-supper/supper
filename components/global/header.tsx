@@ -73,6 +73,7 @@ export const Header: FC<HeaderProps> = (props) => {
   }, [pathname, contactOpen, hasScrolled])
 
   const toggleInfo = useCallback(() => {
+    console.log('toggleInfo', informationOpen)
      setInformationOpen(!informationOpen)
    }, [informationOpen, setInformationOpen])
 
@@ -107,13 +108,29 @@ export const Header: FC<HeaderProps> = (props) => {
     setInformationOpen(false)
   })
 
+  const handleLogoClick = useCallback(() => {
+    setMobileMenuOpen(false)
+
+    if (pathname === '/') {
+      console.log('scrolling to top')
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
+    }
+  }, [pathname])
+
   const colorClass = useMemo(() => {
+    if (informationOpen) {
+      return 'text-black dark:text-white'
+    }
+
     if (!disableHeroTheme) {
       return heroTheme === 'dark' ? 'text-white' : 'text-black dark:text-white'
     }
 
     return theme === 'dark' ? 'text-white' : 'text-black dark:text-white'
-  }, [theme, heroTheme, disableHeroTheme])
+  }, [theme, heroTheme, disableHeroTheme, informationOpen])
 
   return (
     <header 
@@ -138,7 +155,7 @@ export const Header: FC<HeaderProps> = (props) => {
             )
           })}
         </nav>
-        <Link onClick={closeMobileMenu} scroll={false} href="/" className="md:flex-1">
+        <Link onClick={handleLogoClick} scroll={false} href="/" className="md:flex-1">
           <Logo className="w-full h-auto max-w-70 md:max-w-100" />
         </Link>
         <div className="hidden md:grid md:flex-1 grid-contain">

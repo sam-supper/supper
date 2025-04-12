@@ -65,7 +65,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, p
           exit={{ opacity: 0, y: -2, height: 0 }}
           transition={{ duration: 0.55, ease: easeOutExpo }}
         >
-          <div className="w-full pt-20 pb-5 grid grid-cols-[auto_1fr] gap-x-30 gap-y-12">
+          <div className="w-full pt-24 pb-5 grid grid-cols-[auto_1fr] gap-x-30 gap-y-12">
             <div>
               <button className="underline" onClick={toggleInformation}>{information.label}</button>
             </div>
