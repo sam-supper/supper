@@ -7,6 +7,7 @@ import { getRelativePath } from "@/lib/get-relative-path";
 import { easeInOutQuart } from "@/lib/animation";
 import { useClickAway } from "react-use";
 import { useKeyPress } from "@/hooks/use-key-press";
+import { PortableText } from "next-sanity"
 
 import type { SanityLink } from "@/sanity/types";
 
