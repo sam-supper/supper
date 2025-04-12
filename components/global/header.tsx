@@ -162,13 +162,13 @@ export const Header: FC<HeaderProps> = (props) => {
         </div>
         <div className="hidden md:grid md:col-span-3 grid-contain">
           <ToggleRow
-            label={contact.label}
-            url={contact.url}
+            label={information.label}
+            url={information.url}
             enabled={isActive}
-            onLabelClick={toggleContact}
+            onLabelClick={toggleInfo}
           >
             <div className="w-full">
-              {contact.content?.map((row) => (
+              {information.content?.map((row) => (
                 <div key={row._key}>
                   {row.url ? (
                     <a className="site-link" href={row.url} target="_blank">{row.label}</a>
