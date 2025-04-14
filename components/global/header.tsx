@@ -178,14 +178,14 @@ export const Header: FC<HeaderProps> = (props) => {
             </div>
           </ToggleRow>
         </div>
-        <div className="hidden md:grid md:flex-1 grid-contain">
+        <div className="hidden md:grid md:flex-1 grid-contain md:pr-60">
           <ToggleRow
             label={information.label}
             enabled={isActive}
             onLabelClick={toggleInfo}
           >
             <div className="w-full flex items-start justify-start">
-              <button onClick={toggleInfo} className="site-link w-full max-w-[350px] text-left">
+              <button onClick={toggleInfo} className="site-link w-full max-w-[400px] text-left">
                 <PortableText value={information.content} components={{
                   block: {
                     normal: ({ children }) => (
