@@ -12,7 +12,7 @@ export const ProjectMedia: FC<ProjectMediaProps> = (props) => {
   const { media } = props
 
   return (
-    <div className="w-full flex flex-col gap-y-20">
+    <div className="w-full flex flex-col gap-y-10 md:gap-y-20">
       {media?.map((item) => {
         if (item._type === 'mediaRow') {
           return <MediaRow key={item._key} items={item.media} />
@@ -40,7 +40,7 @@ const MediaRow: FC<{ items: (ImageType | VideoType)[] }> = (props) => {
 
   return (
     <div 
-      className="w-full gap-x-20 grid grid-cols-[var(--grid-cols)]"
+      className="w-full gap-x-10 md:gap-x-20 grid grid-cols-[var(--grid-cols)]"
       style={{
         '--grid-cols': `repeat(${items.length}, 1fr)`
       } as React.CSSProperties}

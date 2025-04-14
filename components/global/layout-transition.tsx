@@ -5,8 +5,7 @@ import { usePathname, useSelectedLayoutSegment } from "next/navigation";
 import { useLenis } from "lenis/react";
 
 import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { AnimatePresence, motion } from "framer-motion";
-import { easeInOutQuart } from "@/lib/animation";
+import { AnimatePresence, motion } from "motion/react";
  
 function usePreviousValue<T>(value: T): T | undefined {
   const prevValue = useRef<T | undefined>(undefined);
@@ -25,13 +24,21 @@ function FrozenRouter(props: { children: React.ReactNode }) {
   const context = useContext(LayoutRouterContext);
   const prevContext = usePreviousValue(context) || null;
  
+  const url = context?.url;
+  const prevUrl = prevContext?.url;
   const segment = useSelectedLayoutSegment();
   const prevSegment = usePreviousValue(segment);
  
   const changed =
-    segment !== prevSegment &&
-    segment !== undefined &&
-    prevSegment !== undefined;
+    (
+      segment !== prevSegment &&
+      segment !== undefined &&
+      prevSegment !== undefined
+    ) || (
+      url !== prevUrl &&
+      url !== undefined &&
+      prevUrl !== undefined
+    )
  
   return (
     <LayoutRouterContext.Provider value={changed ? prevContext : context}>
@@ -54,7 +61,7 @@ const defaultExit = {
 
 const defaultTransition = {
   duration: 0.45,
-  ease: easeInOutQuart
+  ease: "easeInOut"
 }
  
 interface LayoutTransitionProps {
@@ -77,11 +84,15 @@ export function LayoutTransition({
   transition = defaultTransition,
 }: LayoutTransitionProps) {
   const segment = useSelectedLayoutSegment();
-  const pathname = usePathname();
   const lenis = useLenis();
+  const pathname = usePathname();
 
   const scrollToTop = useCallback(() => {
-    lenis?.scrollTo(0, { immediate: true });
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo(0, 0);
+    }
   }, [lenis])
  
   return (
@@ -89,7 +100,7 @@ export function LayoutTransition({
       <motion.div
         className={className}
         style={style}
-        key={segment}
+        key={`${segment}-${pathname}`}
         initial={initial}
         animate={animate}
         exit={{

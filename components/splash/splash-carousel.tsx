@@ -29,6 +29,7 @@ export const SplashCarouselContent: React.FC<SplashCarouselProps> = (props) => {
 
   const [currentIndex, setCurrentIndex] = useState(5)
   const [lastIndex, setLastIndex] = useState(currentIndex - 1)
+  const [isFirst, setIsFirst] = useState(true)
   const [scope, animate] = useAnimate()
   const container = useRef<HTMLDivElement>(null)
   const imagesRef = useRef<HTMLDivElement[]>([])
@@ -78,14 +79,14 @@ export const SplashCarouselContent: React.FC<SplashCarouselProps> = (props) => {
     const containerRect = container.current.getBoundingClientRect()
     
     const scale = 1.65;
-    const defaultWidth = clamp(window.innerWidth * 0.12, 100, 400);
+    const defaultWidth = clamp({ value: window.innerWidth * 0.12, min: 100, max: 400});
     const activeWidth = defaultWidth * scale;
     const inactiveWidth = defaultWidth;
 
     const imageCenter = -1 * (currentImageRect.left - window.innerWidth / 2 + (defaultWidth * scale) / 2)
     const containerOffset = containerRect.x
 
-    const targetPosition = imageCenter + containerOffset + (activeWidth - defaultWidth)
+    const targetPosition = imageCenter + containerOffset + (!isFirst ? (activeWidth - defaultWidth) : 0)
 
     images?.forEach((image, index) => {      
       
@@ -117,6 +118,7 @@ export const SplashCarouselContent: React.FC<SplashCarouselProps> = (props) => {
     })
 
     setLastIndex(currentIndex)
+    setIsFirst(false)
   }, [currentIndex])
 
   const randomizedImages = useMemo(() => {

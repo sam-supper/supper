@@ -38,8 +38,8 @@ export const WorksList: FC<WorksListProps> = ({ projects }) => {
         {projects.map((project, index) => (
           <WorksListItem
             key={project._id}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
+            onPointerEnter={() => setHoveredIndex(index)}
+            onPointerLeave={() => setHoveredIndex(null)}
             {...project}
           />
         ))}
