@@ -45,7 +45,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
           </div>
         ) : null}
         
-        <div className="w-full site-grid">
+        <div className="w-full site-grid gap-y-20">
             <div className="w-full col-span-3 flex flex-col gap-y-5">
               <div className="text-eyebrow italic">Services:</div>
               <ul className="flex flex-col">
