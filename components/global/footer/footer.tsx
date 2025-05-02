@@ -26,22 +26,9 @@ export const Footer: FC<FooterProps> = ({ columns, externalLinks }) => {
         })}
       </div>
       <div className="hidden md:flex items-end justify-end gap-50 md:col-span-6">
-        <ul className="flex items-center gap-3">
-          {externalLinks?.map((link: any, index: number) => {
-            return (
-              <li key={link._key}>
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="relative group text-footer"
-                >
-                  {link.label}{index < externalLinks?.length - 1 ? ',' : ''}
-                </a>
-              </li>
-            )
-          })}
-        </ul>
+        <p className="text-footer">
+          (C){new Date().getFullYear()}
+        </p>
       </div>
     </footer>
   )

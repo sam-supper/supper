@@ -82,7 +82,7 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) 
           >
             <motion.ul
               key="filters-list"
-              className="relative top-0 left-0 w-full group flex items-center gap-3 justify-start flex-wrap py-8"
+              className="relative top-0 left-0 w-full group flex items-center gap-6 justify-start flex-wrap py-8"
               variants={revealBottom.variants}
               initial={revealBottom.hide}
               animate={revealBottom.show}

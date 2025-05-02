@@ -49,7 +49,7 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
       className="w-full flex-1 flex justify-center cursor-none"
     >
       <div
-        className={`w-full h-full relative md:-translate-y-20 ${aspectRatio > 1 ? 'md:w-[80%] md:h-auto' : 'md:w-[60%] md:h-auto'}`}
+        className={`w-full h-full relative ${aspectRatio > 1 ? 'md:w-[80%] md:h-auto' : 'md:w-[60%] md:h-auto'}`}
         style={{
           '--aspect-ratio': aspectRatio
         } as React.CSSProperties}

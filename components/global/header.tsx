@@ -141,6 +141,9 @@ export const Header: FC<HeaderProps> = (props) => {
       }
     >
       <div className="w-full flex items-start justify-between">
+        <Link onClick={handleLogoClick} scroll={false} href="/" className="md:flex-1">
+          <Logo className="w-full h-auto max-w-70 md:max-w-100" />
+        </Link>
         <nav className="hidden md:flex items-center md:flex-1">
           {links?.map((link) => {
             const { _key, label, to } = link;
@@ -155,9 +158,6 @@ export const Header: FC<HeaderProps> = (props) => {
             )
           })}
         </nav>
-        <Link onClick={handleLogoClick} scroll={false} href="/" className="md:flex-1">
-          <Logo className="w-full h-auto max-w-70 md:max-w-100" />
-        </Link>
         <div className="hidden md:grid md:flex-1 grid-contain">
           <ToggleRow
             label={contact.label}

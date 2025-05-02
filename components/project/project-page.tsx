@@ -11,11 +11,11 @@ export interface ProjectPageProps extends Project {}
 export const ProjectPage: FC<ProjectPageProps> = (props) => {
   if (!props) return null
   
-  const { title, year, services, explanation, media, related } = props
+  const { title, year, services, explanation, media, related, client } = props
 
   return (
-    <div className="w-full pt-80 md:pt-150 px-site-x md:px-0">
-      <div className="w-full min-h-[calc(100svh-80px)] md:min-h-[calc(100svh-150px)] flex flex-col gap-20 md:gap-32">
+    <div className="w-full pt-80 md:pt-110 px-site-x md:px-0">
+      <div className="w-full max-md:min-h-[calc(100svh-80px)]  flex flex-col gap-20 md:gap-30">
         <div className="w-full md:px-site-x relative z-[6]">
           <BackButton href="/" className="py-10 italic text-[15px]">[Back]</BackButton>
         </div>
@@ -57,6 +57,12 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
                   )
                 })}
               </ul>
+            </div>
+            <div className="w-full col-span-3 flex flex-col gap-y-5">
+              <div className="text-eyebrow italic">Client:</div>
+              <div className="text-subtitle">
+                {client?.title}
+              </div>
             </div>
             <div className="w-full col-span-3 flex flex-col gap-y-5">
               <div className="text-eyebrow italic">Year:</div>
