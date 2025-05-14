@@ -3,9 +3,6 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { worksPageQuery } from "@/sanity/queries/works";
 import { settingsFooterQuery } from "@/sanity/queries/settings";
 
-import { Footer } from "@/components/global/footer";
-import { ViewToggle } from "@/components/works/view-toggle";
-
 export async function generateMetadata() {
   const { data: worksPage } = await sanityFetch({ query: worksPageQuery })
 
@@ -16,7 +13,7 @@ export default async function WorksLayout({ children }: { children: React.ReactN
   const { data: footer } = await sanityFetch({ query: settingsFooterQuery });
 
   return (
-    <div className="w-full pt-80 md:pt-150 px-site-x min-h-screen flex flex-col gap-80 md:gap-140">
+    <div className="w-full pt-80 md:pt-150 px-site-x flex flex-col">
       {children}
     </div>
   )

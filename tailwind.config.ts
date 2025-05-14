@@ -23,7 +23,8 @@ export default {
       'overlay': 'rgba(249, 249, 249, 0.97)',
     },
     screens: {
-      'md': '900px'
+      'md': '800px',
+      'lg': '1280px',
     },
     fontFamily: {
       'serif': ['var(--font-arizona-text)', 'serif']

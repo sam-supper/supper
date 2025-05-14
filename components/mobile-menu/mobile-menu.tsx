@@ -10,7 +10,16 @@ import { PortableText } from "next-sanity";
 import Link from "next/link";
 
 interface MobileMenuProps {
-  links: SanityLink[]
+  links: {
+    _key: string
+    label: string
+    type: 'internal' | 'external' | 'information'
+    to?: {
+      _type: string
+      slug: string
+    }
+    url?: string
+  }[]
   contact: {
     label: string
     url?: string
@@ -89,7 +98,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, p
             </div>
 
             <div>
-              <Link href="/works" scroll={false} onClick={closeMobileMenu} className="underline">Works Index</Link>
+              <Link href="/works" scroll={false} onClick={closeMobileMenu} className="underline">Works</Link>
             </div>
             <div>{projectCount} Case Studies</div>
           </div>

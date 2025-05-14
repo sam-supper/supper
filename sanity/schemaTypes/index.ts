@@ -20,6 +20,7 @@ import richText from './blocks/rich-text'
 import richTextSimple from './blocks/rich-text-simple'
 import externalLink from './blocks/external-link'
 import internalLink from './blocks/internal-link'
+import link from './blocks/link'
 
 /** Settings */
 import settingsSeo from './settings/settings-seo'
@@ -40,6 +41,7 @@ export const allTypes: SchemaTypeDefinition[] = [
   settingsHeader,
   settingsFooter,
   settingsSplash,
+  link,
 
   // Documents
   homePage,

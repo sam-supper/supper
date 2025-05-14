@@ -13,7 +13,7 @@ export default defineType({
         defineArrayMember({
           name: 'link',
           title: 'Link',
-          type: 'internalLink'
+          type: 'link'
         })
       ],
     }),

@@ -4,7 +4,9 @@ import { linkFields, imageFields } from "./fragments";
 export const settingsHeaderQuery = defineQuery(
   groq`*[_type == "settingsHeader"][0] {
     links[] {
-      ${linkFields}
+      type,
+      url,
+      ${linkFields},
     },
     contact {
       label,

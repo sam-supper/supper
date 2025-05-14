@@ -9,10 +9,11 @@ export interface MediaProps {
   video?: any
   fit?: 'contain' | 'cover'
   position?: 'center' | 'bottom' | 'top'
+  sizes?: string
 }
 
 export const Media: FC<MediaProps> = (props) => {
-  const { mediaType, image, video, fit = 'cover', alt, position = 'center' } = props
+  const { mediaType, image, video, fit = 'cover', alt, position = 'center', sizes = '(max-width: 800px) 50vw, 25vw' } = props
 
   const fitClasses = useMemo(() => {
     const fitClass = fit === 'contain' ? 'object-contain' : 'object-cover';
@@ -23,7 +24,7 @@ export const Media: FC<MediaProps> = (props) => {
 
   return (
     <div className="w-full h-full flex items-center justify-center">
-      {mediaType === 'image' ? <Image className={`w-full h-full ${fitClasses}`} image={image} alt={alt} /> : null}
+      {mediaType === 'image' ? <Image className={`w-full h-full ${fitClasses}`} image={image} alt={alt} sizes={sizes} /> : null}
       {mediaType === 'video' ? (
         <div className="w-full h-full">
           <video

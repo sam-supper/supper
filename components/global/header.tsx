@@ -22,7 +22,16 @@ import { ThemeToggle } from "./theme-toggle";
 import { useThemeStore } from "@/stores/use-theme-store";
 
 export interface HeaderProps {
-  links: SanityLink[]
+  links: {
+    _key: string
+    label: string
+    type: 'internal' | 'external' | 'information'
+    to?: {
+      _type: string
+      slug: string
+    }
+    url?: string
+  }[]
   contact: {
     label: string
     url?: string
@@ -112,7 +121,6 @@ export const Header: FC<HeaderProps> = (props) => {
     setMobileMenuOpen(false)
 
     if (pathname === '/') {
-      console.log('scrolling to top')
       window.scrollTo({
         top: 0,
         behavior: 'smooth'
@@ -142,61 +150,50 @@ export const Header: FC<HeaderProps> = (props) => {
     >
       <div className="w-full flex items-start justify-between">
         <Link onClick={handleLogoClick} scroll={false} href="/" className="md:flex-1">
-          <Logo className="w-full h-auto max-w-70 md:max-w-100" />
+          <Logo className="h-24 md:h-18 w-auto" />
         </Link>
-        <nav className="hidden md:flex items-center md:flex-1">
           {links?.map((link) => {
-            const { _key, label, to } = link;
+            const { _key, label, to, url, type } = link;
 
-            const url = getRelativePath({
-              slug: to?.slug,
-              type: to?._type
-            })
+            const linkProps = type === 'internal' ? {
+              href: getRelativePath({
+                slug: to?.slug,
+                type: to?._type
+              }) ?? '',
+              scroll: false,
+              onClick: handleLinkClick
+            } : type === 'external' ? { 
+              href: url ?? '',
+              target: '_blank',
+              onClick: handleLinkClick
+            } : {
+              href: '',
+            }
+
+            if (type === 'information') {
+              return (
+                <button
+                  key={_key}
+                  onClick={toggleInfo}
+                  aria-expanded={informationOpen}
+                  aria-controls="information-content"
+                  className={`site-link max-md:hidden md:flex-1 text-left ${informationOpen ? 'site-link--active' : ''}`}
+                >
+                  {label}
+                </button>
+              )
+            }
 
             return (
-              <Link key={_key} scroll={false} onClick={handleLinkClick} href={url} className="site-link">{label}</Link>
+              <Link
+                key={_key}
+                {...linkProps}
+                className="site-link max-md:hidden md:flex-1"
+              >
+                {label}
+              </Link>
             )
           })}
-        </nav>
-        <div className="hidden md:grid md:flex-1 grid-contain">
-          <ToggleRow
-            label={contact.label}
-            url={contact.url}
-            enabled={isActive}
-            onLabelClick={toggleContact}
-          >
-            <div className="w-full">
-              {contact.content?.map((row) => (
-                <div key={row._key}>
-                  {row.url ? (
-                    <a className="site-link" href={row.url} target="_blank">{row.label}</a>
-                  ) : (
-                    <div>{row.label}</div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </ToggleRow>
-        </div>
-        <div className="hidden md:grid md:flex-1 grid-contain md:pr-60">
-          <ToggleRow
-            label={information.label}
-            enabled={isActive}
-            onLabelClick={toggleInfo}
-          >
-            <div className="w-full flex items-start justify-start">
-              <button onClick={toggleInfo} className="site-link w-full max-w-[400px] text-left">
-                <PortableText value={information.content} components={{
-                  block: {
-                    normal: ({ children }) => (
-                      <span>{children}</span>
-                    )
-                  }
-                }} />
-              </button>
-            </div>
-          </ToggleRow>
-        </div>
         <div className="hidden md:block w-auto">
           <ThemeToggle />
         </div>

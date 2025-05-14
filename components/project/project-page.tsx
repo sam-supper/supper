@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ProjectGallery } from "./project-gallery";
 import { BackButton } from "../global/back-button";
 import { ProjectMedia } from "./project-media";
+import { RelatedProjectLink } from "./related-project-link";
 
 export interface ProjectPageProps extends Project {}
 
@@ -70,27 +71,14 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             </div>
         </div>
 
-        {related?.length ? (
-          <div className="w-full flex flex-col gap-y-5">
-            <div className="text-eyebrow italic">Related:</div>
-            {related?.map(project => {
-              return (
-                <Link href={`/project/${project.slug}`} scroll={false} key={project._id} className="text-subtitle">{project.title}</Link>
-              )
-            })}
-          </div>
-        ) : null}
-
         <ProjectMedia media={media} />
 
         {related?.length ? (
-          <div className="w-full flex flex-col gap-y-5">
+          <div className="w-full flex flex-col items-start gap-y-5">
             <div className="text-eyebrow italic">Related:</div>
-            {related?.map(project => {
-              return (
-                <Link href={`/project/${project.slug}`} scroll={false} key={project._id} className="text-subtitle">{project.title}</Link>
-              )
-            })}
+            {related?.map(project => (
+              <RelatedProjectLink key={project._id} {...project} />
+            ))}
           </div>
         ) : null}
       </div>

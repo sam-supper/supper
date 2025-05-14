@@ -17,7 +17,7 @@ export interface HomePageProps {
 }
 
 export const HomePage = (props: HomePageProps) => {
-  const [view, setView] = useWorksView('grid')
+  const [view, setView] = useWorksView('list')
   const hasLoaded = useSiteStore((state) => state.hasLoaded)
 
   if (!props) return null

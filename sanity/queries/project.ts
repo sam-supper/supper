@@ -51,6 +51,16 @@ export const projectQuery = defineQuery(
       _id,
       title,
       "slug": slug.current,
+      "featuredMedia": media[] {
+        _type,
+        _key,
+        _type == "image" => {
+          ${imageFields}
+        },
+        _type == "video" => {
+          ${videoFields}
+        }
+      }[0]
     }
   }`
 )

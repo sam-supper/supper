@@ -1,6 +1,4 @@
 import type { FC } from "react";
-import { sanityFetch } from "@/sanity/lib/live";
-import { settingsFooterQuery } from "@/sanity/queries/settings";
 
 import { RichTextSimple } from '@/components/global/rich-text-simple'
 
@@ -12,7 +10,7 @@ interface FooterProps {
 export const Footer: FC<FooterProps> = ({ columns, externalLinks }) => {
   return (
     <footer className="px-site-x py-site-y mt-200 flex flex-col md:site-grid text-footer">
-      <div className="md:col-span-6 flex items-end justify-between gap-site-x">
+      <div className="md:col-span-9 lg:col-span-6 flex items-end justify-between gap-site-x">
         {columns?.map((column: any, index: number) => {
           const visibleOnMobile = index === 0
           return (
@@ -25,7 +23,7 @@ export const Footer: FC<FooterProps> = ({ columns, externalLinks }) => {
           )
         })}
       </div>
-      <div className="hidden md:flex items-end justify-end gap-50 md:col-span-6">
+      <div className="hidden md:flex items-end justify-end gap-50 md:col-span-3 lg:col-span-6">
         <p className="text-footer">
           (C){new Date().getFullYear()}
         </p>

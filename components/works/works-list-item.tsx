@@ -15,7 +15,7 @@ export const WorksListItem: FC<WorksListItemProps> = (props) => {
       className="w-full site-grid text-list-title text-black dark:text-grey dark:group-hover:text-grey dark:group-hover:hover:text-grey-light group-hover:text-grey group-hover:hover:text-black group-hover:hover:underline pb-5 last-of-type:pb-0 transition-colors duration-200 ease"
       {...rest}
     >
-      <div className="col-span-4 md:col-span-9 md:grid md:grid-cols-9 gap-x-20">
+      <div className="col-span-4 md:col-span-10 lg:col-span-9 md:grid md:grid-cols-9 gap-x-20">
         <div className="hidden md:block md:col-span-3">{client?.title}</div>
         <div className="md:col-span-3">{title}</div>
         <div className="hidden md:block md:col-span-3 whitespace-nowrap overflow-hidden text-ellipsis">
@@ -28,7 +28,7 @@ export const WorksListItem: FC<WorksListItemProps> = (props) => {
           })}
         </div>
       </div>
-      <div className="col-span-2 md:col-span-3 text-right md:text-left">
+      <div className="col-span-2 lg:col-span-3 text-right md:text-left">
         {year}
       </div>
     </Link>

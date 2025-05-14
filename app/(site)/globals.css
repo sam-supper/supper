@@ -115,7 +115,11 @@ a:focus-visible, button:focus-visible {
   }
 
   .site-link {
-    @apply text-current hover:underline active:underline focus:underline focus-visible:underline;
+    @apply text-current hover:underline active:underline focus-visible:underline;
+  }
+
+  .site-link--active {
+    @apply underline;
   }
 }
 
