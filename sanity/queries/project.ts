@@ -21,6 +21,11 @@ export const projectQuery = defineQuery(
       title,
       "slug": slug.current
     },
+    collaborators[] {
+      _key,
+      name,
+      url
+    },
     explanation,
     featuredMedia {
       ${mediaFields}

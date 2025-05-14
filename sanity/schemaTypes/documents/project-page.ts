@@ -68,6 +68,31 @@ export default defineType({
       of: [{ type: 'reference', to: [{ type: 'service' }] }],
     }),
     defineField({
+      name: 'collaborators',
+      title: 'Collaborators',
+      type: 'array',
+      group: 'content',
+      of: [
+        defineArrayMember({
+          name: 'collaborator',
+          title: 'Collaborator',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'name',
+              title: 'Name',
+              type: 'string',
+            }),
+            defineField({
+              name: 'url',
+              title: 'URL',
+              type: 'url',
+            }),
+          ]
+        })
+      ]
+    }),
+    defineField({
       name: 'explanation',
       title: 'Explanation',
       type: 'richTextSimple',

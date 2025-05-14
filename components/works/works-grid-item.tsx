@@ -31,7 +31,7 @@ export const WorksGridItem: FC<WorksGridItemProps> = (props) => {
     <Link
       scroll={false}
       href={`/project/${slug}?mediaIndex=${index}`}
-      className="group block w-full relative overflow-hidden md:h-0 md:pb-[var(--padding-bottom)] max-md:aspect-[var(--aspect-ratio)]"
+      className="group block w-full relative overflow-hidden h-0 pb-[var(--padding-bottom)]"
       style={{
         '--padding-bottom': `${100 / (4/5)}%`,
         '--aspect-ratio': aspectRatio

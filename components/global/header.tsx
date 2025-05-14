@@ -144,8 +144,10 @@ export const Header: FC<HeaderProps> = (props) => {
     <header 
       ref={headerRef}
       className={`
-        w-full fixed top-0 left-0 px-site-x z-[100] py-16 md:pt-16 md:pb-12 bg-translucent backdrop-blur-nav text-nav text-black transition-colors duration-500 ease
-        ${colorClass}`
+        w-full fixed top-0 left-0 px-site-x z-[100] py-16 md:pt-16 md:pb-12 backdrop-blur-nav text-nav text-black transition-colors duration-500 ease
+        ${colorClass}
+        ${!informationOpen ? 'bg-translucent' : ''}
+      `
       }
     >
       <div className="w-full flex items-start justify-between">

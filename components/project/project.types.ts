@@ -29,6 +29,11 @@ export interface Project {
   client: Client;
   year: string;
   services: Service[];
+  collaborators?: {
+    _key: string;
+    name: string;
+    url?: string;
+  }[];
   explanation: PortableTextBlock[];
   featuredMedia: Image | Video;
   media: Image[] | Video[] | MediaRow[];

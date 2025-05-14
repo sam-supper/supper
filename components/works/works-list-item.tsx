@@ -16,8 +16,8 @@ export const WorksListItem: FC<WorksListItemProps> = (props) => {
       {...rest}
     >
       <div className="col-span-4 md:col-span-10 lg:col-span-9 md:grid md:grid-cols-9 gap-x-20">
-        <div className="hidden md:block md:col-span-3">{client?.title}</div>
         <div className="md:col-span-3">{title}</div>
+        <div className="hidden md:block md:col-span-3">{client?.title}</div>
         <div className="hidden md:block md:col-span-3 whitespace-nowrap overflow-hidden text-ellipsis">
           {services?.map((service, index) => {
             return (

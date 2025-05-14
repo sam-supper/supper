@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 import { Image as ImageType, Video as VideoType } from "@/sanity/types";
 import { MediaRow } from "./project.types";
 import { Image } from "../global/image";
-import { Cursor } from "../global/cursor";
 import { Video } from "../global/video";
 
 interface ProjectGalleryProps {
@@ -46,7 +45,7 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
   return (
     <div 
       ref={galleryRef} 
-      className="w-full flex-1 flex justify-center cursor-none"
+      className="w-full flex-1 flex justify-center"
     >
       <div
         className={`w-full h-full relative ${aspectRatio > 1 ? 'md:w-[80%] md:h-auto' : 'md:w-[60%] md:h-auto'}`}

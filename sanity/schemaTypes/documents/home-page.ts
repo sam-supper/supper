@@ -46,7 +46,12 @@ export default defineType({
               title: 'Project',
               type: 'reference',
               to: [{ type: 'projectPage' }],
-            })
+            }),
+            defineField({
+              name: 'media',
+              title: 'Media',
+              type: 'media',
+            }),
           ],
           preview: {
             select: {

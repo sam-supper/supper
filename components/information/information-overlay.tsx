@@ -5,7 +5,7 @@ import type { SEO } from "@/sanity/types";
 
 import { useDynamicMetaTitle } from "@/hooks/use-dynamic-meta-title";
 import { useSiteStore } from "@/stores/use-site-store";
-import { easeInOutQuart } from "@/lib/animation";
+import { easeInOutQuart, easeOutCubic } from "@/lib/animation";
 
 import { PortableTextReactComponents } from "@portabletext/react";
 import { AnimatePresence, motion } from "motion/react";
@@ -85,13 +85,13 @@ export const InformationOverlay: FC<InformationOverlayProps> = ({ footer, seo, c
     <AnimatePresence>
       {isOpen ? (
         <motion.div
-          className="w-full h-screen fixed inset-0 z-[99] bg-overlay text-black"
+          className="w-full h-screen fixed inset-0 z-[99] bg-overlay dark:bg-[#0e0e0efa] text-black dark:text-white transition-colors duration-500 ease"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{
-            duration: 0.45,
-            ease: easeInOutQuart
+            duration: 0.75,
+            ease: easeOutCubic
           }}
         >
           <div className="w-full min-h-full flex flex-col">

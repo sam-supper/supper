@@ -21,6 +21,7 @@ import richTextSimple from './blocks/rich-text-simple'
 import externalLink from './blocks/external-link'
 import internalLink from './blocks/internal-link'
 import link from './blocks/link'
+import media from './blocks/media'
 
 /** Settings */
 import settingsSeo from './settings/settings-seo'
@@ -41,7 +42,6 @@ export const allTypes: SchemaTypeDefinition[] = [
   settingsHeader,
   settingsFooter,
   settingsSplash,
-  link,
 
   // Documents
   homePage,
@@ -56,7 +56,9 @@ export const allTypes: SchemaTypeDefinition[] = [
   richText,
   richTextSimple,
   externalLink,
-  internalLink
+  internalLink,
+  media,
+  link,
 ]
 
 export const singletonTypes: SingletonType[] = [

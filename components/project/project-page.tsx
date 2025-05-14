@@ -12,7 +12,7 @@ export interface ProjectPageProps extends Project {}
 export const ProjectPage: FC<ProjectPageProps> = (props) => {
   if (!props) return null
   
-  const { title, year, services, explanation, media, related, client } = props
+  const { title, year, services, explanation, media, related, client, collaborators } = props
 
   return (
     <div className="w-full pt-80 md:pt-110 px-site-x md:px-0">
@@ -65,7 +65,22 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
                 {client?.title}
               </div>
             </div>
-            <div className="w-full col-span-3 flex flex-col gap-y-5">
+            {collaborators?.length ? (
+              <div className="w-full col-span-2">
+                {collaborators.map((collaborator, index) => {
+                  return (
+                    <span key={collaborator._key} className="text-subtitle">
+                      {collaborator.url ? (
+                        <Link href={collaborator.url} target="_blank" className="hover:underline active:underline focus-visible:underline">{collaborator.name}{index < collaborators.length - 1 ? ', ' : ''}</Link>
+                      ) : (
+                        <span>{collaborator.name}{index < collaborators.length - 1 ? ', ' : ''}</span>
+                      )}
+                    </span>
+                  )
+                })}
+              </div>
+            ) : null}
+            <div className="w-full col-span-2 flex flex-col gap-y-5">
               <div className="text-eyebrow italic">Year:</div>
               <div className="text-subtitle">{year}</div>
             </div>
