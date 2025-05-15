@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useSiteStore } from "@/stores/use-site-store";
 import { easeInOutQuart } from "@/lib/animation";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { ProjectCarouselItem } from "./project-carousel-item";
@@ -18,6 +19,7 @@ export const ProjectCarousel = (props: ProjectCarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const carouselRef = useRef<any>(null)
   const pathname = usePathname()
+  const router = useRouter();
   
   const setHeroTheme = useSiteStore((state) => state.setHeroTheme)
 
@@ -52,6 +54,16 @@ export const ProjectCarousel = (props: ProjectCarouselProps) => {
     setActiveIndex(nextIndex)
   }, [nextIndex, setActiveIndex])
 
+  const handleProjectClick = useCallback(() => {
+    router.push(`/project/${projects[activeIndex].slug}`)
+  }, [activeIndex, projects])
+
+  const handleKeyDown = useCallback((event: any) => {
+    if (event.key === 'Enter') { 
+      handleProjectClick()
+    }
+  }, [handleProjectClick])
+
   return (
     <div 
       ref={carouselRef}
@@ -65,6 +77,10 @@ export const ProjectCarousel = (props: ProjectCarouselProps) => {
       </button>
       <AnimatePresence>
         <motion.div
+          role="button"
+          tabIndex={0}
+          onClick={handleProjectClick}
+          onKeyDown={handleKeyDown}
           key={`${activeIndex}-${projects[activeIndex]._key}`}
           className="w-full h-full relative cursor-pointer"
           initial={{ opacity: 0 }}
