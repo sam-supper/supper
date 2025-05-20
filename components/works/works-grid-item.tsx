@@ -39,7 +39,7 @@ export const WorksGridItem: FC<WorksGridItemProps> = (props) => {
     >
       {gridSize == 4 || gridSize == 6 ? (
         <div
-          className="absolute inset-0 w-full h-full z-[5] p-10 text-white bg-[rgba(196,196,196,0.15)] backdrop-blur-[20px] flex flex-col justify-end text-nav opacity-0 group-hover:opacity-100 transition-opacity duration-400 ease"
+          className="absolute inset-0 w-full h-full z-[5] p-10 text-white bg-[rgba(196,196,196,0.15)] backdrop-blur-[20px] mix-blend-difference flex flex-col justify-end text-nav opacity-0 group-hover:opacity-100 transition-opacity duration-400 ease"
         >
           {client?.title ? <div>{client.title}</div> : null}
           <div>{title}</div>
