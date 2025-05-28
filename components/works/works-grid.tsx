@@ -27,6 +27,7 @@ export const WorksGrid: FC<WorksGridProps> = ({ projects }) => {
 
   return (
     <motion.div
+      key="grid-items"
       className={gridSizeStyles({ size: gridSize as 4 | 6 | 8 | 10 })}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -34,7 +35,7 @@ export const WorksGrid: FC<WorksGridProps> = ({ projects }) => {
       transition={{ duration: 0.45, ease: easeInOutQuart }}
     >
       {projects?.map((item: any, index: number) => (
-        <WorksGridItem key={`${index}-${item.slug}`} {...item} />
+        <WorksGridItem key={`${index}-${item.slug}`} {...item} index={index} />
       ))}
     </motion.div>
   )

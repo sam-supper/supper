@@ -15,7 +15,7 @@ interface ImageProps {
 
 export const Image: FC<ImageProps> = ({ image, quality = 90, alt, className, sizes = 'auto', placeholder = false }) => {
   const [hasLoaded, setHasLoaded] = useState(false)
-  const deviceSizes = [320, 480, 768, 1024, 1280, 1536]
+  const deviceSizes = [320, 480, 768, 1024, 1280, 1536, 1920, 2560]
 
   const initialSrc = useMemo(() => {
     if (!image) return '';

@@ -1,12 +1,12 @@
 'use client'
 
-import { ComponentProps, useCallback, useEffect, useRef, useState, type FC } from "react"
-import { useWorksStore } from "./use-works-store"
+import { ComponentProps, useCallback, useEffect, useMemo, useRef, useState, type FC } from "react"
 import { revealTop, revealBottom, transitionWithDelay, easeOutExpo } from "@/lib/animation"
+import { useRouter, usePathname } from "next/navigation"
+import { useKeyPress } from "@/hooks/use-key-press"
+import { useSearchParams } from "next/navigation"
 import { cva } from "class-variance-authority"
 import { useClickAway } from "react-use"
-import { useKeyPress } from "@/hooks/use-key-press"
-import { easeOutCubic } from "@/lib/animation"
 
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
@@ -21,9 +21,12 @@ interface WorksFiltersProps {
 }
 
 export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) => {
-  const activeFilter = useWorksStore((state) => state.activeFilter) ?? initialFilter
-  const setActiveFilter = useWorksStore((state) => state.setActiveFilter)
   const [filtersExpanded, setFiltersExpanded] = useState(initialFilter ? true : false)
+
+  const { replace } = useRouter()
+  const params = useSearchParams()
+  const pathname = usePathname()
+  const activeFilters = useMemo(() => params.get('filter')?.split(',') || [], [params])
 
   const filtersRef = useRef<HTMLDivElement>(null)
 
@@ -32,8 +35,8 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) 
   }
 
   const isActiveFilter = useCallback((slug: string) => {
-    return activeFilter === slug
-  }, [activeFilter])
+    return activeFilters.includes(slug) || (slug === 'all' && !activeFilters.length)
+  }, [activeFilters, params])
 
   useEffect(() => {
     const handleKeyUp = (event: KeyboardEvent) => {
@@ -48,21 +51,33 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) 
 
   const closeFilters = useCallback(() => {
     setFiltersExpanded(false)
-  }, [setFiltersExpanded, setActiveFilter])
+  }, [setFiltersExpanded])
 
-  const toggleFilter = (e: React.MouseEvent<HTMLAnchorElement>, slug: string) => {
+  const toggleFilter = useCallback((e: React.MouseEvent<HTMLAnchorElement>, slug: string) => {
     e.preventDefault()
 
-    if (typeof window !== 'undefined') {
-      window.history.replaceState({}, '', `/works/${slug}`)
+    const newParams = new URLSearchParams(params)
+    let newFilters = [...activeFilters]
+
+    if (slug === 'all') {
+      newParams.delete('filter')
+      return replace(`${pathname}?${newParams.toString()}`, { scroll: false })
     }
 
-    if (activeFilter === slug) {
-      setActiveFilter(null)
+    if (activeFilters.includes(slug)) {
+      newFilters = newFilters.filter((filter) => filter !== slug)
     } else {
-      setActiveFilter(slug)
+      newFilters.push(slug)
     }
-  }
+
+    if (newFilters.length > 0) {
+      newParams.set('filter', newFilters.join(','))
+    } else {
+      newParams.delete('filter')
+    }
+
+    replace(`${pathname}?${newParams.toString()}`, { scroll: false })
+  }, [activeFilters, params, replace, pathname])
 
   useClickAway(filtersRef, closeFilters)
   useKeyPress('Escape', closeFilters)
@@ -71,7 +86,6 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) 
     <div className="relative grid-contain place-items-start" ref={filtersRef}>
       <AnimatePresence initial={false}>
         {filtersExpanded ? (
-          // Filter List
           <motion.div
             key="filters"
             className="overflow-hidden will-change-auto"
@@ -90,6 +104,7 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) 
             >
               <motion.li
                 {...revealBottom}
+                className="will-change-transform"
               >
                 <button onClick={closeFilters} className="text-grey hover:underline active:underline">
                   Close
@@ -102,6 +117,7 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) 
                   exit: (filters?.length + 1) * 0.035,
                   template: revealBottom
                 })}
+                className="will-change-transform"
               >
                 <FilterButton onClick={(e) => toggleFilter(e, 'all')} slug="all" active={isActiveFilter('all')}>
                   All,
@@ -121,6 +137,7 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) 
                     initial={transition.hide}
                     animate={transition.show}
                     exit={transition.hide}
+                    className="will-change-transform"
                   >
                     <FilterButton
                       onClick={(e) => toggleFilter(e, filter.slug)}
@@ -138,7 +155,7 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) 
           // Filter Toggle
           <motion.button
             key="filters-toggle"
-            className="text-nav py-4 lg:py-10"
+            className="text-nav py-4 lg:py-8 will-change-transform"
             onClick={toggleFilters}
             variants={revealTop.variants}
             initial={revealTop.hide}

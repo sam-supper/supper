@@ -1,5 +1,4 @@
-
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 export default defineType({
   name: 'link',
@@ -14,6 +13,7 @@ export default defineType({
         list: [
           { title: 'Internal', value: 'internal' },
           { title: 'External', value: 'external' },
+          { title: 'Contact', value: 'contact' },
           { title: 'Information Toggle', value: 'information' }
         ],
         layout: 'radio',
@@ -43,6 +43,39 @@ export default defineType({
       type: 'url',
       validation: (Rule) => Rule.uri({ allowRelative: true, scheme: ['http', 'https', 'mailto', 'tel'] }),
       hidden: ({ parent }) => parent?.type !== 'external',
+    }),
+    defineField({
+      name: 'childLinks',
+      title: 'Child Links',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          name: 'childLink',
+          title: 'Child Link',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'label',
+              title: 'Label',
+              type: 'string',
+            }),
+            defineField({
+              name: 'url',
+              title: 'URL',
+              type: 'url',
+              validation: (Rule) => Rule.uri({ allowRelative: true, scheme: ['http', 'https', 'mailto', 'tel'] }),
+            }),
+          ],
+          preview: {
+            select: {
+              label: 'label',
+              url: 'url',
+            },
+            prepare: ({ label, url }) => ({ title: label, subtitle: url || 'External' }),
+          },
+        })
+      ],
+      hidden: ({ parent }) => parent?.type !== 'contact',
     }),
   ],
 })

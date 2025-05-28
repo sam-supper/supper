@@ -92,9 +92,7 @@ export const ProjectCarousel = (props: ProjectCarouselProps) => {
           } }}
           transition={{ duration: 0.45, ease: easeInOutQuart }}
         >
-          <Link href={`/project/${projects[activeIndex].slug}`}>
-            <ProjectCarouselItem {...projects[activeIndex]} />
-          </Link>
+          <ProjectCarouselItem {...projects[activeIndex]} />
         </motion.div>
       </AnimatePresence>
     </div>

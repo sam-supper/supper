@@ -1,6 +1,6 @@
 "use client";
  
-import { useContext, useEffect, useRef, useCallback } from "react";
+import { useContext, useEffect, useRef, useCallback, useMemo } from "react";
 import { usePathname, useSelectedLayoutSegment } from "next/navigation";
 import { useLenis } from "lenis/react";
 
@@ -46,46 +46,25 @@ function FrozenRouter(props: { children: React.ReactNode }) {
     </LayoutRouterContext.Provider>
   );
 }
-
-const defaultInitial = {
-  opacity: 0,
-}
-
-const defaultAnimate = {
-  opacity: 1,
-}
-
-const defaultExit = {
-  opacity: 0,
-}
-
-const defaultTransition = {
-  duration: 0.45,
-  ease: "easeInOut"
-}
  
-interface LayoutTransitionProps {
+interface TransitionProps {
   children: React.ReactNode;
   className?: React.ComponentProps<typeof motion.div>["className"];
   style?: React.ComponentProps<typeof motion.div>["style"];
-  initial?: React.ComponentProps<typeof motion.div>["initial"];
-  animate?: React.ComponentProps<typeof motion.div>["animate"];
-  exit?: React.ComponentProps<typeof motion.div>["exit"];
-  transition?: React.ComponentProps<typeof motion.div>["transition"];
 }
  
 export function LayoutTransition({
   children,
   className,
   style,
-  initial = defaultInitial,
-  animate = defaultAnimate,
-  exit = defaultExit,
-  transition = defaultTransition,
-}: LayoutTransitionProps) {
+}: TransitionProps) {
   const segment = useSelectedLayoutSegment();
   const lenis = useLenis();
   const pathname = usePathname();
+
+  const key = useMemo(() => {
+    return `${segment}-${pathname}`
+  }, [segment, pathname])
 
   const scrollToTop = useCallback(() => {
     if (lenis) {
@@ -100,17 +79,21 @@ export function LayoutTransition({
       <motion.div
         className={className}
         style={style}
-        key={`${segment}-${pathname}`}
-        initial={initial}
-        animate={animate}
+        key={key}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         exit={{
           opacity: 0,
           transition: {
-            ...transition,
+            duration: 0.45,
+            ease: 'easeInOut',
             onComplete: scrollToTop
           }
         }}
-        transition={transition}
+        transition={{
+          duration: 0.45,
+          ease: 'easeInOut',
+        }}
       >
         <FrozenRouter>{children}</FrozenRouter>
       </motion.div>

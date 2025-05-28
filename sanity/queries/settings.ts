@@ -8,20 +8,6 @@ export const settingsHeaderQuery = defineQuery(
       url,
       ${linkFields},
     },
-    contact {
-      label,
-      url,
-      content[] {
-        _key,
-        _type,
-        label,
-        url
-      }
-    },
-    information {
-      label,
-      content
-    },
     "projectCount": count(*[_type == "projectPage"])
   }`
 )

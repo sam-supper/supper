@@ -1,9 +1,11 @@
 'use client'
 
-import { ComponentProps, type FC, useRef } from "react";
+import { ComponentProps, type FC, useCallback, useRef } from "react";
+import { useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useWorksStore } from "@/components/works/use-works-store";
 import { useClickAway } from "react-use";
-import { revealTop, revealBottom, easeInOutExpo, easeOutExpo } from "@/lib/animation";
+import { revealTop, revealBottom, easeOutExpo } from "@/lib/animation";
 import { cva } from "class-variance-authority";
 
 import { AnimatePresence, motion, HTMLMotionProps } from "motion/react";
@@ -14,7 +16,7 @@ interface ViewToggleProps extends ComponentProps<'div'> {
   setView: (view: 'grid' | 'list') => void
 }
 
-const gridSizes = [4, 6, 8, 10];
+const gridSizes = [4, 6, 8];
 
 export const ViewToggle: FC<ViewToggleProps> = (props) => {
   const { view, setView, ...rest } = props
@@ -24,12 +26,25 @@ export const ViewToggle: FC<ViewToggleProps> = (props) => {
   const setGridControlsActive = useWorksStore((state) => state.setGridControlsActive)
   const gridSize = useWorksStore((state) => state.gridSize)
   const setGridSize = useWorksStore((state) => state.setGridSize)
-  const setActiveFilter = useWorksStore((state) => state.setActiveFilter)
+  
+  const pathname = usePathname()
+  const { replace } = useRouter()
+  const params = useSearchParams()
+
+  const clearFilters = useCallback(() => {
+    const newParams = new URLSearchParams(params)
+    newParams.delete('filter')
+
+    replace(`${pathname}?${newParams.toString()}`, { scroll: false });
+  }, [params, pathname])
 
   const handleViewChange = (view: 'grid' | 'list') => {
     setView(view)
     setGridControlsActive(false)
-    setActiveFilter(null)
+
+    if (view === 'list') {
+      clearFilters()
+    }
   }
 
   useClickAway(gridControlsRef, () => {
@@ -61,7 +76,6 @@ export const ViewToggle: FC<ViewToggleProps> = (props) => {
                   <GridControlsButton
                     key={size}
                     active={gridSize == size}
-
                     onClick={() => setGridSize(size)}
                   >
                     {size}
@@ -82,6 +96,7 @@ export const ViewToggle: FC<ViewToggleProps> = (props) => {
           )}
         </AnimatePresence>
       </div>
+      
       <ToggleButton
         animate
         key="toggle-button"

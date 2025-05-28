@@ -1,17 +1,15 @@
 'use client'
 
-import { FC, useMemo } from "react"
-import { useWorksStore } from "./use-works-store"
-import { shuffleArray } from "@/lib/shuffle-array"
+import { FC, Suspense, useMemo } from "react"
 import { easeInOutQuart } from "@/lib/animation"
 import { AnimatePresence, motion } from "framer-motion"
 
-import type { Image, Video } from "@/sanity/types"
 import type { Project, Service } from "@/components/project/project.types"
 import { WorksFilters } from "./works-filters"
 import { WorksGrid } from "./works-grid"
 import { WorksList } from "./works-list"
 import { ViewToggle } from "./view-toggle"
+import { useSearchParams } from "next/navigation"
 
 interface WorksSectionProps {
   projects: Project[]
@@ -22,58 +20,22 @@ interface WorksSectionProps {
 }
 
 export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, setView, initialFilter }) => {
-  const activeFilter = useWorksStore((state) => state.activeFilter);
+  const params = useSearchParams()
+  const filterString = useMemo(() => params.get('filter') || '', [params])
 
   const filteredProjects = useMemo(() => {
-    const currentFilter = activeFilter ?? initialFilter;
+    const filters = params.get('filter')?.split(',') || []
 
-    if (currentFilter === 'all' || !currentFilter) {
+    if (!filters?.length) {
       return projects
     }
 
-    return projects.filter((project) => project.services?.some((service) => service.slug === currentFilter))
-  }, [activeFilter, initialFilter])
-
-  const mediaItems: any = useMemo(() => {
-    const allMedia = filteredProjects?.reduce((acc, project) => {
-      if (project.media?.length > 0) {
-        project.media?.forEach((item, index) => {
-          const firstMedia = project.media?.[0] as Image | Video
-          const secondMedia = project.media?.[1] as Image | Video
-
-          if (item._type === 'mediaRow') {
-            item.media?.forEach((mediaItem) => {
-              acc.push({
-                index,
-                title: project.title,
-                client: project.client,
-                slug: project.slug,
-                media: mediaItem as Image | Video,
-                hoverMedia: item._id === firstMedia._id ? secondMedia : firstMedia
-              })
-            })
-          } else {
-            acc.push({
-              index,
-              title: project.title,
-              client: project.client,
-              slug: project.slug,
-              media: item as Image | Video,
-              hoverMedia: item._id === firstMedia._id ? secondMedia : firstMedia
-            })
-          }
-        })
-      }
-      return acc
-    }, [] as Array<any>)
-
-    return shuffleArray(allMedia, 2)
-  }, [filteredProjects])
-
+    return projects.filter((project) => project.services?.some((service) => filters.includes(service.slug)))
+  }, [params])
+  
   const isGrid = useMemo(() => {
     return view === 'grid'
   }, [view])
-
 
   return (
     <div className="w-full flex flex-col gap-14 md:gap-30">
@@ -88,12 +50,12 @@ export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, 
         </motion.div>
         <ViewToggle view={view} setView={setView} />
       </div>
-      <div className="w-full flex flex-col gap-10">
+      <div className="w-full grid-contain">
         <AnimatePresence mode="wait" initial={false}>
           {view === 'grid' ? (
-            <WorksGrid key={`grid-${activeFilter}`} projects={mediaItems} />
+            <WorksGrid key={`grid-${filterString}`} projects={filteredProjects} />
           ) : (
-            <WorksList key={`list-${activeFilter}`} projects={filteredProjects} />
+            <WorksList key="list" projects={projects} />
           )}
         </AnimatePresence>
       </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useMemo, type FC } from "react";
+import { useRouter } from "next/navigation";
 
 import Link from "next/link";
 import { Image } from "../global/image";
@@ -33,8 +34,26 @@ export const ProjectCarouselItem: FC<ProjectCarouselItemProps> = (props) => {
     e.stopPropagation()
   }, [])
 
+  const router = useRouter()
+
+  const routeToProject = useCallback(() => {
+    router.push(`/project/${slug}`, { scroll: false })
+  }, [router, slug])
+
+  const handleKeyDown = useCallback((e: any) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      routeToProject()
+    }
+  }, [routeToProject])
+
   return (
-    <div className={`w-full h-full relative ${colorClass}`}>
+    <div
+      className={`w-full h-full relative ${colorClass}`}
+      onClick={routeToProject}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+    >
       {media.mediaType === 'image' ? (
         <Image image={media.image} alt={title} className={`w-full h-full ${fitClass}`} sizes="100vw" />
       ) : null}
@@ -44,7 +63,7 @@ export const ProjectCarouselItem: FC<ProjectCarouselItemProps> = (props) => {
       <Link
         href={`/project/${slug}`}
         onClick={handleLinkClick}
-        className="absolute bottom-0 left-0 z-[2] pl-20 pb-15 text-title-sm hover:underline"
+        className="absolute bottom-0 left-0 z-[10] pl-20 pb-15 text-title-sm hover:underline"
       >
         {client ?? title}
       </Link>

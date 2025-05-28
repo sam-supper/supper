@@ -25,12 +25,16 @@ export interface HeaderProps {
   links: {
     _key: string
     label: string
-    type: 'internal' | 'external' | 'information'
+    type: 'internal' | 'external' | 'information' | 'contact'
     to?: {
       _type: string
       slug: string
     }
     url?: string
+    childLinks?: {
+      label: string
+      url?: string
+    }[]
   }[]
   contact: {
     label: string
@@ -186,6 +190,14 @@ export const Header: FC<HeaderProps> = (props) => {
               )
             }
 
+            if (type === 'contact') {
+              return (
+                <button key={_key} className="site-link max-md:hidden md:flex-1 text-left">
+                  {label}
+                </button>
+              )
+            }
+
             return (
               <Link
                 key={_key}
@@ -197,7 +209,7 @@ export const Header: FC<HeaderProps> = (props) => {
             )
           })}
         <div className="hidden md:block w-auto">
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
         </div>
         <MobileMenuButton />
       </div>

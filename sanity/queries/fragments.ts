@@ -21,6 +21,11 @@ export const linkFields = groq`
   _key,
   _type,
   label,
+  url,
+  childLinks[] {
+    label,
+    url,
+  },
   to -> {
     _type,
     "slug": slug.current

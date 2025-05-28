@@ -2,7 +2,6 @@ import { useCallback, useEffect, type FC } from "react";
 import { useSiteStore } from "@/stores/use-site-store";
 import { easeOutExpo } from "@/lib/animation";
 
-import type { SanityLink } from "@/sanity/types";
 import type { PortableTextBlock } from "@portabletext/types";
 
 import { AnimatePresence, motion } from "framer-motion";
@@ -13,12 +12,16 @@ interface MobileMenuProps {
   links: {
     _key: string
     label: string
-    type: 'internal' | 'external' | 'information'
+    type: 'internal' | 'external' | 'information' | 'contact'
     to?: {
       _type: string
       slug: string
     }
     url?: string
+    childLinks?: {
+      label: string
+      url?: string
+    }[]
   }[]
   contact: {
     label: string
