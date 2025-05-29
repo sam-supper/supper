@@ -1,6 +1,6 @@
 'use client'
 
-import { type FC } from "react";
+import { Suspense, type FC } from "react";
 import type { Project, Service } from '@/components/project/project.types'
 
 import { useWorksView } from "./use-works-view";
@@ -17,5 +17,9 @@ interface WorksPageProps {
 export const WorksPage: FC<WorksPageProps> = ({ projects, services, initialView, initialFilter }) => {
   const [view, setView] = useWorksView(initialView)
 
-  return <WorksSection projects={projects} services={services} view={view} setView={setView} initialFilter={initialFilter} />
+  return (
+    <Suspense fallback={null}>
+      <WorksSection projects={projects} services={services} view={view} setView={setView} initialFilter={initialFilter} />
+    </Suspense>
+  )
 }

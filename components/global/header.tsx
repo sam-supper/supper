@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useLenis } from "lenis/react";
 import { ThemeToggle } from "./theme-toggle";
 import { useThemeStore } from "@/stores/use-theme-store";
+import { CopyButton } from "./copy-button";
 
 export interface HeaderProps {
   links: {
@@ -74,6 +75,10 @@ export const Header: FC<HeaderProps> = (props) => {
 
     const heroThemeDisabled = scroll > (window.innerHeight - 50)
     const hasScrolled = scroll > 100
+
+    if (hasScrolled) {
+      setContactOpen(false)
+    }
     
     setDisableHeroTheme(heroThemeDisabled)
     setHasScrolled(hasScrolled)
@@ -81,9 +86,9 @@ export const Header: FC<HeaderProps> = (props) => {
 
   const headerRef = useRef<HTMLDivElement>(null)
 
-  const isActive = useMemo(() => {
-    return (pathname === '/' || contactOpen) && !hasScrolled
-  }, [pathname, contactOpen, hasScrolled])
+  // const isActive = useMemo(() => {
+  //   return (pathname === '/' || contactOpen) && !hasScrolled
+  // }, [pathname, contactOpen, hasScrolled])
 
   const toggleInfo = useCallback(() => {
     console.log('toggleInfo', informationOpen)
@@ -159,7 +164,7 @@ export const Header: FC<HeaderProps> = (props) => {
           <Logo className="h-24 md:h-18 w-auto" />
         </Link>
           {links?.map((link) => {
-            const { _key, label, to, url, type } = link;
+            const { _key, label, to, url, type, childLinks = [] } = link;
 
             const linkProps = type === 'internal' ? {
               href: getRelativePath({
@@ -192,9 +197,33 @@ export const Header: FC<HeaderProps> = (props) => {
 
             if (type === 'contact') {
               return (
-                <button key={_key} className="site-link max-md:hidden md:flex-1 text-left">
-                  {label}
-                </button>
+                <ToggleRow
+                  key={_key}
+                  label={label}
+                  enabled={contactOpen}
+                  onLabelClick={toggleContact}
+                >
+                  <ul className="w-full flex flex-col items-start justify-start">
+                    {childLinks.map((childLink) => {
+                      if (!childLink.url?.includes('mailto:') || !childLink.url?.includes('http')) {
+                        return (
+                          <li key={childLink.label}>
+                            <CopyButton text={childLink.url ?? ''}>
+                              <span className="site-link">{childLink.label}</span>
+                            </CopyButton>
+                          </li>
+                        )
+                      }
+                      return (
+                        <li key={childLink.label}>
+                          <Link href={childLink.url ?? ''} className="site-link">
+                            {childLink.label}
+                          </Link>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </ToggleRow>
               )
             }
 
@@ -220,7 +249,7 @@ export const Header: FC<HeaderProps> = (props) => {
 
 const ToggleRow = ({ label, children, enabled, onLabelClick, suffix, url }: { label: string, children: ReactNode, enabled: boolean, suffix?: ReactNode, onLabelClick?: () => void, url?: string }) => {
   return (
-    <div className="w-full grid-contain">
+    <div className="max-md:hidden w-full md:flex-1 grid-contain">
       <AnimatePresence initial={false}>
         {enabled ? (
           <motion.div

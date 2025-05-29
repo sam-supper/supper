@@ -26,11 +26,13 @@ export const revealTop: TransitionTemplate = {
     hide: {
       y: -8,
       opacity: 0,
+      pointerEvents: 'none',
       transition: { duration: 0.65, ease: easeOutExpo}
     },
     show: {
       y: 0,
       opacity: 1,
+      pointerEvents: 'auto',
       transition: { duration: 0.65, ease: easeOutExpo, delay: 0.1}
     }
   }
@@ -43,11 +45,13 @@ export const revealBottom: TransitionTemplate = {
     hide: {
       y: 8,
       opacity: 0,
+      pointerEvents: 'none',
       transition: { duration: 0.65, ease: easeOutExpo}
     },
     show: {
       y: 0,
       opacity: 1,
+      pointerEvents: 'auto',
       transition: { duration: 0.65, ease: easeOutExpo, delay: 0.1}
     }
   }

@@ -66,7 +66,7 @@ export default defineType({
           type: 'richTextSimple'
         })
       ]
-    })
+    }),
   ],
   preview: {
     select: {},

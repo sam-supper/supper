@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { WorksSection } from "../works/works-section";
 import { ProjectCarousel } from "./project-carousel";
 import { SplashCarousel } from "../splash/splash-carousel";
+import { Suspense } from "react";
 
 export interface HomePageProps {
   title: string
@@ -44,7 +45,9 @@ export const HomePage = (props: HomePageProps) => {
       <ProjectCarousel projects={featuredProjects} />
 
       <div className="w-full pt-40 px-site-x flex flex-col gap-80 md:gap-140 text-black">
-        <WorksSection projects={projects} services={services} view={view} setView={setView} />
+        <Suspense fallback={null}>
+          <WorksSection projects={projects} services={services} view={view} setView={setView} />
+        </Suspense>
       </div>
     </div>
   );

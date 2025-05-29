@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, Suspense, useMemo } from "react"
+import { FC, useMemo } from "react"
 import { easeInOutQuart } from "@/lib/animation"
 import { AnimatePresence, motion } from "framer-motion"
 
