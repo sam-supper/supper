@@ -238,6 +238,7 @@ export const Header: FC<HeaderProps> = (props) => {
             )
           })}
         <div className="hidden md:block w-auto">
+          &copy;{new Date().getFullYear()}
           {/* <ThemeToggle /> */}
         </div>
         <MobileMenuButton />
