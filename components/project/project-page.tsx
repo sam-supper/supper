@@ -53,43 +53,55 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
         ) : null}
         
         <div className="w-full site-grid gap-y-20">
-            <div className="w-full col-span-3 flex flex-col gap-y-5">
-              <div className="text-eyebrow italic">Services:</div>
-              <ul className="flex flex-col">
-                {services?.map(service => {
-                  return (
-                    <li key={service._id} className="text-subtitle">
-                      <Link href={`/works/${service.slug}`} scroll={false} className="hover:underline">{service.title}</Link>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-            <div className="w-full col-span-3 flex flex-col gap-y-5">
-              <div className="text-eyebrow italic">Client:</div>
-              <div className="text-subtitle">
-                {client?.title}
-              </div>
-            </div>
-            {collaborators?.length ? (
-              <div className="w-full col-span-2">
-                {collaborators.map((collaborator, index) => {
-                  return (
-                    <span key={collaborator._key} className="text-subtitle">
-                      {collaborator.url ? (
-                        <Link href={collaborator.url} target="_blank" className="hover:underline active:underline focus-visible:underline">{collaborator.name}{index < collaborators.length - 1 ? ', ' : ''}</Link>
-                      ) : (
-                        <span>{collaborator.name}{index < collaborators.length - 1 ? ', ' : ''}</span>
-                      )}
-                    </span>
-                  )
-                })}
+            {services?.length ? (
+              <div className="w-full col-span-3 flex flex-col gap-y-5">
+                <div className="text-eyebrow italic">Services:</div>
+                <ul className="flex flex-col">
+                  {services?.map(service => {
+                    return (
+                      <li key={service._id} className="text-subtitle">
+                        <Link href={`/works/${service.slug}`} scroll={false} className="hover:underline">{service.title}</Link>
+                      </li>
+                    )
+                  })}
+                </ul>
               </div>
             ) : null}
-            <div className="w-full col-span-2 flex flex-col gap-y-5">
-              <div className="text-eyebrow italic">Year:</div>
-              <div className="text-subtitle">{getYear(year)}</div>
-            </div>
+
+            {client?.title ? (
+              <div className="w-full col-span-3 flex flex-col gap-y-5">
+                <div className="text-eyebrow italic">Client:</div>
+                <div className="text-subtitle">
+                  {client?.title}
+                </div>
+              </div>
+            ) : null}
+
+            {collaborators?.length ? (
+              <div className="w-full col-span-3 flex flex-col gap-y-5">
+                <div className="text-eyebrow italic">Collaborators:</div>
+                <ul className="flex flex-col">
+                  {collaborators?.map(collaborator => {
+                    return (
+                      <li key={collaborator._key} className="text-subtitle">
+                        {collaborator.url ? (
+                          <Link href={collaborator.url} scroll={false} className="hover:underline">{collaborator.name}</Link>
+                        ) : (
+                          <span>{collaborator.name}</span>
+                        )}
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            ) : null}
+
+            {year ? (
+              <div className="w-full col-span-2 flex flex-col gap-y-5">
+                <div className="text-eyebrow italic">Year:</div>
+                <div className="text-subtitle">{getYear(year)}</div>
+              </div>
+            ) : null}
         </div>
 
         <ProjectMedia media={media} />
