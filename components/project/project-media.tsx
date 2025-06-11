@@ -47,12 +47,12 @@ const MediaRow: FC<{ items: (ImageType | VideoType)[] }> = (props) => {
     >
       {items.map((item) => {
         return (
-          <div key={item._key} className="w-full relative overflow-hidden h-auto" style={{ aspectRatio: item.aspectRatio ?? '4/5' }}>
+          <div key={item._key} className="w-full relative overflow-hidden h-auto" style={{ aspectRatio: item.aspectRatio ?? '1/1' }}>
             {item._type === 'image' ? (
-              <Image image={item} className="object-contain w-full h-full" alt="" sizes="90vw" />
+              <Image image={item} className="object-cover w-full h-full" alt="" sizes="90vw" />
             ) : null}
             {item._type === 'video' ? (
-              <Video {...item} className="object-contain w-full h-full" />
+              <Video {...item} className="object-cover w-full h-full" />
             ) : null}
           </div>
         )
