@@ -53,12 +53,7 @@ export default defineType({
     defineField({
       name: 'year',
       title: 'Year',
-      type: 'string',
-      group: 'content',
-      options: {
-        list: lastTenYears(),
-      },
-      initialValue: () => new Date().getFullYear().toString(),
+      type: 'date',
     }),
     defineField({
       name: 'services',

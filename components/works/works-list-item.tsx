@@ -1,4 +1,4 @@
-import { type FC, type ComponentProps } from "react";
+import { type FC, type ComponentProps, useCallback } from "react";
 import type { Project } from "@/components/project/project.types";
 import Link from "next/link";
 
@@ -6,6 +6,13 @@ interface WorksListItemProps extends Partial<Project>, Omit<ComponentProps<'a'>,
 
 export const WorksListItem: FC<WorksListItemProps> = (props) => {
   const { title, slug, client, services, year, featuredMedia, media, ...rest } = props;
+
+  const getYear = useCallback((year?: string) => {
+    if (!year) return '';
+
+    const date = new Date(year);
+    return date.toUTCString().split(' ')[3];
+  }, [])
 
   return (
     <Link
@@ -29,7 +36,7 @@ export const WorksListItem: FC<WorksListItemProps> = (props) => {
         </div>
       </div>
       <div className="col-span-2 lg:col-span-3 text-right md:text-left">
-        {year}
+        {getYear(year)}
       </div>
     </Link>
   )

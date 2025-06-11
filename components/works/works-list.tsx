@@ -36,7 +36,7 @@ export const WorksList: FC<WorksListProps> = ({ projects }) => {
           </div>
         </div>
         <div className="flex flex-col group">
-          {projects.sort((a: any, b: any) => b?.year && a?.year ? b.year - a.year : 0).map((project, index) => (
+          {projects.sort((a: any, b: any) => b?.year && a?.year ? new Date(b.year).getTime() - new Date(a.year).getTime() : 0).map((project, index) => (
             <WorksListItem
               key={project._id}
               onPointerEnter={() => setHoveredIndex(index)}

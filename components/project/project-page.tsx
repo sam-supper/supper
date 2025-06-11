@@ -1,4 +1,4 @@
-import { Suspense, type FC } from "react";
+import { Suspense, useCallback, type FC } from "react";
 import { Project } from "./project.types";
 import { PortableText } from "next-sanity";
 import Link from "next/link";
@@ -13,6 +13,12 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
   if (!props) return null
   
   const { title, year, services, explanation, media, related, client, collaborators } = props
+
+  const getYear = useCallback((year?: string) => {
+    if (!year) return '';
+    const date = new Date(year);
+    return date.toUTCString().split(' ')[3];
+  }, [])
 
   return (
     <div className="w-full pt-80 md:pt-110 px-site-x md:px-0">
@@ -82,7 +88,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             ) : null}
             <div className="w-full col-span-2 flex flex-col gap-y-5">
               <div className="text-eyebrow italic">Year:</div>
-              <div className="text-subtitle">{year}</div>
+              <div className="text-subtitle">{getYear(year)}</div>
             </div>
         </div>
 
