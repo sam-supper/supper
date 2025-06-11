@@ -103,7 +103,6 @@ export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, p
             <div>
               <Link href="/works" scroll={false} onClick={closeMobileMenu} className="underline">Works</Link>
             </div>
-            <div>{projectCount} Case Studies</div>
           </div>
         </motion.div>
       ) : null}
