@@ -73,7 +73,7 @@ export const Header: FC<HeaderProps> = (props) => {
   useLenis(({ scroll }) => {
     if (typeof window === 'undefined') return
 
-    const heroThemeDisabled = scroll > (window.innerHeight - 50)
+    const heroThemeDisabled = scroll > (window.innerWidth > 800 ? window.innerHeight - 50 : window.innerWidth)
     const hasScrolled = scroll > 100
 
     if (hasScrolled) {

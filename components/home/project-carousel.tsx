@@ -67,7 +67,7 @@ export const ProjectCarousel = (props: ProjectCarouselProps) => {
   return (
     <div 
       ref={carouselRef}
-      className="w-full h-[100svh] grid-contain"
+      className="relative w-full aspect-[1/1] md:aspect-auto md:h-[100svh] grid-contain"
     >
       <button className="absolute top-0 left-0 z-[5] w-1/3 h-full bg-transparent cursor-w-resize" onClick={handlePreviousClick}>
         <span className="sr-only">Previous</span>

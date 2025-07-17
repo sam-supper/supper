@@ -63,7 +63,7 @@ export const ProjectCarouselItem: FC<ProjectCarouselItemProps> = (props) => {
       <Link
         href={`/project/${slug}`}
         onClick={handleLinkClick}
-        className="absolute bottom-0 left-0 z-[10] pl-20 pb-15 text-title-sm hover:underline"
+        className="absolute bottom-0 left-0 z-[10] px-site-x md:px-20 pb-15 text-title-sm hover:underline text-balance"
       >
         {client ?? title}
       </Link>
