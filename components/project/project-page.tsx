@@ -104,7 +104,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             ) : null}
         </div>
 
-        <ProjectMedia media={media} />
+        <ProjectMedia media={media?.slice(1)} />
 
         {related?.length ? (
           <div className="w-full flex flex-col items-start gap-y-5">
