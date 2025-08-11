@@ -17,21 +17,15 @@ import { InformationPage } from "@/components/information/information-page";
 import { Footer } from '@/components/global/footer';
 import { ThemeProvider } from '@/components/global/theme-provider';
 
-// NEW: import Script for Google Analytics
-import Script from 'next/script';
+// Google Analytics
+import Script from 'next/script'
+import GAListener from '../ga-listener'
+import { Suspense } from 'react'
 
 const ArizonaText = localFont({
   src: [
-    {
-      path: '../fonts/ABCArizonaText-Regular.woff2',
-      weight: '400',
-      style: 'normal'
-    },
-    {
-      path: '../fonts/ABCArizonaText-RegularItalic.woff2',
-      weight: '400',
-      style: 'italic'
-    }
+    { path: '../fonts/ABCArizonaText-Regular.woff2', weight: '400', style: 'normal' },
+    { path: '../fonts/ABCArizonaText-RegularItalic.woff2', weight: '400', style: 'italic' }
   ],
   display: 'swap',
   variable: '--font-arizona-text'
@@ -39,15 +33,12 @@ const ArizonaText = localFont({
 
 export async function generateMetadata(): Promise<Metadata> {
   const { data } = await sanityFetch({ query: settingsSeoQuery })
-
   return useMetadata({ data, useTitleTemplate: false })
 }
 
 export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   const [{ data: settings }, { data: footerSettings }] = await Promise.all([
     sanityFetch({ query: settingsQuery }),
     sanityFetch({ query: settingsFooterQuery })
@@ -58,38 +49,40 @@ export default async function RootLayout({
       <body
         className={`${ArizonaText.variable} antialiased font-serif font-normal bg-grey-light text-black dark:bg-dark-black dark:text-grey-light transition-colors duration-[600ms] ease`}
       >
+        {/* GA - load early */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-HS3WKH1936"
+          strategy="beforeInteractive"
+        />
+        <Script id="gtag-init" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-HS3WKH1936', {
+              send_page_view: true,
+              page_path: window.location.pathname + window.location.search
+            });
+          `}
+        </Script>
+
         <EnterAnimation />
         <Header {...settings?.header} />
         <SetVH />
         <InformationPage />
         <SanityLive />
         <LayoutTransition>
-          <ReactLenis
-            root
-            options={{
-              lerp: 0.15,
-            }}
-          >
+          <ReactLenis root options={{ lerp: 0.15 }}>
             {children}
             <Footer {...footerSettings} />
           </ReactLenis>
         </LayoutTransition>
         {(await draftMode()).isEnabled && <VisualEditing />}
 
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-HS3WKH1936"
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-HS3WKH1936', { page_path: window.location.pathname });
-          `}
-        </Script>
-
+        {/* GA - track client side route changes */}
+        <Suspense fallback={null}>
+          <GAListener />
+        </Suspense>
       </body>
     </ThemeProvider>
   );
