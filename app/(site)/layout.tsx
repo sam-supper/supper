@@ -19,20 +19,13 @@ import { ThemeProvider } from '@/components/global/theme-provider';
 
 // Google Analytics
 import Script from 'next/script'
-import GAListener from '@/app/ga-listener'
+import GAListener from '../ga-listener'
+import { Suspense } from 'react'
 
 const ArizonaText = localFont({
   src: [
-    {
-      path: '../fonts/ABCArizonaText-Regular.woff2',
-      weight: '400',
-      style: 'normal'
-    },
-    {
-      path: '../fonts/ABCArizonaText-RegularItalic.woff2',
-      weight: '400',
-      style: 'italic'
-    }
+    { path: '../fonts/ABCArizonaText-Regular.woff2', weight: '400', style: 'normal' },
+    { path: '../fonts/ABCArizonaText-RegularItalic.woff2', weight: '400', style: 'italic' }
   ],
   display: 'swap',
   variable: '--font-arizona-text'
@@ -45,9 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   const [{ data: settings }, { data: footerSettings }] = await Promise.all([
     sanityFetch({ query: settingsQuery }),
     sanityFetch({ query: settingsFooterQuery })
@@ -81,10 +72,7 @@ export default async function RootLayout({
         <InformationPage />
         <SanityLive />
         <LayoutTransition>
-          <ReactLenis
-            root
-            options={{ lerp: 0.15 }}
-          >
+          <ReactLenis root options={{ lerp: 0.15 }}>
             {children}
             <Footer {...footerSettings} />
           </ReactLenis>
@@ -92,7 +80,9 @@ export default async function RootLayout({
         {(await draftMode()).isEnabled && <VisualEditing />}
 
         {/* GA - track client side route changes */}
-        <GAListener />
+        <Suspense fallback={null}>
+          <GAListener />
+        </Suspense>
       </body>
     </ThemeProvider>
   );
