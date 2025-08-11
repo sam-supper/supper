@@ -17,8 +17,9 @@ import { InformationPage } from "@/components/information/information-page";
 import { Footer } from '@/components/global/footer';
 import { ThemeProvider } from '@/components/global/theme-provider';
 
-// NEW: import Script for Google Analytics
-import Script from 'next/script';
+// Google Analytics
+import Script from 'next/script'
+import GAListener from '@/app/ga-listener'
 
 const ArizonaText = localFont({
   src: [
@@ -39,7 +40,6 @@ const ArizonaText = localFont({
 
 export async function generateMetadata(): Promise<Metadata> {
   const { data } = await sanityFetch({ query: settingsSeoQuery })
-
   return useMetadata({ data, useTitleTemplate: false })
 }
 
@@ -58,6 +58,23 @@ export default async function RootLayout({
       <body
         className={`${ArizonaText.variable} antialiased font-serif font-normal bg-grey-light text-black dark:bg-dark-black dark:text-grey-light transition-colors duration-[600ms] ease`}
       >
+        {/* GA - load early */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-HS3WKH1936"
+          strategy="beforeInteractive"
+        />
+        <Script id="gtag-init" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-HS3WKH1936', {
+              send_page_view: true,
+              page_path: window.location.pathname + window.location.search
+            });
+          `}
+        </Script>
+
         <EnterAnimation />
         <Header {...settings?.header} />
         <SetVH />
@@ -66,9 +83,7 @@ export default async function RootLayout({
         <LayoutTransition>
           <ReactLenis
             root
-            options={{
-              lerp: 0.15,
-            }}
+            options={{ lerp: 0.15 }}
           >
             {children}
             <Footer {...footerSettings} />
@@ -76,20 +91,8 @@ export default async function RootLayout({
         </LayoutTransition>
         {(await draftMode()).isEnabled && <VisualEditing />}
 
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-HS3WKH1936"
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-HS3WKH1936', { page_path: window.location.pathname });
-          `}
-        </Script>
-
+        {/* GA - track client side route changes */}
+        <GAListener />
       </body>
     </ThemeProvider>
   );
