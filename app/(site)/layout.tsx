@@ -17,6 +17,8 @@ import { InformationPage } from "@/components/information/information-page";
 import { Footer } from '@/components/global/footer';
 import { ThemeProvider } from '@/components/global/theme-provider';
 
+import Script from 'next/script'
+
 const ArizonaText = localFont({
   src: [
     {
@@ -72,6 +74,21 @@ export default async function RootLayout({
           </ReactLenis>
         </LayoutTransition>
         {(await draftMode()).isEnabled && <VisualEditing />}
+
+{/* Google Analytics */}
+<Script
+  src="https://www.googletagmanager.com/gtag/js?id=G-HS3WKH1936"
+  strategy="afterInteractive"
+/>
+<Script id="gtag-init" strategy="afterInteractive">
+  {`
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HS3WKH1936');
+  `}
+</Script>
+        
       </body>
     </ThemeProvider>
   );
