@@ -205,10 +205,16 @@ export const Header: FC<HeaderProps> = (props) => {
                 >
                   <ul className="w-full flex flex-col items-start justify-start">
                     {childLinks.map((childLink) => {
-                      if (!childLink.url?.includes('mailto:') || !childLink.url?.includes('http')) {
+                      const url = childLink.url ?? ''
+                      const isMailto = url.includes('mailto:')
+                      const isHttp = url.includes('http')
+
+                      // Only copy to clipboard when it isn't an openable link
+                      // (e.g. a bare handle or phone number). Real URLs open.
+                      if (!isMailto && !isHttp) {
                         return (
                           <li key={childLink.label}>
-                            <CopyButton text={childLink.url ?? ''}>
+                            <CopyButton text={url}>
                               <span className="site-link">{childLink.label}</span>
                             </CopyButton>
                           </li>
@@ -216,7 +222,11 @@ export const Header: FC<HeaderProps> = (props) => {
                       }
                       return (
                         <li key={childLink.label}>
-                          <Link href={childLink.url ?? ''} className="site-link">
+                          <Link
+                            href={url}
+                            {...(isHttp ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                            className="site-link"
+                          >
                             {childLink.label}
                           </Link>
                         </li>

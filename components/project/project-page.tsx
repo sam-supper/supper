@@ -20,12 +20,15 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
     return date.toUTCString().split(' ')[3];
   }, [])
 
+  // Match subsequent photos to the width of the first photo (the gallery),
+  // which is sized off the first media's aspect ratio.
+  const firstMedia = media?.[0] as any
+  const firstAspect = firstMedia?.aspectRatio ?? 1.77
+  const mediaWidthClass = firstAspect > 1 ? 'md:w-[80%]' : 'md:w-[60%]'
+
   return (
-    <div className="w-full pt-80 md:pt-110 px-site-x md:px-0">
-      <div className="w-full max-md:min-h-[calc(100svh-80px)]  flex flex-col gap-20 md:gap-30">
-        <div className="w-full md:px-site-x relative z-[6]">
-          <BackButton href="/" className="py-10 italic text-[15px]">[Back]</BackButton>
-        </div>
+    <div className="w-full pt-50 md:pt-60 px-site-x md:px-0">
+      <div className="w-full max-md:min-h-[calc(100svh-80px)] flex flex-col gap-20 md:gap-30">
         <div className="w-full flex-1 overflow-hidden flex">
           <Suspense>
             <ProjectGallery media={media} />
@@ -39,7 +42,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
       <div className="flex flex-col md:pt-20 gap-y-20 md:gap-y-40 md:px-site-x">
         {explanation ? (
           <div className="w-full md:site-grid">
-            <div className="w-full md:col-span-9">
+            <div className="w-full md:col-span-6">
               <PortableText
                 value={explanation}
                 components={{
@@ -60,7 +63,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
                   {services?.map(service => {
                     return (
                       <li key={service._id} className="text-subtitle">
-                        <Link href={`/works/${service.slug}`} scroll={false} className="hover:underline">{service.title}</Link>
+                        <Link href={`/works?filter=${service.slug}`} scroll={false} className="hover:underline">{service.title}</Link>
                       </li>
                     )
                   })}
@@ -104,7 +107,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             ) : null}
         </div>
 
-        <ProjectMedia media={media?.slice(1)} />
+        <ProjectMedia media={media?.slice(1)} widthClass={mediaWidthClass} />
 
         {related?.length ? (
           <div className="w-full flex flex-col items-start gap-y-5">
@@ -114,6 +117,15 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             ))}
           </div>
         ) : null}
+      </div>
+
+      <div className="sticky bottom-0 z-[6] w-full md:px-site-x pointer-events-none">
+        <BackButton
+          href="/"
+          className="inline-block py-6 italic text-[15px] pointer-events-auto mix-blend-difference text-white"
+        >
+          [Back]
+        </BackButton>
       </div>
     </div>
   );

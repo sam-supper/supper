@@ -94,6 +94,30 @@ export default defineType({
       group: 'content',
     }),
     defineField({
+      name: 'gridMedia',
+      title: 'Grid Thumbnail',
+      description: 'Optional. Shown in the works grid (desktop + mobile) instead of the first project photo. Leave empty to use the first photo.',
+      type: 'image',
+      group: 'media',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+        })
+      ],
+      preview: {
+        select: {
+          filename: 'asset.originalFilename',
+          media: 'asset'
+        },
+        prepare: ({ filename, media }) => ({
+          title: filename,
+          media: media,
+        }),
+      },
+    }),
+    defineField({
       name: 'media',
       title: 'Media',
       type: 'array',

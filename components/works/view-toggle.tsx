@@ -1,8 +1,6 @@
 'use client'
 
-import { ComponentProps, type FC, useCallback, useRef } from "react";
-import { useSearchParams } from "next/navigation";
-import { useRouter, usePathname } from "next/navigation";
+import { ComponentProps, type FC, useRef } from "react";
 import { useWorksStore } from "@/components/works/use-works-store";
 import { useClickAway } from "react-use";
 import { revealTop, revealBottom, easeOutExpo } from "@/lib/animation";
@@ -26,25 +24,10 @@ export const ViewToggle: FC<ViewToggleProps> = (props) => {
   const setGridControlsActive = useWorksStore((state) => state.setGridControlsActive)
   const gridSize = useWorksStore((state) => state.gridSize)
   const setGridSize = useWorksStore((state) => state.setGridSize)
-  
-  const pathname = usePathname()
-  const { replace } = useRouter()
-  const params = useSearchParams()
-
-  const clearFilters = useCallback(() => {
-    const newParams = new URLSearchParams(params)
-    newParams.delete('filter')
-
-    replace(`${pathname}?${newParams.toString()}`, { scroll: false });
-  }, [params, pathname])
 
   const handleViewChange = (view: 'grid' | 'list') => {
     setView(view)
     setGridControlsActive(false)
-
-    if (view === 'list') {
-      clearFilters()
-    }
   }
 
   useClickAway(gridControlsRef, () => {

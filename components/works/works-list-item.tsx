@@ -5,7 +5,7 @@ import Link from "next/link";
 interface WorksListItemProps extends Partial<Project>, Omit<ComponentProps<'a'>, 'title' | 'media'> {}
 
 export const WorksListItem: FC<WorksListItemProps> = (props) => {
-  const { title, slug, client, services, year, featuredMedia, media, ...rest } = props;
+  const { title, slug, client, services, year, featuredMedia, gridMedia, media, ...rest } = props;
 
   const getYear = useCallback((year?: string) => {
     if (!year) return '';

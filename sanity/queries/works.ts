@@ -35,6 +35,9 @@ media[] {
     ${videoFields}
   }
 },
+gridMedia {
+  ${imageFields}
+},
 "featuredMedia": media[0] {
   _type,
   _type == "mediaRow" => {
