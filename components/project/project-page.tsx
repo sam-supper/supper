@@ -119,10 +119,10 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
         ) : null}
       </div>
 
-      <div className="sticky bottom-0 z-[6] w-full md:px-site-x pointer-events-none">
+      <div className="sticky bottom-0 z-[6] w-full md:px-site-x pt-10 pb-site-y pointer-events-none">
         <BackButton
           href="/"
-          className="inline-block py-6 italic text-[15px] pointer-events-auto mix-blend-difference text-white"
+          className="inline-block italic text-[15px] px-4 py-2 -ml-4 pointer-events-auto text-black dark:text-white bg-overlay/70 dark:bg-black/50 backdrop-blur-md hover:underline transition-colors duration-200 ease"
         >
           [Back]
         </BackButton>
