@@ -23,7 +23,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
   return (
     <div className="w-full pt-50 md:pt-60 px-site-x md:px-0">
       <div className="w-full max-md:min-h-[calc(100svh-80px)] flex flex-col gap-20 md:gap-30">
-        <div className="w-full flex-1 overflow-hidden flex">
+        <div className="w-full flex-1 overflow-hidden flex md:px-site-x">
           <Suspense>
             <ProjectGallery media={media} mobileMedia={mobileMedia} />
           </Suspense>
@@ -34,9 +34,11 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
         </div>
       </div>
       <div className="flex flex-col md:pt-20 gap-y-20 md:gap-y-40 md:px-site-x">
-        <div className="w-full site-grid gap-y-20">
+        {/* Mirrors the header's column layout (Logo · Works · Contact · Information · ©)
+            so the metadata lines up with the Information column on the right. */}
+        <div className="w-full flex flex-col gap-y-20 md:flex-row md:items-start">
           {explanation ? (
-            <div className="w-full md:col-span-6">
+            <div className="w-full md:flex-[2]">
               <PortableText
                 value={explanation}
                 components={{
@@ -46,10 +48,15 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
                 }}
               />
             </div>
-          ) : null}
+          ) : (
+            <div className="hidden md:block md:flex-[2]" aria-hidden="true" />
+          )}
 
-          {/* Metadata — right of the text, aligned with the Information header */}
-          <div className="w-full md:col-start-7 md:col-span-6 flex flex-col gap-y-20">
+          {/* Spacer matching the Contact column */}
+          <div className="hidden md:block md:flex-1" aria-hidden="true" />
+
+          {/* Metadata — aligned with the Information column */}
+          <div className="w-full md:flex-1 flex flex-col gap-y-20">
             {services?.length ? (
               <div className="w-full flex flex-col gap-y-5">
                 <div className="text-eyebrow italic">Services:</div>
@@ -100,6 +107,9 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
               </div>
             ) : null}
           </div>
+
+          {/* Phantom copyright — matches the header's trailing © so the columns align */}
+          <div className="hidden md:block w-auto opacity-0 select-none text-nav" aria-hidden="true">&copy;{new Date().getFullYear()}</div>
         </div>
 
         <ProjectMedia media={media?.slice(1)} />
