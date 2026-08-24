@@ -12,9 +12,18 @@ import { Video } from "../global/video";
 
 interface ProjectGalleryProps {
   media: (ImageType | VideoType | MediaRow)[]
+  /** Optional mobile-only primary image, used instead of the first media on small screens. */
+  mobileMedia?: ImageType
 }
 
-export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
+const renderMedia = (item: any) => {
+  if (!item) return null
+  if (item._type === 'image') return <Image image={item} className="object-contain w-full h-full" />
+  if (item._type === 'video') return <Video {...item} className="object-contain w-full h-full" />
+  return null
+}
+
+export const ProjectGallery: FC<ProjectGalleryProps> = ({ media, mobileMedia }) => {
   const queryParams = useSearchParams();
   const mediaIndex = queryParams?.get('mediaIndex')
   
@@ -40,15 +49,26 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
     return (mediaItem as any)?.aspectRatio ?? 1.77
   }, [mediaItem])
 
+  // Prefer the dedicated mobile image when set; otherwise fall back to the first media.
+  const mobileItem = (mobileMedia as any)?.asset ? mobileMedia : mediaItem
+
   if (!mediaItem) return null
 
   return (
-    <div 
-      ref={galleryRef} 
+    <div
+      ref={galleryRef}
       className="w-full flex-1 flex justify-center"
     >
+      {/* Mobile primary image */}
+      <div className="md:hidden w-full h-full relative">
+        <div className="w-full h-full">
+          {renderMedia(mobileItem)}
+        </div>
+      </div>
+
+      {/* Desktop — full bleed */}
       <div
-        className={`w-full h-full relative ${aspectRatio > 1 ? 'md:w-[80%] md:h-auto' : 'md:w-[60%] md:h-auto'}`}
+        className="hidden md:block w-full h-full relative"
         style={{
           '--aspect-ratio': aspectRatio
         } as React.CSSProperties}
@@ -56,12 +76,7 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media }) => {
         <div
           className="w-full h-full md:aspect-[var(--aspect-ratio)]"
         >
-          {mediaItem._type === 'image' ? (
-            <Image image={mediaItem} className="object-contain w-full h-full" />
-          ) : null}
-          {mediaItem._type === 'video' ? (
-            <Video {...mediaItem} className="object-contain w-full h-full" />
-          ) : null}
+          {renderMedia(mediaItem)}
         </div>
       </div>
     </div>

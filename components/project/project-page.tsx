@@ -12,7 +12,7 @@ export interface ProjectPageProps extends Project {}
 export const ProjectPage: FC<ProjectPageProps> = (props) => {
   if (!props) return null
   
-  const { title, year, services, explanation, media, related, client, collaborators } = props
+  const { title, year, services, explanation, media, mobileMedia, related, client, collaborators } = props
 
   const getYear = useCallback((year?: string) => {
     if (!year) return '';
@@ -20,18 +20,12 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
     return date.toUTCString().split(' ')[3];
   }, [])
 
-  // Match subsequent photos to the width of the first photo (the gallery),
-  // which is sized off the first media's aspect ratio.
-  const firstMedia = media?.[0] as any
-  const firstAspect = firstMedia?.aspectRatio ?? 1.77
-  const mediaWidthClass = firstAspect > 1 ? 'md:w-[80%]' : 'md:w-[60%]'
-
   return (
     <div className="w-full pt-50 md:pt-60 px-site-x md:px-0">
       <div className="w-full max-md:min-h-[calc(100svh-80px)] flex flex-col gap-20 md:gap-30">
         <div className="w-full flex-1 overflow-hidden flex">
           <Suspense>
-            <ProjectGallery media={media} />
+            <ProjectGallery media={media} mobileMedia={mobileMedia} />
           </Suspense>
         </div>
         <div className="w-full flex flex-col gap-5 pb-site-y md:px-site-x">
@@ -40,8 +34,8 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
         </div>
       </div>
       <div className="flex flex-col md:pt-20 gap-y-20 md:gap-y-40 md:px-site-x">
-        {explanation ? (
-          <div className="w-full md:site-grid">
+        <div className="w-full site-grid gap-y-20">
+          {explanation ? (
             <div className="w-full md:col-span-6">
               <PortableText
                 value={explanation}
@@ -52,12 +46,12 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
                 }}
               />
             </div>
-          </div>
-        ) : null}
-        
-        <div className="w-full site-grid gap-y-20">
+          ) : null}
+
+          {/* Metadata — right of the text, aligned with the Information header */}
+          <div className="w-full md:col-start-7 md:col-span-6 flex flex-col gap-y-20">
             {services?.length ? (
-              <div className="w-full col-span-3 flex flex-col gap-y-5">
+              <div className="w-full flex flex-col gap-y-5">
                 <div className="text-eyebrow italic">Services:</div>
                 <ul className="flex flex-col">
                   {services?.map(service => {
@@ -72,7 +66,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             ) : null}
 
             {client?.title ? (
-              <div className="w-full col-span-3 flex flex-col gap-y-5">
+              <div className="w-full flex flex-col gap-y-5">
                 <div className="text-eyebrow italic">Client:</div>
                 <div className="text-subtitle">
                   {client?.title}
@@ -81,14 +75,14 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             ) : null}
 
             {collaborators?.length ? (
-              <div className="w-full col-span-3 flex flex-col gap-y-5">
+              <div className="w-full flex flex-col gap-y-5">
                 <div className="text-eyebrow italic">Collaborators:</div>
                 <ul className="flex flex-col">
                   {collaborators?.map(collaborator => {
                     return (
                       <li key={collaborator._key} className="text-subtitle">
                         {collaborator.url ? (
-                          <Link href={collaborator.url} scroll={false} className="hover:underline">{collaborator.name}</Link>
+                          <Link href={collaborator.url} target="_blank" rel="noopener noreferrer" className="hover:underline">{collaborator.name}</Link>
                         ) : (
                           <span>{collaborator.name}</span>
                         )}
@@ -100,14 +94,15 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             ) : null}
 
             {year ? (
-              <div className="w-full col-span-2 flex flex-col gap-y-5">
+              <div className="w-full flex flex-col gap-y-5">
                 <div className="text-eyebrow italic">Year:</div>
                 <div className="text-subtitle">{getYear(year)}</div>
               </div>
             ) : null}
+          </div>
         </div>
 
-        <ProjectMedia media={media?.slice(1)} widthClass={mediaWidthClass} />
+        <ProjectMedia media={media?.slice(1)} />
 
         {related?.length ? (
           <div className="w-full flex flex-col items-start gap-y-5">

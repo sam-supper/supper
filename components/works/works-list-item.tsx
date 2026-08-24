@@ -1,5 +1,6 @@
 import { type FC, type ComponentProps, useCallback } from "react";
 import type { Project } from "@/components/project/project.types";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 interface WorksListItemProps extends Partial<Project>, Omit<ComponentProps<'a'>, 'title' | 'media'> {}
@@ -7,12 +8,27 @@ interface WorksListItemProps extends Partial<Project>, Omit<ComponentProps<'a'>,
 export const WorksListItem: FC<WorksListItemProps> = (props) => {
   const { title, slug, client, services, year, featuredMedia, gridMedia, media, ...rest } = props;
 
+  const { replace } = useRouter()
+  const pathname = usePathname()
+  const params = useSearchParams()
+
   const getYear = useCallback((year?: string) => {
     if (!year) return '';
 
     const date = new Date(year);
     return date.toUTCString().split(' ')[3];
   }, [])
+
+  // Clicking a service filters the list to that service rather than opening the project.
+  const filterByService = useCallback((e: React.MouseEvent, serviceSlug?: string) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!serviceSlug) return
+
+    const newParams = new URLSearchParams(params)
+    newParams.set('filter', serviceSlug)
+    replace(`${pathname}?${newParams.toString()}`, { scroll: false })
+  }, [params, pathname, replace])
 
   return (
     <Link
@@ -29,7 +45,13 @@ export const WorksListItem: FC<WorksListItemProps> = (props) => {
           {services?.map((service, index) => {
             return (
               <span key={service._id}>
-                {service.title}{index < services.length - 1 ? ', ' : ''}
+                <button
+                  type="button"
+                  onClick={(e) => filterByService(e, service.slug)}
+                  className="hover:underline"
+                >
+                  {service.title}
+                </button>{index < services.length - 1 ? ', ' : ''}
               </span>
             )
           })}

@@ -118,6 +118,30 @@ export default defineType({
       },
     }),
     defineField({
+      name: 'mobileMedia',
+      title: 'Mobile Primary Image',
+      description: 'Optional. Shown as the primary project image on mobile instead of the first media. Leave empty to use the first media.',
+      type: 'image',
+      group: 'media',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+        })
+      ],
+      preview: {
+        select: {
+          filename: 'asset.originalFilename',
+          media: 'asset'
+        },
+        prepare: ({ filename, media }) => ({
+          title: filename,
+          media: media,
+        }),
+      },
+    }),
+    defineField({
       name: 'media',
       title: 'Media',
       type: 'array',

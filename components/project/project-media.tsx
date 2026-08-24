@@ -6,26 +6,20 @@ import { Video } from "../global/video";
 
 export interface ProjectMediaProps {
   media: Project['media']
-  /** Width class matching the first photo (gallery), e.g. `md:w-[80%]`. */
-  widthClass?: string
 }
 
 export const ProjectMedia: FC<ProjectMediaProps> = (props) => {
-  const { media, widthClass = 'md:w-[80%]' } = props
+  const { media } = props
 
   return (
     <div className="w-full flex flex-col gap-y-10 md:gap-y-20">
       {media?.map((item) => {
         if (item._type === 'mediaRow') {
-          return (
-            <div key={item._key} className={`w-full ${widthClass} mx-auto`}>
-              <MediaRow items={item.media} />
-            </div>
-          )
+          return <MediaRow key={item._key} items={item.media} />
         }
 
         return (
-          <div key={item._key} className={`w-full ${widthClass} mx-auto relative overflow-hidden h-auto`} style={{ aspectRatio: item.aspectRatio ?? '16/9' }}>
+          <div key={item._key} className="w-full relative overflow-hidden h-auto" style={{ aspectRatio: item.aspectRatio ?? '16/9' }}>
             <div className="w-full h-full">
               {item._type === 'image' ? (
                 <Image image={item} className="object-contain w-full h-full" alt="" sizes="90vw" />

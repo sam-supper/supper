@@ -37,6 +37,7 @@ export interface Project {
   explanation: PortableTextBlock[];
   featuredMedia: Image | Video;
   gridMedia?: Image;
+  mobileMedia?: Image;
   media: Image[] | Video[] | MediaRow[];
   related?: Project[];
 }

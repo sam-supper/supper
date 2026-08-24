@@ -21,7 +21,7 @@ interface WorksFiltersProps {
 }
 
 export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) => {
-  const [filtersExpanded, setFiltersExpanded] = useState(initialFilter ? true : false)
+  const [filtersExpanded, setFiltersExpanded] = useState(true)
 
   const { replace } = useRouter()
   const params = useSearchParams()

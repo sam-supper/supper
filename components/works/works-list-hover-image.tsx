@@ -10,7 +10,7 @@ interface WorksListHoverImageProps {
 
 export const WorksListHoverImage: FC<WorksListHoverImageProps> = ({ projects, activeIndex }) => {
   return (
-    <div className="absolute bottom-0 right-0 w-[calc((100%/12)*3-100px)] z-[2] grid-contain place-items-end pointer-events-none">
+    <div className="absolute top-0 right-0 w-[calc((100%/12)*3-100px)] z-[2] grid-contain place-items-start pointer-events-none">
       {projects?.map((project, index) => {
         const { featuredMedia, title } = project;
         const aspectRatio = featuredMedia?.aspectRatio ?? (4/5);
@@ -24,10 +24,10 @@ export const WorksListHoverImage: FC<WorksListHoverImageProps> = ({ projects, ac
             style={{ aspectRatio }}
           >
             {featuredMedia._type === "image" ? (
-              <Image image={featuredMedia} className="object-contain object-bottom w-full h-full" sizes="300px" />
+              <Image image={featuredMedia} className="object-contain object-top w-full h-full" sizes="300px" />
             ) : null}
             {featuredMedia._type === "video" ? (
-              <Video {...featuredMedia} className="object-contain object-bottom w-full h-full" />
+              <Video {...featuredMedia} className="object-contain object-top w-full h-full" />
             ) : null}
           </div>
         )
