@@ -44,6 +44,14 @@ export default defineType({
       },
     }),
     defineField({
+      name: 'hideFromWorks',
+      title: 'Hide from Works',
+      description: 'When enabled, this project is hidden from the works grid and list (and the home page listing). It can still be opened via its direct link and shown as a related project.',
+      type: 'boolean',
+      initialValue: false,
+      group: 'content',
+    }),
+    defineField({
       name: "client",
       title: "Client",
       type: 'reference',
@@ -279,4 +287,16 @@ export default defineType({
       of: [{ type: 'reference', to: [{ type: 'projectPage' }] }],
     }),
   ],
+  preview: {
+    select: {
+      title: 'title',
+      hidden: 'hideFromWorks',
+      media: 'media.0.asset',
+    },
+    prepare: ({ title, hidden, media }) => ({
+      title,
+      subtitle: hidden ? 'Hidden from Works' : undefined,
+      media,
+    }),
+  },
 });
