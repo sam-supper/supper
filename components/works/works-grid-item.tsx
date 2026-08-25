@@ -63,7 +63,7 @@ export const WorksGridItem: FC<WorksGridItemProps> = (props) => {
 
       <div className="absolute inset-0 w-full h-full z-[1]">
         {thumbnail?._type === "image" && thumbnail?.asset ? (
-          <Image image={thumbnail} className="object-cover w-full h-full" alt={title} sizes="(max-width: 800px) 30vw, 20vw" />
+          <Image image={thumbnail} className="object-cover w-full h-full" alt={title} sizes="(max-width: 768px) 50vw, 25vw" />
         ) : null}
         {thumbnail?._type === "video" ? (
           <Video {...thumbnail} className="object-cover w-full h-full" />
