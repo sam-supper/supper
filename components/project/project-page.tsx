@@ -29,7 +29,6 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
           </Suspense>
         </div>
         <div className="w-full flex flex-col gap-5 pb-site-y md:px-site-x">
-          <div className="italic text-eyebrow">Project:</div>
           <h1 className="text-title">{title}</h1>
         </div>
       </div>
