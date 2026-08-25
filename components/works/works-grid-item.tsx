@@ -16,18 +16,24 @@ interface WorksGridItemProps {
   client: any;
   slug: string;
   featuredMedia: ImageType | VideoType;
+  gridMedia?: ImageType;
   index: number
 }
 
 const MotionLink = motion.create(Link, { forwardMotionProps: true })
 
 export const WorksGridItem: FC<WorksGridItemProps> = (props) => {
-  const { title, client, slug, featuredMedia, index } = props;
+  const { title, client, slug, featuredMedia, gridMedia, index } = props;
   const gridSize = useWorksStore((state) => state.gridSize)
 
+  // Prefer the dedicated grid thumbnail when set; otherwise use the first project photo.
+  const thumbnail = useMemo(() => {
+    return gridMedia?.asset ? gridMedia : featuredMedia
+  }, [gridMedia, featuredMedia])
+
   const aspectRatio = useMemo(() => {
-    return featuredMedia?.aspectRatio || 1;
-  }, [featuredMedia])
+    return thumbnail?.aspectRatio || 1;
+  }, [thumbnail])
 
   return (
     <MotionLink
@@ -56,11 +62,11 @@ export const WorksGridItem: FC<WorksGridItemProps> = (props) => {
       ) : null}
 
       <div className="absolute inset-0 w-full h-full z-[1]">
-        {featuredMedia?._type === "image" && featuredMedia?.asset ? (
-          <Image image={featuredMedia} className="object-cover w-full h-full" alt={title} sizes="(max-width: 800px) 30vw, 20vw" />
+        {thumbnail?._type === "image" && thumbnail?.asset ? (
+          <Image image={thumbnail} className="object-cover w-full h-full" alt={title} sizes="(max-width: 768px) 50vw, 25vw" />
         ) : null}
-        {featuredMedia?._type === "video" ? (
-          <Video {...featuredMedia} className="object-cover w-full h-full" />
+        {thumbnail?._type === "video" ? (
+          <Video {...thumbnail} className="object-cover w-full h-full" />
         ) : null}
       </div>
     </MotionLink>

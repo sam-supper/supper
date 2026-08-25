@@ -12,7 +12,7 @@ export interface ProjectPageProps extends Project {}
 export const ProjectPage: FC<ProjectPageProps> = (props) => {
   if (!props) return null
   
-  const { title, year, services, explanation, media, related, client, collaborators } = props
+  const { title, year, services, explanation, media, mobileMedia, related, client, collaborators } = props
 
   const getYear = useCallback((year?: string) => {
     if (!year) return '';
@@ -21,25 +21,23 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
   }, [])
 
   return (
-    <div className="w-full pt-80 md:pt-110 px-site-x md:px-0">
-      <div className="w-full max-md:min-h-[calc(100svh-80px)]  flex flex-col gap-20 md:gap-30">
-        <div className="w-full md:px-site-x relative z-[6]">
-          <BackButton href="/" className="py-10 italic text-[15px]">[Back]</BackButton>
-        </div>
-        <div className="w-full flex-1 overflow-hidden flex">
+    <div className="w-full pt-50 md:pt-60 px-site-x md:px-0">
+      <div className="w-full max-md:min-h-[calc(100svh-80px)] flex flex-col gap-20 md:gap-30">
+        <div className="w-full flex-1 overflow-hidden flex md:px-site-x">
           <Suspense>
-            <ProjectGallery media={media} />
+            <ProjectGallery media={media} mobileMedia={mobileMedia} />
           </Suspense>
         </div>
         <div className="w-full flex flex-col gap-5 pb-site-y md:px-site-x">
-          <div className="italic text-eyebrow">Project:</div>
           <h1 className="text-title">{title}</h1>
         </div>
       </div>
       <div className="flex flex-col md:pt-20 gap-y-20 md:gap-y-40 md:px-site-x">
-        {explanation ? (
-          <div className="w-full md:site-grid">
-            <div className="w-full md:col-span-9">
+        {/* Mirrors the header's column layout (Logo · Works · Contact · Information · ©)
+            so the metadata lines up with the Information column on the right. */}
+        <div className="w-full flex flex-col gap-y-20 md:flex-row md:items-start">
+          {explanation ? (
+            <div className="w-full md:flex-[2]">
               <PortableText
                 value={explanation}
                 components={{
@@ -49,18 +47,23 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
                 }}
               />
             </div>
-          </div>
-        ) : null}
-        
-        <div className="w-full site-grid gap-y-20">
+          ) : (
+            <div className="hidden md:block md:flex-[2]" aria-hidden="true" />
+          )}
+
+          {/* Spacer matching the Contact column */}
+          <div className="hidden md:block md:flex-1" aria-hidden="true" />
+
+          {/* Metadata — aligned with the Information column */}
+          <div className="w-full md:flex-1 flex flex-col gap-y-20">
             {services?.length ? (
-              <div className="w-full col-span-3 flex flex-col gap-y-5">
+              <div className="w-full flex flex-col gap-y-5">
                 <div className="text-eyebrow italic">Services:</div>
                 <ul className="flex flex-col">
                   {services?.map(service => {
                     return (
                       <li key={service._id} className="text-subtitle">
-                        <Link href={`/works/${service.slug}`} scroll={false} className="hover:underline">{service.title}</Link>
+                        <Link href={`/works?filter=${service.slug}`} scroll={false} className="hover:underline">{service.title}</Link>
                       </li>
                     )
                   })}
@@ -69,7 +72,7 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             ) : null}
 
             {client?.title ? (
-              <div className="w-full col-span-3 flex flex-col gap-y-5">
+              <div className="w-full flex flex-col gap-y-5">
                 <div className="text-eyebrow italic">Client:</div>
                 <div className="text-subtitle">
                   {client?.title}
@@ -78,14 +81,14 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             ) : null}
 
             {collaborators?.length ? (
-              <div className="w-full col-span-3 flex flex-col gap-y-5">
+              <div className="w-full flex flex-col gap-y-5">
                 <div className="text-eyebrow italic">Collaborators:</div>
                 <ul className="flex flex-col">
                   {collaborators?.map(collaborator => {
                     return (
                       <li key={collaborator._key} className="text-subtitle">
                         {collaborator.url ? (
-                          <Link href={collaborator.url} scroll={false} className="hover:underline">{collaborator.name}</Link>
+                          <Link href={collaborator.url} target="_blank" rel="noopener noreferrer" className="hover:underline">{collaborator.name}</Link>
                         ) : (
                           <span>{collaborator.name}</span>
                         )}
@@ -97,11 +100,15 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             ) : null}
 
             {year ? (
-              <div className="w-full col-span-2 flex flex-col gap-y-5">
+              <div className="w-full flex flex-col gap-y-5">
                 <div className="text-eyebrow italic">Year:</div>
                 <div className="text-subtitle">{getYear(year)}</div>
               </div>
             ) : null}
+          </div>
+
+          {/* Phantom copyright — matches the header's trailing © so the columns align */}
+          <div className="hidden md:block w-auto opacity-0 select-none text-nav" aria-hidden="true">&copy;{new Date().getFullYear()}</div>
         </div>
 
         <ProjectMedia media={media?.slice(1)} />
@@ -114,6 +121,15 @@ export const ProjectPage: FC<ProjectPageProps> = (props) => {
             ))}
           </div>
         ) : null}
+      </div>
+
+      <div className="sticky bottom-0 z-[6] w-full md:px-site-x pt-10 pb-site-y flex justify-end pointer-events-none">
+        <BackButton
+          href="/"
+          className="inline-block italic text-[15px] pointer-events-auto text-black dark:text-white hover:underline transition-colors duration-200 ease"
+        >
+          [Back]
+        </BackButton>
       </div>
     </div>
   );

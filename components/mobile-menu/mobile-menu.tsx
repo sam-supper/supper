@@ -7,6 +7,7 @@ import type { PortableTextBlock } from "@portabletext/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { PortableText } from "next-sanity";
 import Link from "next/link";
+import { CopyButton } from "@/components/global/copy-button";
 
 interface MobileMenuProps {
   links: {
@@ -39,7 +40,10 @@ interface MobileMenuProps {
   projectCount?: string | number
 }
 
-export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, projectCount }) => {
+export const MobileMenu: FC<MobileMenuProps> = ({ links, information, projectCount }) => {
+  // Use the same Contact source as the desktop header (the contact link's child links)
+  // so the two stay in sync instead of drifting.
+  const contactLink = links?.find((link) => link.type === 'contact')
   const isOpen = useSiteStore((state) => state.mobileMenuOpen)
   const setMobileMenuOpen = useSiteStore((state) => state.setMobileMenuOpen)
   const informationOpen = useSiteStore((state) => state.informationOpen)
@@ -86,18 +90,35 @@ export const MobileMenu: FC<MobileMenuProps> = ({ links, contact, information, p
             </div>
 
             <div>
-              <a onClick={closeMobileMenu} href={contact.url} target="_blank" className="underline">{contact.label}</a>
+              <span className="underline">{contactLink?.label}</span>
             </div>
             <div className="flex flex-col">
-              {contact.content?.map((row) => (
-                <div key={row._key}>
-                  {row.url ? (
-                    <a onClick={closeMobileMenu} href={row.url} target="_blank">{row.label}</a>
-                  ) : (
-                    <div>{row.label}</div>
-                  )}
-                </div>
-              ))}
+              {contactLink?.childLinks?.map((child) => {
+                const url = child.url ?? ''
+                const isMailto = url.includes('mailto:')
+                const isHttp = url.includes('http')
+
+                // Bare handles/emails copy to clipboard; real links open — same as desktop.
+                if (!isMailto && !isHttp) {
+                  return (
+                    <div key={child.label}>
+                      <CopyButton text={url}>{child.label}</CopyButton>
+                    </div>
+                  )
+                }
+
+                return (
+                  <div key={child.label}>
+                    <a
+                      onClick={closeMobileMenu}
+                      href={url}
+                      {...(isHttp ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    >
+                      {child.label}
+                    </a>
+                  </div>
+                )
+              })}
             </div>
 
             <div>

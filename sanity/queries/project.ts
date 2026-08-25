@@ -30,6 +30,9 @@ export const projectQuery = defineQuery(
     featuredMedia {
       ${mediaFields}
     },
+    mobileMedia {
+      ${imageFields}
+    },
     media[] {
       _type,
       _key,

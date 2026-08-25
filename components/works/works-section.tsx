@@ -21,17 +21,21 @@ interface WorksSectionProps {
 
 export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, setView, initialFilter }) => {
   const params = useSearchParams()
-  const filterString = useMemo(() => params.get('filter') || '', [params])
 
   const filteredProjects = useMemo(() => {
     const filters = params.get('filter')?.split(',') || []
 
-    if (!filters?.length) {
-      return projects
-    }
+    const base = !filters?.length
+      ? projects
+      : projects.filter((project) => project.services?.some((service) => filters.includes(service.slug)))
 
-    return projects.filter((project) => project.services?.some((service) => filters.includes(service.slug)))
-  }, [params])
+    // Default order for both grid and list views: newest first by year.
+    return [...base].sort((a, b) => {
+      const av = a?.year ? new Date(a.year).getTime() : 0
+      const bv = b?.year ? new Date(b.year).getTime() : 0
+      return bv - av
+    })
+  }, [params, projects])
   
   const isGrid = useMemo(() => {
     return view === 'grid'
@@ -42,8 +46,8 @@ export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, 
       <div className="w-full flex items-start justify-between gap-x-20">
         <motion.div
           className="w-full text-nav"
-          initial={{ opacity: isGrid ? 1 : 0, pointerEvents: isGrid ? 'auto' : 'none' }}
-          animate={{ opacity: isGrid ? 1 : 0, pointerEvents: isGrid ? 'auto' : 'none' }}
+          initial={{ opacity: 1, pointerEvents: 'auto' }}
+          animate={{ opacity: 1, pointerEvents: 'auto' }}
           transition={{ duration: 0.45, ease: easeInOutQuart, delay: isGrid ? 0.45 : 0 }}
         >
           <WorksFilters filters={services} initialFilter={initialFilter} />
@@ -53,9 +57,9 @@ export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, 
       <div className="w-full grid-contain">
         <AnimatePresence mode="wait" initial={false}>
           {view === 'grid' ? (
-            <WorksGrid key={`grid-${filterString}`} projects={filteredProjects} />
+            <WorksGrid key="grid" projects={filteredProjects} />
           ) : (
-            <WorksList key="list" projects={projects} />
+            <WorksList key="list" projects={filteredProjects} />
           )}
         </AnimatePresence>
       </div>

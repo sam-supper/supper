@@ -6,7 +6,6 @@ import { useRouter, usePathname } from "next/navigation"
 import { useKeyPress } from "@/hooks/use-key-press"
 import { useSearchParams } from "next/navigation"
 import { cva } from "class-variance-authority"
-import { useClickAway } from "react-use"
 
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
@@ -21,7 +20,7 @@ interface WorksFiltersProps {
 }
 
 export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) => {
-  const [filtersExpanded, setFiltersExpanded] = useState(initialFilter ? true : false)
+  const [filtersExpanded, setFiltersExpanded] = useState(true)
 
   const { replace } = useRouter()
   const params = useSearchParams()
@@ -79,7 +78,6 @@ export const WorksFilters: FC<WorksFiltersProps> = ({ filters, initialFilter }) 
     replace(`${pathname}?${newParams.toString()}`, { scroll: false })
   }, [activeFilters, params, replace, pathname])
 
-  useClickAway(filtersRef, closeFilters)
   useKeyPress('Escape', closeFilters)
 
   return (
