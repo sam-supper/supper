@@ -25,12 +25,17 @@ export const WorksSection: FC<WorksSectionProps> = ({ projects, services, view, 
   const filteredProjects = useMemo(() => {
     const filters = params.get('filter')?.split(',') || []
 
-    if (!filters?.length) {
-      return projects
-    }
+    const base = !filters?.length
+      ? projects
+      : projects.filter((project) => project.services?.some((service) => filters.includes(service.slug)))
 
-    return projects.filter((project) => project.services?.some((service) => filters.includes(service.slug)))
-  }, [params])
+    // Default order for both grid and list views: newest first by year.
+    return [...base].sort((a, b) => {
+      const av = a?.year ? new Date(a.year).getTime() : 0
+      const bv = b?.year ? new Date(b.year).getTime() : 0
+      return bv - av
+    })
+  }, [params, projects])
   
   const isGrid = useMemo(() => {
     return view === 'grid'
