@@ -26,7 +26,7 @@ export const homePageQuery = defineQuery(
       },
       color
     },
-    "projects": *[_type == "projectPage"] | order(orderRank) {
+    "projects": *[_type == "projectPage" && hideFromWorks != true] | order(orderRank) {
       ${worksProjectFields},
     },
     "services": *[_type == "service"] {
