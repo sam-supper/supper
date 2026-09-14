@@ -104,50 +104,16 @@ export default defineType({
     defineField({
       name: 'gridMedia',
       title: 'Grid Thumbnail',
-      description: 'Optional. Shown in the works grid (desktop + mobile) instead of the first project photo. Leave empty to use the first photo.',
-      type: 'image',
+      description: 'Optional. Shown in the works grid (desktop + mobile) instead of the first project media. Choose an image or a video. Leave empty to use the first media.',
+      type: 'media',
       group: 'media',
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alt Text',
-          type: 'string',
-        })
-      ],
-      preview: {
-        select: {
-          filename: 'asset.originalFilename',
-          media: 'asset'
-        },
-        prepare: ({ filename, media }) => ({
-          title: filename,
-          media: media,
-        }),
-      },
     }),
     defineField({
       name: 'mobileMedia',
-      title: 'Mobile Primary Image',
-      description: 'Optional. Shown as the primary project image on mobile instead of the first media. Leave empty to use the first media.',
-      type: 'image',
+      title: 'Mobile Primary Media',
+      description: 'Optional. Shown as the primary project media on mobile instead of the first media. Choose an image or a video. Leave empty to use the first media.',
+      type: 'media',
       group: 'media',
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alt Text',
-          type: 'string',
-        })
-      ],
-      preview: {
-        select: {
-          filename: 'asset.originalFilename',
-          media: 'asset'
-        },
-        prepare: ({ filename, media }) => ({
-          title: filename,
-          media: media,
-        }),
-      },
     }),
     defineField({
       name: 'media',
