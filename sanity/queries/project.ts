@@ -31,7 +31,7 @@ export const projectQuery = defineQuery(
       ${mediaFields}
     },
     mobileMedia {
-      ${imageFields}
+      ${mediaFields}
     },
     media[] {
       _type,

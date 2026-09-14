@@ -1,5 +1,5 @@
 import { defineQuery, groq } from "next-sanity";
-import { imageFields, videoFields, seoQuery } from "./fragments";
+import { imageFields, videoFields, mediaFields, seoQuery } from "./fragments";
 
 export const worksProjectFields = groq`
 _id,
@@ -36,7 +36,7 @@ media[] {
   }
 },
 gridMedia {
-  ${imageFields}
+  ${mediaFields}
 },
 "featuredMedia": media[0] {
   _type,

@@ -4,10 +4,11 @@ import { useMemo, type FC } from "react";
 import { useWorksStore } from "./use-works-store";
 import { motion } from "framer-motion";
 
-import type { Image as ImageType, Video as VideoType } from "@/sanity/types";
+import type { Image as ImageType, Video as VideoType, Media as MediaType } from "@/sanity/types";
 
 import { Image } from "../global/image";
 import { Video } from "../global/video";
+import { resolveMedia } from "../project/project.types";
 import Link from "next/link";
 import { easeInOutQuart } from "@/lib/animation";
 
@@ -16,7 +17,7 @@ interface WorksGridItemProps {
   client: any;
   slug: string;
   featuredMedia: ImageType | VideoType;
-  gridMedia?: ImageType;
+  gridMedia?: MediaType;
   index: number
 }
 
@@ -26,9 +27,9 @@ export const WorksGridItem: FC<WorksGridItemProps> = (props) => {
   const { title, client, slug, featuredMedia, gridMedia, index } = props;
   const gridSize = useWorksStore((state) => state.gridSize)
 
-  // Prefer the dedicated grid thumbnail when set; otherwise use the first project photo.
+  // Prefer the dedicated grid thumbnail (image or video) when set; otherwise use the first project media.
   const thumbnail = useMemo(() => {
-    return gridMedia?.asset ? gridMedia : featuredMedia
+    return resolveMedia(gridMedia) ?? featuredMedia
   }, [gridMedia, featuredMedia])
 
   const aspectRatio = useMemo(() => {

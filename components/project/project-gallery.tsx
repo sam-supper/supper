@@ -5,15 +5,15 @@ import { easeInOutQuart } from "@/lib/animation";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 
-import { Image as ImageType, Video as VideoType } from "@/sanity/types";
-import { MediaRow } from "./project.types";
+import { Image as ImageType, Video as VideoType, Media as MediaType } from "@/sanity/types";
+import { MediaRow, resolveMedia } from "./project.types";
 import { Image } from "../global/image";
 import { Video } from "../global/video";
 
 interface ProjectGalleryProps {
   media: (ImageType | VideoType | MediaRow)[]
-  /** Optional mobile-only primary image, used instead of the first media on small screens. */
-  mobileMedia?: ImageType
+  /** Optional mobile-only primary media (image or video), used instead of the first media on small screens. */
+  mobileMedia?: MediaType
 }
 
 const renderMedia = (item: any) => {
@@ -49,8 +49,8 @@ export const ProjectGallery: FC<ProjectGalleryProps> = ({ media, mobileMedia }) 
     return (mediaItem as any)?.aspectRatio ?? 1.77
   }, [mediaItem])
 
-  // Prefer the dedicated mobile image when set; otherwise fall back to the first media.
-  const mobileItem = (mobileMedia as any)?.asset ? mobileMedia : mediaItem
+  // Prefer the dedicated mobile media (image or video) when set; otherwise fall back to the first media.
+  const mobileItem = resolveMedia(mobileMedia) ?? mediaItem
 
   if (!mediaItem) return null
 

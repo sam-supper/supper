@@ -39,78 +39,6 @@ export type SanityImageDimensions = {
   aspectRatio?: number;
 };
 
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityFileAsset = {
-  _id: string;
-  _type: "sanity.fileAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
-  uploadId?: string;
-  path?: string;
-  url?: string;
-  source?: SanityAssetSourceData;
-};
-
-export type SanityImageAsset = {
-  _id: string;
-  _type: "sanity.imageAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
-  uploadId?: string;
-  path?: string;
-  url?: string;
-  metadata?: SanityImageMetadata;
-  source?: SanityAssetSourceData;
-};
-
-export type SanityImageMetadata = {
-  _type: "sanity.imageMetadata";
-  location?: Geopoint;
-  dimensions?: SanityImageDimensions;
-  palette?: SanityImagePalette;
-  lqip?: string;
-  blurHash?: string;
-  hasAlpha?: boolean;
-  isOpaque?: boolean;
-};
-
 export type Geopoint = {
   _type: "geopoint";
   lat?: number;
@@ -118,15 +46,9 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData";
-  name?: string;
-  id?: string;
-  url?: string;
-};
-
-export type InternalLink = {
-  _type: "internalLink";
+export type Link = {
+  _type: "link";
+  type?: "internal" | "external" | "contact" | "information";
   label?: string;
   to?: {
     _ref: string;
@@ -137,7 +59,30 @@ export type InternalLink = {
     _ref: string;
     _type: "reference";
     _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "aboutPage";
+    [internalGroqTypeReferenceTo]?: "projectPage";
+  } | {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "worksPage";
+  };
+  url?: string;
+  childLinks?: Array<{
+    label?: string;
+    url?: string;
+    _type: "childLink";
+    _key: string;
+  }>;
+};
+
+export type InternalLink = {
+  _type: "internalLink";
+  label?: string;
+  to?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "homePage";
   } | {
     _ref: string;
     _type: "reference";
@@ -171,11 +116,6 @@ export type RichTextSimple = Array<{
       _ref: string;
       _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "aboutPage";
-    } | {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
       [internalGroqTypeReferenceTo]?: "homePage";
     } | {
       _ref: string;
@@ -193,7 +133,6 @@ export type RichTextSimple = Array<{
     _key: string;
   } | {
     url?: string;
-    arrow?: boolean;
     _type: "externalLink";
     _key: string;
   }>;
@@ -221,31 +160,69 @@ export type RichText = Array<{
   _key: string;
 }>;
 
+export type InfoPage = {
+  _id: string;
+  _type: "infoPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  seo?: Seo;
+  content?: Array<{
+    text?: RichTextSimple;
+    _type: "textRow";
+    _key: string;
+  } | {
+    columnOne?: RichTextSimple;
+    columnTwo?: RichTextSimple;
+    _type: "splitTextRow";
+    _key: string;
+  }>;
+};
+
+export type Service = {
+  _id: string;
+  _type: "service";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+};
+
+export type SettingsSplash = {
+  _id: string;
+  _type: "settingsSplash";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  images?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
+};
+
 export type SettingsFooter = {
   _id: string;
   _type: "settingsFooter";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  title?: string;
-  siteInfo?: Array<{
+  columns?: Array<{
     text?: RichTextSimple;
-    _type: "textBlock";
+    _type: "column";
     _key: string;
   }>;
-  links?: Array<{
-    label?: string;
-    _type: "search";
+  externalLinks?: Array<{
     _key: string;
-  } | {
-    label?: string;
-    _type: "mainMenu";
-    _key: string;
-  } | {
-    label?: string;
-    _type: "bag";
-    _key: string;
-  }>;
+  } & ExternalLink>;
 };
 
 export type SettingsHeader = {
@@ -256,9 +233,10 @@ export type SettingsHeader = {
   _rev: string;
   links?: Array<{
     _key: string;
-  } & InternalLink>;
+  } & Link>;
   contact?: {
     label?: string;
+    url?: string;
     content?: Array<{
       _key: string;
     } & ExternalLink>;
@@ -269,18 +247,182 @@ export type SettingsHeader = {
   };
 };
 
+export type HomePage = {
+  _id: string;
+  _type: "homePage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  seo?: Seo;
+  title?: string;
+  featuredProjects?: Array<{
+    color?: "black" | "white";
+    project?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "projectPage";
+    };
+    media?: Media;
+    _type: "project";
+    _key: string;
+  }>;
+};
+
+export type ProjectPage = {
+  _id: string;
+  _type: "projectPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  orderRank?: string;
+  seo?: Seo;
+  title?: string;
+  slug?: Slug;
+  hideFromWorks?: boolean;
+  client?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "client";
+  };
+  year?: string;
+  services?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "service";
+  }>;
+  collaborators?: Array<{
+    name?: string;
+    url?: string;
+    _type: "collaborator";
+    _key: string;
+  }>;
+  explanation?: RichTextSimple;
+  gridMedia?: Media;
+  mobileMedia?: Media;
+  media?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+    };
+    aspectRatio?: number;
+    _type: "video";
+    _key: string;
+  } | {
+    media?: Array<{
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+      };
+      aspectRatio?: number;
+      _type: "video";
+      _key: string;
+    }>;
+    _type: "mediaRow";
+    _key: string;
+  }>;
+  related?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "projectPage";
+  }>;
+};
+
+export type SanityFileAsset = {
+  _id: string;
+  _type: "sanity.fileAsset";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  originalFilename?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  altText?: string;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
+  uploadId?: string;
+  path?: string;
+  url?: string;
+  source?: SanityAssetSourceData;
+};
+
+export type Media = {
+  _type: "media";
+  mediaType?: "image" | "video";
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  video?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+    };
+    aspectRatio?: number;
+    _type: "file";
+  };
+};
+
 export type WorksPage = {
   _id: string;
   _type: "worksPage";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  seo?: Seo;
   title?: string;
 };
 
-export type ProjectPage = {
+export type Client = {
   _id: string;
-  _type: "projectPage";
+  _type: "client";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -294,31 +436,357 @@ export type Slug = {
   source?: string;
 };
 
-export type HomePage = {
+export type Seo = {
+  _type: "seo";
+  title?: string;
+  description?: string;
+  ogImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+};
+
+export type SettingsSeo = {
   _id: string;
-  _type: "homePage";
+  _type: "settingsSeo";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   title?: string;
+  description?: string;
+  favicon?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  ogImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
 };
 
-export type AboutPage = {
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
+export type SanityImageAsset = {
   _id: string;
-  _type: "aboutPage";
+  _type: "sanity.imageAsset";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  originalFilename?: string;
+  label?: string;
   title?: string;
+  description?: string;
+  altText?: string;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
+  uploadId?: string;
+  path?: string;
+  url?: string;
+  metadata?: SanityImageMetadata;
+  source?: SanityAssetSourceData;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | SanityAssetSourceData | InternalLink | ExternalLink | RichTextSimple | RichText | SettingsFooter | SettingsHeader | WorksPage | ProjectPage | Slug | HomePage | AboutPage;
+export type SanityAssetSourceData = {
+  _type: "sanity.assetSourceData";
+  name?: string;
+  id?: string;
+  url?: string;
+};
+
+export type SanityImageMetadata = {
+  _type: "sanity.imageMetadata";
+  location?: Geopoint;
+  dimensions?: SanityImageDimensions;
+  palette?: SanityImagePalette;
+  lqip?: string;
+  blurHash?: string;
+  hasAlpha?: boolean;
+  isOpaque?: boolean;
+};
+
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | Geopoint | Link | InternalLink | ExternalLink | RichTextSimple | RichText | InfoPage | Service | SettingsSplash | SettingsFooter | SettingsHeader | HomePage | ProjectPage | SanityFileAsset | Media | WorksPage | Client | Slug | Seo | SettingsSeo | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./sanity/queries/fragments.ts
+// Variable: seoQuery
+// Query: seo {  title,  description,  ogImage {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  }}
+export type SeoQueryResult = never;
+
 // Source: ./sanity/queries/home.ts
 // Variable: homePageQuery
-// Query: *[_type == "homePage"][0] {    title,  }
+// Query: *[_type == "homePage"][0] {    seo {  title,  description,  ogImage {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  }},    title,    featuredProjects[] {      _key,      "title": project -> title,      "client": project -> client.title,      "slug": project -> slug.current,      media {        mediaType,        mediaType == 'image' => {          image {              _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,          },        },        mediaType == 'video' => {          video {              _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio          },        }      },      color    },    "projects": *[_type == "projectPage" && hideFromWorks != true] | order(orderRank) {      _id,title,"slug": slug.current,year,client -> {  _id,  title,  "slug": slug.current},services[] -> {  _id,  title,  "slug": slug.current},media[] {  _type,  _type == "mediaRow" => {    media[] {      _type == "image" => {          _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,      },      _type == "video" => {          _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio      }    }  },  _type == "image" => {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  },  _type == "video" => {      _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio  }},gridMedia {    _key,  _type,  mediaType,  image {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  },  video {      _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio  }},"featuredMedia": media[0] {  _type,  _type == "mediaRow" => {    media[] {      _type == "image" => {          _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,      },      _type == "video" => {          _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio      }    }  },  _type == "image" => {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  },  _type == "video" => {      _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio  }},    },    "services": *[_type == "service"] {      _id,      title,      "slug": slug.current    }  }
 export type HomePageQueryResult = {
+  seo: {
+    title: string | null;
+    description: string | null;
+    ogImage: {
+      _type: "image";
+      asset: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      } | null;
+      alt: null;
+      _id: string | null;
+      aspectRatio: number | null;
+      lqip: string | null;
+    } | null;
+  } | null;
   title: string | null;
+  featuredProjects: Array<{
+    _key: string;
+    title: string | null;
+    client: null;
+    slug: string | null;
+    media: {
+      mediaType: "image" | "video" | null;
+      image: {
+        _type: "image";
+        asset: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        } | null;
+        alt: string | null;
+        _id: string | null;
+        aspectRatio: number | null;
+        lqip: string | null;
+      } | null;
+      video: {
+        _key: null;
+        _id: string | null;
+        _type: "file";
+        url: string | null;
+        aspectRatio: number | null;
+      } | null;
+    } | {
+      mediaType: "image" | "video" | null;
+      image: {
+        _type: "image";
+        asset: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        } | null;
+        alt: string | null;
+        _id: string | null;
+        aspectRatio: number | null;
+        lqip: string | null;
+      } | null;
+    } | {
+      mediaType: "image" | "video" | null;
+      video: {
+        _key: null;
+        _id: string | null;
+        _type: "file";
+        url: string | null;
+        aspectRatio: number | null;
+      } | null;
+    } | {
+      mediaType: "image" | "video" | null;
+    } | null;
+    color: "black" | "white" | null;
+  }> | null;
+  projects: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    year: string | null;
+    client: {
+      _id: string;
+      title: string | null;
+      slug: string | null;
+    } | null;
+    services: Array<{
+      _id: string;
+      title: string | null;
+      slug: string | null;
+    }> | null;
+    media: Array<{
+      _type: "video";
+      _key: string;
+      _id: string | null;
+      url: string | null;
+      aspectRatio: number | null;
+    } | {
+      _type: "image";
+      asset: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      } | null;
+      alt: string | null;
+      _id: string | null;
+      aspectRatio: number | null;
+      lqip: string | null;
+    } | {
+      _type: "mediaRow";
+      media: Array<{
+        _key: string;
+        _id: string | null;
+        _type: "video";
+        url: string | null;
+        aspectRatio: number | null;
+      } | {
+        _type: "image";
+        asset: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        } | null;
+        alt: string | null;
+        _id: string | null;
+        aspectRatio: number | null;
+        lqip: string | null;
+      }> | null;
+    }> | null;
+    gridMedia: {
+      _key: null;
+      _type: "media";
+      mediaType: "image" | "video" | null;
+      image: {
+        _type: "image";
+        asset: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        } | null;
+        alt: string | null;
+        _id: string | null;
+        aspectRatio: number | null;
+        lqip: string | null;
+      } | null;
+      video: {
+        _key: null;
+        _id: string | null;
+        _type: "file";
+        url: string | null;
+        aspectRatio: number | null;
+      } | null;
+    } | null;
+    featuredMedia: {
+      _type: "video";
+      _key: string;
+      _id: string | null;
+      url: string | null;
+      aspectRatio: number | null;
+    } | {
+      _type: "image";
+      asset: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      } | null;
+      alt: string | null;
+      _id: string | null;
+      aspectRatio: number | null;
+      lqip: string | null;
+    } | {
+      _type: "mediaRow";
+      media: Array<{
+        _key: string;
+        _id: string | null;
+        _type: "video";
+        url: string | null;
+        aspectRatio: number | null;
+      } | {
+        _type: "image";
+        asset: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        } | null;
+        alt: string | null;
+        _id: string | null;
+        aspectRatio: number | null;
+        lqip: string | null;
+      }> | null;
+    } | null;
+  }>;
+  services: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+  }>;
+} | null;
+
+// Source: ./sanity/queries/info.ts
+// Variable: infoPageQuery
+// Query: *[_type == "infoPage"][0] {    seo {  title,  description,  ogImage {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  }},    "title": "The Info Page",    content[] {      _key,      _type,      _type == "textRow" => {        text      },      _type == "splitTextRow" => {        columnOne,        columnTwo      }    }  }
+export type InfoPageQueryResult = {
+  seo: {
+    title: string | null;
+    description: string | null;
+    ogImage: {
+      _type: "image";
+      asset: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      } | null;
+      alt: null;
+      _id: string | null;
+      aspectRatio: number | null;
+      lqip: string | null;
+    } | null;
+  } | null;
+  title: "The Info Page";
+  content: Array<{
+    _key: string;
+    _type: "splitTextRow";
+    columnOne: RichTextSimple | null;
+    columnTwo: RichTextSimple | null;
+  } | {
+    _key: string;
+    _type: "textRow";
+    text: RichTextSimple | null;
+  }> | null;
 } | null;
 
 // Source: ./sanity/queries/project.ts
@@ -328,24 +796,156 @@ export type ProjectPathsQueryResult = Array<{
   slug: string | null;
 }>;
 // Variable: projectQuery
-// Query: *[_type == "projectPage" && slug.current == $slug][0] {    title,    "slug": slug.current  }
+// Query: *[_type == "projectPage" && slug.current == $slug][0] {    seo {  title,  description,  ogImage {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  }},    title,    "slug": slug.current,    year,    client -> {      title    },    services[] -> {      _id,      title,      "slug": slug.current    },    collaborators[] {      _key,      name,      url    },    explanation,    featuredMedia {        _key,  _type,  mediaType,  image {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  },  video {      _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio  }    },    mobileMedia {        _key,  _type,  mediaType,  image {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  },  video {      _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio  }    },    media[] {      _type,      _key,      _type == "image" => {          _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,      },      _type == "video" => {          _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio      },      _type == "mediaRow" => {        media[] {          _type,          _key,          _type == "image" => {              _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,          },          _type == "video" => {              _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio          }        }      }    },    related[] -> {      _id,      title,      "slug": slug.current,      "featuredMedia": media[] {        _type,        _key,        _type == "image" => {            _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,        },        _type == "video" => {            _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio        }      }[0]    }  }
 export type ProjectQueryResult = {
+  seo: {
+    title: string | null;
+    description: string | null;
+    ogImage: {
+      _type: "image";
+      asset: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      } | null;
+      alt: null;
+      _id: string | null;
+      aspectRatio: number | null;
+      lqip: string | null;
+    } | null;
+  } | null;
   title: string | null;
   slug: string | null;
+  year: string | null;
+  client: {
+    title: string | null;
+  } | null;
+  services: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+  }> | null;
+  collaborators: Array<{
+    _key: string;
+    name: string | null;
+    url: string | null;
+  }> | null;
+  explanation: RichTextSimple | null;
+  featuredMedia: null;
+  mobileMedia: {
+    _key: null;
+    _type: "media";
+    mediaType: "image" | "video" | null;
+    image: {
+      _type: "image";
+      asset: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      } | null;
+      alt: string | null;
+      _id: string | null;
+      aspectRatio: number | null;
+      lqip: string | null;
+    } | null;
+    video: {
+      _key: null;
+      _id: string | null;
+      _type: "file";
+      url: string | null;
+      aspectRatio: number | null;
+    } | null;
+  } | null;
+  media: Array<{
+    _type: "image";
+    _key: string;
+    asset: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    } | null;
+    alt: string | null;
+    _id: string | null;
+    aspectRatio: number | null;
+    lqip: string | null;
+  } | {
+    _type: "video";
+    _key: string;
+    _id: string | null;
+    url: string | null;
+    aspectRatio: number | null;
+  } | {
+    _type: "mediaRow";
+    _key: string;
+    media: Array<{
+      _type: "image";
+      _key: string;
+      asset: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      } | null;
+      alt: string | null;
+      _id: string | null;
+      aspectRatio: number | null;
+      lqip: string | null;
+    } | {
+      _type: "video";
+      _key: string;
+      _id: string | null;
+      url: string | null;
+      aspectRatio: number | null;
+    }> | null;
+  }> | null;
+  related: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    featuredMedia: {
+      _type: "image";
+      _key: string;
+      asset: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      } | null;
+      alt: string | null;
+      _id: string | null;
+      aspectRatio: number | null;
+      lqip: string | null;
+    } | {
+      _type: "video";
+      _key: string;
+      _id: string | null;
+      url: string | null;
+      aspectRatio: number | null;
+    } | {
+      _type: "mediaRow";
+      _key: string;
+    } | null;
+  }> | null;
 } | null;
 
 // Source: ./sanity/queries/settings.ts
 // Variable: settingsHeaderQuery
-// Query: *[_type == "settingsHeader"][0] {    links[] {        _key,  _type,  label,  to -> {    _type,    "slug": slug.current  }    },    contact {      label,      content[] {        _key,        _type,        label,        url      }    },    information {      label,      content    }  }
+// Query: *[_type == "settingsHeader"][0] {    links[] {      type,      url,        _key,  _type,  label,  url,  childLinks[] {    label,    url,  },  to -> {    _type,    "slug": slug.current  },    },    contact {      label,      url,      content[] {        _key,        _type,        label,        url      }    },    information {      label,      content    },    "projectCount": count(*[_type == "projectPage"])  }
 export type SettingsHeaderQueryResult = {
   links: Array<{
+    type: "contact" | "external" | "information" | "internal" | null;
+    url: string | null;
     _key: string;
-    _type: "internalLink";
+    _type: "link";
     label: string | null;
+    childLinks: Array<{
+      label: string | null;
+      url: string | null;
+    }> | null;
     to: {
-      _type: "aboutPage";
-      slug: null;
-    } | {
       _type: "homePage";
       slug: null;
     } | {
@@ -358,6 +958,7 @@ export type SettingsHeaderQueryResult = {
   }> | null;
   contact: {
     label: string | null;
+    url: string | null;
     content: Array<{
       _key: string;
       _type: "externalLink";
@@ -369,55 +970,68 @@ export type SettingsHeaderQueryResult = {
     label: string | null;
     content: RichTextSimple | null;
   } | null;
+  projectCount: number;
 } | null;
 // Variable: settingsFooterQuery
-// Query: *[_type == "settingsFooter"][0] {    siteInfo[] {      _key,      _type,      _type == "textBlock" => {        text[] {          ...,          markDefs[] {            ...,            _type == "internalLink" => {              to->{                "slug": slug.current              },              arrow            },            _type == "externalLink" => {              url,              arrow            }          }        }      },      _type == "credit" => {        title,        credits[] {          _key,          label,          url        }      }    }  }
+// Query: *[_type == "settingsFooter"][0] {    columns[] {      _key,      text    },    externalLinks[] {      _key,      label,      url    }  }
 export type SettingsFooterQueryResult = {
-  siteInfo: Array<{
+  columns: Array<{
     _key: string;
-    _type: "textBlock";
-    text: Array<{
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }>;
-      style?: "normal";
-      listItem?: never;
-      markDefs: Array<{
-        url: string | null;
-        arrow: boolean | null;
-        _type: "externalLink";
-        _key: string;
-      } | {
-        to: {
-          slug: null;
-        } | {
-          slug: string | null;
-        } | null;
-        arrow: boolean | null;
-        _type: "internalLink";
-        _key: string;
-      }> | null;
-      level?: number;
-      _type: "block";
-      _key: string;
-    }> | null;
+    text: RichTextSimple | null;
+  }> | null;
+  externalLinks: Array<{
+    _key: string;
+    label: string | null;
+    url: string | null;
   }> | null;
 } | null;
+// Variable: settingsSeoQuery
+// Query: *[_type == "settingsSeo"][0] {    title,    description,    favicon {        _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,    },    ogImage {        _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,    }  }
+export type SettingsSeoQueryResult = {
+  title: string | null;
+  description: string | null;
+  favicon: {
+    _type: "image";
+    asset: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    } | null;
+    alt: null;
+    _id: string | null;
+    aspectRatio: number | null;
+    lqip: string | null;
+  } | null;
+  ogImage: {
+    _type: "image";
+    asset: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    } | null;
+    alt: null;
+    _id: string | null;
+    aspectRatio: number | null;
+    lqip: string | null;
+  } | null;
+} | null;
 // Variable: settingsQuery
-// Query: {    "header": *[_type == "settingsHeader"][0] {    links[] {        _key,  _type,  label,  to -> {    _type,    "slug": slug.current  }    },    contact {      label,      content[] {        _key,        _type,        label,        url      }    },    information {      label,      content    }  },    "footer": *[_type == "settingsFooter"][0] {    siteInfo[] {      _key,      _type,      _type == "textBlock" => {        text[] {          ...,          markDefs[] {            ...,            _type == "internalLink" => {              to->{                "slug": slug.current              },              arrow            },            _type == "externalLink" => {              url,              arrow            }          }        }      },      _type == "credit" => {        title,        credits[] {          _key,          label,          url        }      }    }  },  }
+// Query: {    "header": *[_type == "settingsHeader"][0] {    links[] {      type,      url,        _key,  _type,  label,  url,  childLinks[] {    label,    url,  },  to -> {    _type,    "slug": slug.current  },    },    contact {      label,      url,      content[] {        _key,        _type,        label,        url      }    },    information {      label,      content    },    "projectCount": count(*[_type == "projectPage"])  },    "footer": *[_type == "settingsFooter"][0] {    columns[] {      _key,      text    },    externalLinks[] {      _key,      label,      url    }  },  }
 export type SettingsQueryResult = {
   header: {
     links: Array<{
+      type: "contact" | "external" | "information" | "internal" | null;
+      url: string | null;
       _key: string;
-      _type: "internalLink";
+      _type: "link";
       label: string | null;
+      childLinks: Array<{
+        label: string | null;
+        url: string | null;
+      }> | null;
       to: {
-        _type: "aboutPage";
-        slug: null;
-      } | {
         _type: "homePage";
         slug: null;
       } | {
@@ -430,6 +1044,7 @@ export type SettingsQueryResult = {
     }> | null;
     contact: {
       label: string | null;
+      url: string | null;
       content: Array<{
         _key: string;
         _type: "externalLink";
@@ -441,52 +1056,252 @@ export type SettingsQueryResult = {
       label: string | null;
       content: RichTextSimple | null;
     } | null;
+    projectCount: number;
   } | null;
   footer: {
-    siteInfo: Array<{
+    columns: Array<{
       _key: string;
-      _type: "textBlock";
-      text: Array<{
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?: "normal";
-        listItem?: never;
-        markDefs: Array<{
-          url: string | null;
-          arrow: boolean | null;
-          _type: "externalLink";
-          _key: string;
-        } | {
-          to: {
-            slug: null;
-          } | {
-            slug: string | null;
-          } | null;
-          arrow: boolean | null;
-          _type: "internalLink";
-          _key: string;
-        }> | null;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }> | null;
+      text: RichTextSimple | null;
+    }> | null;
+    externalLinks: Array<{
+      _key: string;
+      label: string | null;
+      url: string | null;
     }> | null;
   } | null;
 };
+// Variable: settingsSplashQuery
+// Query: *[_type == "settingsSplash"][0] {    images[] {        _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,    }  }
+export type SettingsSplashQueryResult = {
+  images: Array<{
+    _type: "image";
+    asset: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    } | null;
+    alt: null;
+    _id: string | null;
+    aspectRatio: number | null;
+    lqip: string | null;
+  }> | null;
+} | null;
+
+// Source: ./sanity/queries/works.ts
+// Variable: worksPageQuery
+// Query: *[_type == "worksPage"][0] {    seo {  title,  description,  ogImage {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  }},    "projects": *[_type == "projectPage" && hideFromWorks != true] | order(orderRank) {      _id,title,"slug": slug.current,year,client -> {  _id,  title,  "slug": slug.current},services[] -> {  _id,  title,  "slug": slug.current},media[] {  _type,  _type == "mediaRow" => {    media[] {      _type == "image" => {          _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,      },      _type == "video" => {          _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio      }    }  },  _type == "image" => {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  },  _type == "video" => {      _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio  }},gridMedia {    _key,  _type,  mediaType,  image {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  },  video {      _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio  }},"featuredMedia": media[0] {  _type,  _type == "mediaRow" => {    media[] {      _type == "image" => {          _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,      },      _type == "video" => {          _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio      }    }  },  _type == "image" => {      _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,  },  _type == "video" => {      _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio  }},    },    "services": *[_type == "service"] {      _id,      title,      "slug": slug.current    }  }
+export type WorksPageQueryResult = {
+  seo: {
+    title: string | null;
+    description: string | null;
+    ogImage: {
+      _type: "image";
+      asset: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      } | null;
+      alt: null;
+      _id: string | null;
+      aspectRatio: number | null;
+      lqip: string | null;
+    } | null;
+  } | null;
+  projects: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    year: string | null;
+    client: {
+      _id: string;
+      title: string | null;
+      slug: string | null;
+    } | null;
+    services: Array<{
+      _id: string;
+      title: string | null;
+      slug: string | null;
+    }> | null;
+    media: Array<{
+      _type: "video";
+      _key: string;
+      _id: string | null;
+      url: string | null;
+      aspectRatio: number | null;
+    } | {
+      _type: "image";
+      asset: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      } | null;
+      alt: string | null;
+      _id: string | null;
+      aspectRatio: number | null;
+      lqip: string | null;
+    } | {
+      _type: "mediaRow";
+      media: Array<{
+        _key: string;
+        _id: string | null;
+        _type: "video";
+        url: string | null;
+        aspectRatio: number | null;
+      } | {
+        _type: "image";
+        asset: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        } | null;
+        alt: string | null;
+        _id: string | null;
+        aspectRatio: number | null;
+        lqip: string | null;
+      }> | null;
+    }> | null;
+    gridMedia: {
+      _key: null;
+      _type: "media";
+      mediaType: "image" | "video" | null;
+      image: {
+        _type: "image";
+        asset: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        } | null;
+        alt: string | null;
+        _id: string | null;
+        aspectRatio: number | null;
+        lqip: string | null;
+      } | null;
+      video: {
+        _key: null;
+        _id: string | null;
+        _type: "file";
+        url: string | null;
+        aspectRatio: number | null;
+      } | null;
+    } | null;
+    featuredMedia: {
+      _type: "video";
+      _key: string;
+      _id: string | null;
+      url: string | null;
+      aspectRatio: number | null;
+    } | {
+      _type: "image";
+      asset: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      } | null;
+      alt: string | null;
+      _id: string | null;
+      aspectRatio: number | null;
+      lqip: string | null;
+    } | {
+      _type: "mediaRow";
+      media: Array<{
+        _key: string;
+        _id: string | null;
+        _type: "video";
+        url: string | null;
+        aspectRatio: number | null;
+      } | {
+        _type: "image";
+        asset: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        } | null;
+        alt: string | null;
+        _id: string | null;
+        aspectRatio: number | null;
+        lqip: string | null;
+      }> | null;
+    } | null;
+  }>;
+  services: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+  }>;
+} | null;
+// Variable: worksPagePathsQuery
+// Query: *[_type == "service" && defined(slug.current)] {    "slug": slug.current  }
+export type WorksPagePathsQueryResult = Array<{
+  slug: string | null;
+}>;
+// Variable: worksMediaQuery
+// Query: *[_type == "projectPage"] {    "featuredMedia": media[0] {      _type,      _type == "mediaRow" => {        media[] {          _type == "image" => {              _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,          },          _type == "video" => {              _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio          }        }      },      _type == "image" => {          _type,  asset,  alt,  "_id": asset._ref,  "aspectRatio": asset -> metadata.dimensions.aspectRatio,  "lqip": asset -> metadata.lqip,      },      _type == "video" => {          _key,  "_id": asset._ref,  _type,  "url": asset -> url,  aspectRatio      }    }  }
+export type WorksMediaQueryResult = Array<{
+  featuredMedia: {
+    _type: "video";
+    _key: string;
+    _id: string | null;
+    url: string | null;
+    aspectRatio: number | null;
+  } | {
+    _type: "image";
+    asset: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    } | null;
+    alt: string | null;
+    _id: string | null;
+    aspectRatio: number | null;
+    lqip: string | null;
+  } | {
+    _type: "mediaRow";
+    media: Array<{
+      _key: string;
+      _id: string | null;
+      _type: "video";
+      url: string | null;
+      aspectRatio: number | null;
+    } | {
+      _type: "image";
+      asset: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      } | null;
+      alt: string | null;
+      _id: string | null;
+      aspectRatio: number | null;
+      lqip: string | null;
+    }> | null;
+  } | null;
+}>;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"homePage\"][0] {\n    title,\n  }": HomePageQueryResult;
+    "\nseo {\n  title,\n  description,\n  ogImage {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  }\n}\n": SeoQueryResult;
+    "*[_type == \"homePage\"][0] {\n    \nseo {\n  title,\n  description,\n  ogImage {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  }\n}\n,\n    title,\n    featuredProjects[] {\n      _key,\n      \"title\": project -> title,\n      \"client\": project -> client.title,\n      \"slug\": project -> slug.current,\n      media {\n        mediaType,\n        mediaType == 'image' => {\n          image {\n            \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n          },\n        },\n        mediaType == 'video' => {\n          video {\n            \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n          },\n        }\n      },\n      color\n    },\n    \"projects\": *[_type == \"projectPage\" && hideFromWorks != true] | order(orderRank) {\n      \n_id,\ntitle,\n\"slug\": slug.current,\nyear,\nclient -> {\n  _id,\n  title,\n  \"slug\": slug.current\n},\nservices[] -> {\n  _id,\n  title,\n  \"slug\": slug.current\n},\nmedia[] {\n  _type,\n  _type == \"mediaRow\" => {\n    media[] {\n      _type == \"image\" => {\n        \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n      },\n      _type == \"video\" => {\n        \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n      }\n    }\n  },\n  _type == \"image\" => {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  },\n  _type == \"video\" => {\n    \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n  }\n},\ngridMedia {\n  \n  _key,\n  _type,\n  mediaType,\n  image {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  },\n  video {\n    \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n  }\n\n},\n\"featuredMedia\": media[0] {\n  _type,\n  _type == \"mediaRow\" => {\n    media[] {\n      _type == \"image\" => {\n        \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n      },\n      _type == \"video\" => {\n        \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n      }\n    }\n  },\n  _type == \"image\" => {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  },\n  _type == \"video\" => {\n    \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n  }\n}\n,\n    },\n    \"services\": *[_type == \"service\"] {\n      _id,\n      title,\n      \"slug\": slug.current\n    }\n  }": HomePageQueryResult;
+    "*[_type == \"infoPage\"][0] {\n    \nseo {\n  title,\n  description,\n  ogImage {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  }\n}\n,\n    \"title\": \"The Info Page\",\n    content[] {\n      _key,\n      _type,\n      _type == \"textRow\" => {\n        text\n      },\n      _type == \"splitTextRow\" => {\n        columnOne,\n        columnTwo\n      }\n    }\n  }": InfoPageQueryResult;
     "*[_type == \"projectPage\"] {\n    \"slug\": slug.current\n  }": ProjectPathsQueryResult;
-    "*[_type == \"projectPage\" && slug.current == $slug][0] {\n    title,\n    \"slug\": slug.current\n  }": ProjectQueryResult;
-    "*[_type == \"settingsHeader\"][0] {\n    links[] {\n      \n  _key,\n  _type,\n  label,\n  to -> {\n    _type,\n    \"slug\": slug.current\n  }\n\n    },\n    contact {\n      label,\n      content[] {\n        _key,\n        _type,\n        label,\n        url\n      }\n    },\n    information {\n      label,\n      content\n    }\n  }": SettingsHeaderQueryResult;
-    "*[_type == \"settingsFooter\"][0] {\n    siteInfo[] {\n      _key,\n      _type,\n      _type == \"textBlock\" => {\n        text[] {\n          ...,\n          markDefs[] {\n            ...,\n            _type == \"internalLink\" => {\n              to->{\n                \"slug\": slug.current\n              },\n              arrow\n            },\n            _type == \"externalLink\" => {\n              url,\n              arrow\n            }\n          }\n        }\n      },\n      _type == \"credit\" => {\n        title,\n        credits[] {\n          _key,\n          label,\n          url\n        }\n      }\n    }\n  }": SettingsFooterQueryResult;
-    "{\n    \"header\": *[_type == \"settingsHeader\"][0] {\n    links[] {\n      \n  _key,\n  _type,\n  label,\n  to -> {\n    _type,\n    \"slug\": slug.current\n  }\n\n    },\n    contact {\n      label,\n      content[] {\n        _key,\n        _type,\n        label,\n        url\n      }\n    },\n    information {\n      label,\n      content\n    }\n  },\n    \"footer\": *[_type == \"settingsFooter\"][0] {\n    siteInfo[] {\n      _key,\n      _type,\n      _type == \"textBlock\" => {\n        text[] {\n          ...,\n          markDefs[] {\n            ...,\n            _type == \"internalLink\" => {\n              to->{\n                \"slug\": slug.current\n              },\n              arrow\n            },\n            _type == \"externalLink\" => {\n              url,\n              arrow\n            }\n          }\n        }\n      },\n      _type == \"credit\" => {\n        title,\n        credits[] {\n          _key,\n          label,\n          url\n        }\n      }\n    }\n  },\n  }": SettingsQueryResult;
+    "*[_type == \"projectPage\" && slug.current == $slug][0] {\n    \nseo {\n  title,\n  description,\n  ogImage {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  }\n}\n,\n    title,\n    \"slug\": slug.current,\n    year,\n    client -> {\n      title\n    },\n    services[] -> {\n      _id,\n      title,\n      \"slug\": slug.current\n    },\n    collaborators[] {\n      _key,\n      name,\n      url\n    },\n    explanation,\n    featuredMedia {\n      \n  _key,\n  _type,\n  mediaType,\n  image {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  },\n  video {\n    \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n  }\n\n    },\n    mobileMedia {\n      \n  _key,\n  _type,\n  mediaType,\n  image {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  },\n  video {\n    \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n  }\n\n    },\n    media[] {\n      _type,\n      _key,\n      _type == \"image\" => {\n        \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n      },\n      _type == \"video\" => {\n        \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n      },\n      _type == \"mediaRow\" => {\n        media[] {\n          _type,\n          _key,\n          _type == \"image\" => {\n            \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n          },\n          _type == \"video\" => {\n            \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n          }\n        }\n      }\n    },\n    related[] -> {\n      _id,\n      title,\n      \"slug\": slug.current,\n      \"featuredMedia\": media[] {\n        _type,\n        _key,\n        _type == \"image\" => {\n          \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n        },\n        _type == \"video\" => {\n          \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n        }\n      }[0]\n    }\n  }": ProjectQueryResult;
+    "*[_type == \"settingsHeader\"][0] {\n    links[] {\n      type,\n      url,\n      \n  _key,\n  _type,\n  label,\n  url,\n  childLinks[] {\n    label,\n    url,\n  },\n  to -> {\n    _type,\n    \"slug\": slug.current\n  }\n,\n    },\n    contact {\n      label,\n      url,\n      content[] {\n        _key,\n        _type,\n        label,\n        url\n      }\n    },\n    information {\n      label,\n      content\n    },\n    \"projectCount\": count(*[_type == \"projectPage\"])\n  }": SettingsHeaderQueryResult;
+    "*[_type == \"settingsFooter\"][0] {\n    columns[] {\n      _key,\n      text\n    },\n    externalLinks[] {\n      _key,\n      label,\n      url\n    }\n  }": SettingsFooterQueryResult;
+    "*[_type == \"settingsSeo\"][0] {\n    title,\n    description,\n    favicon {\n      \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n    },\n    ogImage {\n      \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n    }\n  }": SettingsSeoQueryResult;
+    "{\n    \"header\": *[_type == \"settingsHeader\"][0] {\n    links[] {\n      type,\n      url,\n      \n  _key,\n  _type,\n  label,\n  url,\n  childLinks[] {\n    label,\n    url,\n  },\n  to -> {\n    _type,\n    \"slug\": slug.current\n  }\n,\n    },\n    contact {\n      label,\n      url,\n      content[] {\n        _key,\n        _type,\n        label,\n        url\n      }\n    },\n    information {\n      label,\n      content\n    },\n    \"projectCount\": count(*[_type == \"projectPage\"])\n  },\n    \"footer\": *[_type == \"settingsFooter\"][0] {\n    columns[] {\n      _key,\n      text\n    },\n    externalLinks[] {\n      _key,\n      label,\n      url\n    }\n  },\n  }": SettingsQueryResult;
+    "*[_type == \"settingsSplash\"][0] {\n    images[] {\n      \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n    }\n  }": SettingsSplashQueryResult;
+    "*[_type == \"worksPage\"][0] {\n    \nseo {\n  title,\n  description,\n  ogImage {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  }\n}\n,\n    \"projects\": *[_type == \"projectPage\" && hideFromWorks != true] | order(orderRank) {\n      \n_id,\ntitle,\n\"slug\": slug.current,\nyear,\nclient -> {\n  _id,\n  title,\n  \"slug\": slug.current\n},\nservices[] -> {\n  _id,\n  title,\n  \"slug\": slug.current\n},\nmedia[] {\n  _type,\n  _type == \"mediaRow\" => {\n    media[] {\n      _type == \"image\" => {\n        \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n      },\n      _type == \"video\" => {\n        \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n      }\n    }\n  },\n  _type == \"image\" => {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  },\n  _type == \"video\" => {\n    \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n  }\n},\ngridMedia {\n  \n  _key,\n  _type,\n  mediaType,\n  image {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  },\n  video {\n    \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n  }\n\n},\n\"featuredMedia\": media[0] {\n  _type,\n  _type == \"mediaRow\" => {\n    media[] {\n      _type == \"image\" => {\n        \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n      },\n      _type == \"video\" => {\n        \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n      }\n    }\n  },\n  _type == \"image\" => {\n    \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n  },\n  _type == \"video\" => {\n    \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n  }\n}\n,\n    },\n    \"services\": *[_type == \"service\"] {\n      _id,\n      title,\n      \"slug\": slug.current\n    }\n  }": WorksPageQueryResult;
+    "*[_type == \"service\" && defined(slug.current)] {\n    \"slug\": slug.current\n  }": WorksPagePathsQueryResult;
+    "*[_type == \"projectPage\"] {\n    \"featuredMedia\": media[0] {\n      _type,\n      _type == \"mediaRow\" => {\n        media[] {\n          _type == \"image\" => {\n            \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n          },\n          _type == \"video\" => {\n            \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n          }\n        }\n      },\n      _type == \"image\" => {\n        \n  _type,\n  asset,\n  alt,\n  \"_id\": asset._ref,\n  \"aspectRatio\": asset -> metadata.dimensions.aspectRatio,\n  \"lqip\": asset -> metadata.lqip,\n\n      },\n      _type == \"video\" => {\n        \n  _key,\n  \"_id\": asset._ref,\n  _type,\n  \"url\": asset -> url,\n  aspectRatio\n\n      }\n    }\n  }": WorksMediaQueryResult;
   }
 }
