@@ -29,10 +29,15 @@ export interface MediaRow {
  */
 export const resolveMedia = (media?: Media): Image | Video | undefined => {
   if (!media) return undefined;
-  const item = media.mediaType === 'video' ? media.video : media.image;
-  if (!item) return undefined;
-  const populated = item._type === 'image' ? !!(item as Image).asset : !!(item as Video).url;
-  return populated ? item : undefined;
+  if (media.mediaType === 'video') {
+    const video = media.video;
+    // Inside a `media` object the video lives in a `file` field, so its stored
+    // `_type` is 'file', not 'video'. Normalize it so downstream renderers that
+    // branch on `_type === 'video'` (grid item, gallery) pick it up.
+    return video?.url ? { ...video, _type: 'video' } : undefined;
+  }
+  const image = media.image;
+  return image?.asset ? { ...image, _type: 'image' } : undefined;
 };
 
 export interface Project {
