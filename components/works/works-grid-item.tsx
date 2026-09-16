@@ -56,7 +56,7 @@ export const WorksGridItem: FC<WorksGridItemProps> = (props) => {
             className="absolute inset-0 w-full h-full z-[5] bg-[rgba(196,196,196,0.15)] backdrop-blur-[20px] opacity-0 group-hover:opacity-100 transition-opacity duration-400 ease will-change-transform"
           ></div>
           <div className="absolute inset-0 w-full h-full z-[6] p-10 flex flex-col justify-end text-nav mix-blend-difference text-white opacity-0 will-change-transform group-hover:opacity-100 transition-opacity duration-400 ease">
-            {client?.title ? <div>{client.title}</div> : null}
+            {client?.title && client.title !== title ? <div>{client.title}</div> : null}
             <div>{title}</div>
           </div>
         </div>
@@ -64,7 +64,7 @@ export const WorksGridItem: FC<WorksGridItemProps> = (props) => {
 
       <div className="absolute inset-0 w-full h-full z-[1]">
         {thumbnail?._type === "image" && thumbnail?.asset ? (
-          <Image image={thumbnail} className="object-cover w-full h-full" alt={title} sizes={`(max-width: 768px) 50vw, ${(100 / gridSize).toFixed(2)}vw`} />
+          <Image image={thumbnail} className="object-cover w-full h-full" alt={title} sizes="(max-width: 768px) 50vw, 25vw" />
         ) : null}
         {thumbnail?._type === "video" ? (
           <Video {...thumbnail} className="object-cover w-full h-full" />
