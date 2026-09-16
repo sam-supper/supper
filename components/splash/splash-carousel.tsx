@@ -142,7 +142,7 @@ export const SplashCarouselContent: React.FC<SplashCarouselProps> = (props) => {
               }}
             >
               <div className="absolute inset-0 w-full h-full splash-image">
-                <Image image={image} placeholder className="w-full h-full object-cover" sizes="350px" />
+                <Image image={image} placeholder priority className="w-full h-full object-cover" sizes="350px" />
               </div>
             </div>
           )
@@ -151,7 +151,7 @@ export const SplashCarouselContent: React.FC<SplashCarouselProps> = (props) => {
           {randomizedImages?.map((image) => {
             return (
               <div key={`${image._id}-clone`} className="inline-block align-middle w-[clamp(100px,12vw,400px)] h-auto" style={{ aspectRatio: image.aspectRatio > 1 ? image.aspectRatio : image.aspectRatio }}>
-                <Image image={image} placeholder className="w-full h-full object-cover" sizes="350px" />
+                <Image image={image} placeholder priority className="w-full h-full object-cover" sizes="350px" />
               </div>
             )
           })}

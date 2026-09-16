@@ -11,9 +11,11 @@ interface ImageProps {
   quality?: number
   sizes?: string
   placeholder?: boolean
+  priority?: boolean
 }
 
-export const Image: FC<ImageProps> = ({ image, quality = 90, alt, className, sizes = 'auto', placeholder = false }) => {
+export const Image: FC<ImageProps> = ({ image, quality = 90, alt, className, sizes = 'auto', placeholder = false, priority = false }) => {
+  const loading = priority ? 'eager' : 'lazy'
   const [hasLoaded, setHasLoaded] = useState(false)
   const deviceSizes = [320, 480, 768, 1024, 1280, 1536, 1920, 2560]
 
@@ -47,6 +49,8 @@ export const Image: FC<ImageProps> = ({ image, quality = 90, alt, className, siz
           alt={alt}
           className="absolute inset-0 w-full h-full object-cover"
           sizes={sizes}
+          loading={loading}
+          decoding="async"
           onLoad={() => setHasLoaded(true)}
         />
       </div>
@@ -60,6 +64,8 @@ export const Image: FC<ImageProps> = ({ image, quality = 90, alt, className, siz
       alt={alt}
       className={className}
       sizes={sizes}
+      loading={loading}
+      decoding="async"
     />
   )
 }
