@@ -1,5 +1,6 @@
 import { FC, useMemo } from "react";
 import { Image } from "./image";
+import { Video } from "./video";
 import { MediaType } from "@/sanity/types";
 
 export interface MediaProps {
@@ -27,14 +28,7 @@ export const Media: FC<MediaProps> = (props) => {
       {mediaType === 'image' ? <Image className={`w-full h-full ${fitClasses}`} image={image} alt={alt} sizes={sizes} /> : null}
       {mediaType === 'video' ? (
         <div className="w-full h-full">
-          <video
-            className={`w-full h-full ${fitClasses}`}
-            src={video.url}
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
+          <Video url={video.url} className={`w-full h-full ${fitClasses}`} />
           {alt ? <span className="sr-only">{alt}</span> : null}
         </div>
       ) : null}

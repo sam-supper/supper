@@ -22,6 +22,9 @@ import Script from 'next/script'
 import GAListener from '../ga-listener'
 import { Suspense } from 'react'
 
+// Vercel Analytics
+import { Analytics } from '@vercel/analytics/next'
+
 const ArizonaText = localFont({
   src: [
     { path: '../fonts/ABCArizonaText-Regular.woff2', weight: '400', style: 'normal' },
@@ -83,6 +86,9 @@ export default async function RootLayout({
         <Suspense fallback={null}>
           <GAListener />
         </Suspense>
+
+        {/* Vercel Web Analytics */}
+        <Analytics />
       </body>
     </ThemeProvider>
   );
