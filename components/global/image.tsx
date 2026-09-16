@@ -50,7 +50,6 @@ export const Image: FC<ImageProps> = ({ image, quality = 90, alt, className, siz
           className="absolute inset-0 w-full h-full object-cover"
           sizes={sizes}
           loading={loading}
-          decoding="async"
           onLoad={() => setHasLoaded(true)}
         />
       </div>
@@ -65,7 +64,6 @@ export const Image: FC<ImageProps> = ({ image, quality = 90, alt, className, siz
       className={className}
       sizes={sizes}
       loading={loading}
-      decoding="async"
     />
   )
 }
